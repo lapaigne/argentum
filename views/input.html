@@ -1,0 +1,60 @@
+{{ block "add-task" . }}
+
+<form hx-post>
+    <div>
+        <div id="comb-cat-wrap">
+            <label>Категории задачи</label>
+            <div>
+                <select id="first-selector">
+                </select>
+            </div>
+
+            <div>
+                <select id="second-selector">
+                </select>
+            </div>
+
+            <div>
+                <select id="third-selector">
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label>Описание задачи</label>
+            <input type="text">
+        </div>
+
+        <div>
+            <label>Дата создания</label>
+            <input type="date" id="created">
+        </div>
+
+        <div>
+            <div>
+                <label>Срок выполнения</label>
+                <input type="date" id="do-until">
+            </div>
+
+            <div>
+                <label>Без определенного срока</label>
+                <input type="checkbox">
+            </div>
+        </div>
+
+        <div>
+            <label>Исполнители</label>
+            <select id="actor-selector">
+            </select>
+        </div>
+
+        <div>
+            <label>Комментарий</label>
+            <input type="text" id="comment">
+        </div>
+
+        <button type="submit">Добавить задачу</button>
+    </div>
+</form>
+
+{{ end }}
