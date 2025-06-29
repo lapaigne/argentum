@@ -20,7 +20,7 @@ type FormTempl struct {
 	IsUntil  bool
 }
 
-type FormData struct {
+type TaskData struct {
 	TopCat  string
 	SecCat  string
 	ThrCat  string

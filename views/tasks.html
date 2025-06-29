@@ -1,0 +1,43 @@
+{{ block "task" . }}
+
+<div>
+    {{ range . }}
+    <div>
+        <p>{{ .TopCat }}</p>
+        <p>{{ .SecCat }}</p>
+        <p>{{ .ThrCat }}</p>
+        <p>{{ .TaskStr }}</p>
+        <p>{{ .AddrObj }}</p>
+        <p>{{ .Created }}</p>
+        <p>
+            {{ if .IsUntil }}
+            {{ .DoUntil }}
+            {{ else }}
+            Без определенного срока
+            {{ end }}
+        </p>
+        <ul>
+            {{ range .Actors }}
+            <p>{{ . }}</p>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+</div>
+
+{{ end }}
+
+
+
+<!---->
+<!-- type TaskData struct { -->
+<!-- 	TopCat  string -->
+<!-- 	SecCat  string -->
+<!-- 	ThrCat  string -->
+<!-- 	TaskStr string -->
+<!-- 	AddrObj string -->
+<!-- 	Created time.Time -->
+<!-- 	DoUntil time.Time -->
+<!-- 	IsUntil bool -->
+<!-- 	Actors  []string -->
+<!-- } -->
