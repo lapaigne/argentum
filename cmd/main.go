@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"io"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,12 +24,19 @@ func NewTemplate() *Templates {
 }
 
 func main() {
+
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Renderer = NewTemplate()
-	fd := FormData{}
+	fd := []TaskData{
+		{TopCat: "foo", SecCat: "bar", ThrCat: "fizz", TaskStr: "Do fizzbuzz", AddrObj: "Blooper street, 42069", Created: time.Now(), IsUntil: false, Actors: []string{"Ax, Bes, Cot"}},
+	}
+
+	e.Router()
+
 	e.GET("/", func(c echo.Context) error {
 		return c.Render(200, "index", fd)
 	})
+
 	e.Logger.Fatal(e.Start(":42069"))
 }
