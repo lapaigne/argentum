@@ -1,43 +1,36 @@
-{{ block "task" . }}
+{{ block "task-list" . }}
 
 <div>
+    <h1>Задачи</h1>
     {{ range . }}
     <div>
-        <p>{{ .TopCat }}</p>
-        <p>{{ .SecCat }}</p>
-        <p>{{ .ThrCat }}</p>
-        <p>{{ .TaskStr }}</p>
-        <p>{{ .AddrObj }}</p>
-        <p>{{ .Created }}</p>
-        <p>
-            {{ if .IsUntil }}
-            {{ .DoUntil }}
-            {{ else }}
-            Без определенного срока
-            {{ end }}
-        </p>
-        <ul>
-            {{ range .Actors }}
-            <p>{{ . }}</p>
-            {{ end }}
-        </ul>
+        <p>{{ .Cat_1 }}</p>
+        <p>{{ .Cat_2 }}</p>
+        <p>{{ .Cat_3 }}</p>
+        <p>{{ .Desc }}</p>
+        <p>{{ .Addr_obj }}</p>
+        <p>{{ .Created_date }}</p>
+        <p>{{ .Until_date }}</p>
+        <p>{{ .Completed_date }}</p>
+        <p>{{ .Comment }}</p>
     </div>
+    <hr>
     {{ end }}
 </div>
 
 {{ end }}
 
+<!-- <ul> -->
+<!--     {{ range .Actors }} -->
+<!--     <p>{{ . }}</p> -->
+<!--     {{ end }} -->
+<!-- </ul> -->
 
 
-<!---->
-<!-- type TaskData struct { -->
-<!-- 	TopCat  string -->
-<!-- 	SecCat  string -->
-<!-- 	ThrCat  string -->
-<!-- 	TaskStr string -->
-<!-- 	AddrObj string -->
-<!-- 	Created time.Time -->
-<!-- 	DoUntil time.Time -->
-<!-- 	IsUntil bool -->
-<!-- 	Actors  []string -->
-<!-- } -->
+<!-- <p> -->
+<!--     {{ if .IsUntil }} -->
+<!--     {{ .DoUntil }} -->
+<!--     {{ else }} -->
+<!--     Без определенного срока -->
+<!--     {{ end }} -->
+<!-- </p> -->

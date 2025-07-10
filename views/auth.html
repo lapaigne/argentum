@@ -1,0 +1,30 @@
+{{ block "auth" . }}
+
+<div>
+
+    <input type="tel">
+
+
+    <button id="login-w-pass">Войти с паролем</button>
+    <button id="login-w-code">Войти с кодом</button>
+
+</div>
+
+
+{{ end }}
+
+{{ block "password" .}}
+
+{{ end }}
+
+{{ block "code-input" . }}
+
+{{ end }}
+
+{{ block "failed" . }}
+<span>Не удалось авторизоваться</span>
+{{ end }}
+
+{{ block "successful" . }}
+
+{{ end }}
