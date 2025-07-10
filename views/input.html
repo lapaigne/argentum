@@ -1,11 +1,14 @@
-{{ block "add-task" . }}
+{{ block "input" . }}
 
-<form hx-post>
+<form hx-post="/task" id="add-task-form" hx-swap="outerHTML" hx-push-url="task-list">
     <div>
         <div id="comb-cat-wrap">
             <label>Категории задачи</label>
             <div>
                 <select id="first-selector">
+                    {{ range .Categories }}
+                    <option>{{ .Name }}</option>
+                    {{ end }}
                 </select>
             </div>
 
@@ -21,24 +24,36 @@
         </div>
 
         <div>
+            <label>Адрес</label>
+            <select required name="address">
+                <option disabled selected>Не выбран!</option>
+                {{ range .Addresses}}
+                <option value="{{ .Id }}">
+                    {{ .Address}}
+                </option>
+                {{ end }}
+            </select>
+        </div>
+
+        <div>
             <label>Описание задачи</label>
-            <input type="text">
+            <input type="text" id="description" name="desc">
         </div>
 
         <div>
             <label>Дата создания</label>
-            <input type="date" id="created">
+            <input type="date" id="created" name="created">
         </div>
 
         <div>
             <div>
                 <label>Срок выполнения</label>
-                <input type="date" id="do-until">
+                <input type="date" id="do-until" name="do-until">
             </div>
 
             <div>
                 <label>Без определенного срока</label>
-                <input type="checkbox">
+                <input type="checkbox" id="until-checkbox">
             </div>
         </div>
 
@@ -50,11 +65,22 @@
 
         <div>
             <label>Комментарий</label>
-            <input type="text" id="comment">
+            <input type="text" id="comment" name="comment">
         </div>
 
         <button type="submit">Добавить задачу</button>
     </div>
 </form>
+
+<!-- NOTE: default date to be dispayed and set-->
+<script>
+    const datePicker = document.getElementById("created");
+    const date = new Date();
+    datePicker.valueAsDate ??= date;
+    console.log(datePicker.valueAsDate)
+    console.log(datePicker.value)
+    // const fmt = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`
+    // console.log(fmt)
+</script>
 
 {{ end }}

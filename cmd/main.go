@@ -1,9 +1,10 @@
 package main
 
 import (
+	"argentum/db"
+	"fmt"
 	"html/template"
 	"io"
-	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,20 +24,39 @@ func NewTemplate() *Templates {
 	}
 }
 
+var data Data
+
 func main() {
 
+	fmt.Println("just so it'd be here")
 	e := echo.New()
 	e.Use(middleware.Logger())
+
+	e.Static("/css", "views/css")
+
 	e.Renderer = NewTemplate()
-	fd := []TaskData{
-		{TopCat: "foo", SecCat: "bar", ThrCat: "fizz", TaskStr: "Do fizzbuzz", AddrObj: "Blooper street, 42069", Created: time.Now(), IsUntil: false, Actors: []string{"Ax, Bes, Cot"}},
-	}
+
+	db.OpenConn()
+	defer db.CloseConn()
+
+	FetchRare()
+	FetchIncomplete()
+
+	fmt.Println(len(data.Incomplete))
+	fmt.Println(len(data.Workers))
+	fmt.Println(len(data.Categories))
+	fmt.Println(len(data.Addresses))
 
 	e.Router()
 
-	e.GET("/", func(c echo.Context) error {
-		return c.Render(200, "index", fd)
-	})
+	e.GET("/", func(c echo.Context) error { return c.Render(200, "index", nil) })
+	e.GET("/input", func(c echo.Context) error { return c.Render(200, "input", data) })
 
-	e.Logger.Fatal(e.Start(":42069"))
+	e.POST("/add", func(c echo.Context) error { return c.Redirect(303, "input") })
+	e.POST("/task", TaskFormHandler)
+
+	e.POST("/task-list", TaskListHandler)
+	e.GET("/task-list", TaskListHandler)
+
+	e.Logger.Fatal(e.Start("0.0.0.0:42069"))
 }

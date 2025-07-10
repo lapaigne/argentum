@@ -2,6 +2,10 @@ package main
 
 import "time"
 
+// TODO:
+// all the input data structures
+// all the output data structures
+
 type FormOpts struct {
 	TopOpts []string
 	SecOpts []string
