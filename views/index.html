@@ -11,9 +11,9 @@
 </head>
 
 <body>
-    <button hx-post="/add" hx-swap="outerHTML" hx-target="body" hx-push-url="true">ADDTASK</button>
+    <button hx-get="/task-form" hx-swap="outerHTML" hx-target="body" hx-push-url="true">ADDTASK</button>
 
-    <button hx-post="/task-list" hx-swap="outerHTML" hx-target="body" hx-push-url="true">GET ALL DATA</button>
+    <button hx-get="/task-list" hx-swap="outerHTML" hx-target="body" hx-push-url="true">GET ALL DATA</button>
 </body>
 
 </html>

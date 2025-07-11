@@ -10,6 +10,7 @@ type Data struct {
 	Workers    []db.Worker
 	Addresses  []db.Address
 	Categories []db.Category
+	Today      string
 }
 
 // fetch mostly static data: categories, workers, adresses, etc
