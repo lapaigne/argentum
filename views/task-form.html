@@ -16,6 +16,8 @@
                 </select>
             </div>
 
+            {{ $cat_1 := 1 }}
+
             <div>
                 <select id="cat_2" required name="cat_2">
                     {{ range .Categories }}
@@ -88,3 +90,5 @@
         <button type="submit">Добавить задачу</button>
     </div>
 </form>
+
+{{ end }}
