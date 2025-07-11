@@ -1,24 +1,30 @@
 {{ block "input" . }}
 
-<form hx-post="/task" id="add-task-form" hx-swap="outerHTML" hx-push-url="task-list">
+<form hx-post="/task-form-submit" id="add-task-form" hx-swap="outerHTML" hx-push-url="task-list" hx-history>
     <div>
         <div id="comb-cat-wrap">
             <label>Категории задачи</label>
             <div>
-                <select id="first-selector">
+                <select id="cat_1" required name="cat_1">
                     {{ range .Categories }}
-                    <option>{{ .Name }}</option>
+                    <option value="{{ .Id }}">{{ .Name }}</option>
                     {{ end }}
                 </select>
             </div>
 
             <div>
-                <select id="second-selector">
+                <select id="cat_2" required name="cat_2">
+                    {{ range .Categories }}
+                    <option value="{{ .Id }}">{{ .Name }}</option>
+                    {{ end }}
                 </select>
             </div>
 
             <div>
-                <select id="third-selector">
+                <select id="cat_3" required name="cat_3">
+                    {{ range .Categories }}
+                    <option value="{{ .Id }}">{{ .Name }}</option>
+                    {{ end }}
                 </select>
             </div>
         </div>
@@ -42,7 +48,7 @@
 
         <div>
             <label>Дата создания</label>
-            <input type="date" id="created" name="created">
+            <input type="date" id="created" name="created" value="{{ .Today }}">
         </div>
 
         <div>
@@ -71,16 +77,5 @@
         <button type="submit">Добавить задачу</button>
     </div>
 </form>
-
-<!-- NOTE: default date to be dispayed and set-->
-<script>
-    const datePicker = document.getElementById("created");
-    const date = new Date();
-    datePicker.valueAsDate ??= date;
-    console.log(datePicker.valueAsDate)
-    console.log(datePicker.value)
-    // const fmt = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`
-    // console.log(fmt)
-</script>
 
 {{ end }}

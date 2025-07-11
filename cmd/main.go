@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -50,13 +51,18 @@ func main() {
 	e.Router()
 
 	e.GET("/", func(c echo.Context) error { return c.Render(200, "index", nil) })
-	e.GET("/input", func(c echo.Context) error { return c.Render(200, "input", data) })
 
-	e.POST("/add", func(c echo.Context) error { return c.Redirect(303, "input") })
-	e.POST("/task", TaskFormHandler)
+	e.GET("/task-form", func(c echo.Context) error {
+		data.Today = time.Now().Format(time.DateOnly)
+		return c.Render(200, "input", data)
+	})
 
-	e.POST("/task-list", TaskListHandler)
-	e.GET("/task-list", TaskListHandler)
+	e.POST("/task-form-submit", TaskFormHandler)
 
-	e.Logger.Fatal(e.Start("0.0.0.0:42069"))
+	e.GET("/task-list", func(c echo.Context) error {
+		FetchIncomplete()
+		return c.Render(200, "task-list", data.Incomplete)
+	})
+
+	e.Logger.Fatal(e.Start(":42069"))
 }

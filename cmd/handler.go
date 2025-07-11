@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -11,9 +12,9 @@ import (
 
 func TaskFormHandler(c echo.Context) error {
 	var err error
-	date := c.FormValue("created")
-
 	var t db.Task
+
+	date := c.FormValue("created")
 
 	pdate, err := time.Parse(time.DateOnly, date)
 	if err != nil {
@@ -21,41 +22,60 @@ func TaskFormHandler(c echo.Context) error {
 		return err
 	}
 
+	dif := time.Since(pdate)
+
+	if dif.Hours() > 24 {
+		errS := fmt.Sprintf("Invalid creation date: %v", pdate)
+		return errors.New(errS)
+	}
+
 	t.Created_date = pdate
 
 	// structurize the categories
 	// perhaps add an extra field for level (w/ vals as 1,2 or 3)
 	// use proper parser
-	t.Cat_1 = 1
-	t.Cat_2 = 2
-	t.Cat_3 = 3
 
-	t.Desc = c.FormValue("desc")
-	// t.Addr_obj
-	add := c.FormValue("address")
-	temp, err := strconv.Atoi(add)
+	c1, err := strconv.Atoi(c.FormValue("cat_1"))
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("cat 1")
 		return err
 	}
-	t.Addr_obj = temp
+
+	t.Cat_1 = c1
+
+	c2, err := strconv.Atoi(c.FormValue("cat_2"))
+	if err != nil {
+		fmt.Println("cat 2")
+		return err
+	}
+
+	t.Cat_2 = c2
+
+	c3, err := strconv.Atoi(c.FormValue("cat_3"))
+	if err != nil {
+		fmt.Println("cat 3")
+		return err
+	}
+
+	t.Cat_3 = c3
+
+	t.Desc = c.FormValue("desc")
+
+	addr, err := strconv.Atoi(c.FormValue("address"))
+	if err != nil {
+		return err
+	}
+
+	t.Addr_obj = addr
 
 	t.Comment = c.FormValue("comment")
-
-	fmt.Println(t.Created_date)
 
 	err = db.AddTask(t)
 
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println(err)
+		return err
 	}
-
-	FetchIncomplete()
-	return c.Render(200, "task-list", data.Incomplete)
-}
-
-func TaskListHandler(c echo.Context) error {
 
 	FetchIncomplete()
 	return c.Render(200, "task-list", data.Incomplete)

@@ -4,14 +4,31 @@
     <h1>Задачи</h1>
     {{ range . }}
     <div>
+        <label>Категория 1</label>
         <p>{{ .Cat_1 }}</p>
+
+        <label>Категория 2</label>
         <p>{{ .Cat_2 }}</p>
+
+        <label>Категория 3</label>
         <p>{{ .Cat_3 }}</p>
+
+        <label>Описание</label>
         <p>{{ .Desc }}</p>
+
+        <label>Адрес</label>
         <p>{{ .Addr_obj }}</p>
+
+        <label>Дата создания</label>
         <p>{{ .Created_date }}</p>
+
+        <label>Срок выполнения</label>
         <p>{{ .Until_date }}</p>
+
+        <label>Выполнено</label>
         <p>{{ .Completed_date }}</p>
+
+        <label>Доп. комментарий</label>
         <p>{{ .Comment }}</p>
     </div>
     <hr>
