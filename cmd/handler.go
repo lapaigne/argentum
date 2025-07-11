@@ -80,3 +80,20 @@ func TaskFormHandler(c echo.Context) error {
 	FetchIncomplete()
 	return c.Render(200, "task-list", data.Incomplete)
 }
+
+func Cat1Handler(c echo.Context) error {
+	raw := c.FormValue("cat_1")
+	cat_1, err := strconv.Atoi(raw)
+
+	// put into html {{ $cat_1 }} instead
+
+	// perhaps replace only the data which would go there
+
+	fmt.Println(cat_1)
+
+	if err != nil {
+		return err
+	}
+
+	return c.Render(200, "cat-2", cat_1)
+}

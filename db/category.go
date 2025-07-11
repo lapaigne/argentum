@@ -1,18 +1,26 @@
 package db
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 )
 
 type Category struct {
 	Id     int
-	Parent int
+	Parent sql.NullInt32
 	Name   string
+	Level  int
 }
 
-func AddCategory(parent int, name string) error {
+func AddCategory(parent, level int, name string) error {
 
-	query := fmt.Sprintf("INSERT INTO public.categories (parent_id, name) VALUES (%d, %s);", parent, name)
+	if level > 3 {
+		s := fmt.Sprintf("Invalid category level of %d, when adding category <%s>", level, name)
+		return errors.New(s)
+	}
+
+	query := fmt.Sprintf("INSERT INTO public.categories (parent_id, name, level) VALUES (%d, %s, %d);", parent, name, level)
 	_, err := db.Exec(query)
 	if err != nil {
 		return err
@@ -34,14 +42,8 @@ func GetCategories() ([]Category, error) {
 	res := []Category{}
 	for rows.Next() {
 		var cat Category
-		var parent *int
-		if err := rows.Scan(&cat.Id, &parent, &cat.Name); err != nil {
+		if err := rows.Scan(&cat.Id, &cat.Parent, &cat.Name, &cat.Level); err != nil {
 			return res, err
-		}
-		if parent == nil {
-			cat.Parent = -1
-		} else {
-			cat.Parent = *parent
 		}
 		res = append(res, cat)
 	}

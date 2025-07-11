@@ -11,9 +11,19 @@
 </head>
 
 <body>
-    <button hx-get="/task-form" hx-swap="outerHTML" hx-target="body" hx-push-url="true">ADDTASK</button>
 
-    <button hx-get="/task-list" hx-swap="outerHTML" hx-target="body" hx-push-url="true">GET ALL DATA</button>
+    <header>
+
+    </header>
+    <main>
+        <!-- <a href="/task-form"></a> -->
+        <button hx-get="/task-form" hx-swap="outerHTML" hx-target="body" hx-push-url="true">Добавить задачу</button>
+        <button hx-get="/task-list" hx-swap="outerHTML" hx-target="body" hx-push-url="true">Просмотреть задачи</button>
+    </main>
+
+    <footer>
+
+    </footer>
 </body>
 
 </html>

@@ -54,10 +54,11 @@ func main() {
 
 	e.GET("/task-form", func(c echo.Context) error {
 		data.Today = time.Now().Format(time.DateOnly)
-		return c.Render(200, "input", data)
+		return c.Render(200, "task-form", data)
 	})
 
-	e.POST("/task-form-submit", TaskFormHandler)
+	e.POST("/submit-task", TaskFormHandler)
+	e.POST("/submit-task/cat-1", Cat1Handler)
 
 	e.GET("/task-list", func(c echo.Context) error {
 		FetchIncomplete()
