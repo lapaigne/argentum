@@ -1,6 +1,6 @@
 {{ block "task-form" . }}
 
-<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-push-url="task-list">
+<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-push-url="task-list" hx-target="main">
     <div>
         <div id="comb-cat-wrap">
             <label>Категории задачи</label>
