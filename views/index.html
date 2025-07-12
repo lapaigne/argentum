@@ -13,22 +13,22 @@
 <body>
 
     <header>
-
+        HEADER
     </header>
+
+    <hr>
+
     <main>
-        <!-- <a href="/task-form"></a> -->
-        <button hx-get="/task-form" hx-swap="outerHTML" hx-target="body" hx-push-url="true">Добавить задачу</button>
-        <button hx-get="/task-list" hx-swap="outerHTML" hx-target="body" hx-push-url="true">Просмотреть задачи</button>
+        <button hx-get="/task-form" hx-swap="outerHTML" hx-target="main" hx-push-url="true">Добавить задачу</button>
+        <button hx-get="/task-list" hx-swap="outerHTML" hx-target="main" hx-push-url="true">Просмотреть задачи</button>
     </main>
 
-    <footer>
+    <hr>
 
+    <footer>
+        FOOTER
     </footer>
 </body>
 
 </html>
 {{ end }}
-
-<!-- {{ template "add-task" . }} -->
-<!-- {{ template "auth" . }} -->
-<!-- {{ template "task" . }} -->

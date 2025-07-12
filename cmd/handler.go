@@ -16,22 +16,20 @@ func TaskFormHandler(c echo.Context) error {
 	var err error
 	var t db.Task
 
-	date := c.FormValue("created")
-
-	pdate, err := time.Parse(time.DateOnly, date)
+	date, err := time.Parse(time.DateOnly, c.FormValue("created"))
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	dif := time.Since(pdate)
+	dif := time.Since(date)
 
 	if dif.Hours() > 24 {
-		errS := fmt.Sprintf("Invalid creation date: %v", pdate)
+		errS := fmt.Sprintf("Invalid creation date: %v", date)
 		return errors.New(errS)
 	}
 
-	t.Created_date = pdate
+	t.Created_date = date
 
 	// structurize the categories
 	// perhaps add an extra field for level (w/ vals as 1,2 or 3)
