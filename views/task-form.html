@@ -1,13 +1,14 @@
 {{ block "task-form" . }}
 
-<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-push-url="task-list" hx-history>
+<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-push-url="task-list">
     <div>
         <div id="comb-cat-wrap">
             <label>Категории задачи</label>
-            <div>
-                <select id="cat_1" required name="cat_1" hx-post="/submit-task/cat-1">
-                    <!-- probably add hx-swap-oob and hx-target -->
-                    <option selected disabled>Не выбрано!</option>
+
+            <div id="cat_1">
+                <select required name="cat_1" hx-post="/submit-task/cat-1" hx-target="#cat_2"
+                    hx-trigger="change changed" hx-history="false" id="s1" hx-push-url="false">
+                    <option selected disabled value="-1">Не выбрано!</option>
                     {{ range .Categories }}
                     {{ if eq .Level 1}}
                     <option value="{{ .Id }}">{{ .Name }}</option>
@@ -16,25 +17,19 @@
                 </select>
             </div>
 
-            {{ $cat_1 := 1 }}
-
-            <div>
-                <select id="cat_2" required name="cat_2">
-                    {{ range .Categories }}
-                    {{ if eq .Parent.Int32 $cat_1 }}
-                    <option value="{{ .Id }}">{{ .Name }} {{ .Parent.Int32 }} </option>
-                    {{ end }}
-                    {{ end }}
+            <div id="cat_2">
+                <select required name="cat_2" hx-post="/submit-task/cat-2" hx-swap="innerHTML" hx-target="#s3"
+                    hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false">
+                    {{ template "tf-cat-2" . }}
                 </select>
             </div>
 
-            <div>
-                <select id="cat_3" required name="cat_3">
-                    {{ range .Categories }}
-                    <option value="{{ .Id }}">{{ .Name }}</option>
-                    {{ end }}
+            <div id="cat_3">
+                <select required name="cat_3" id="s3">
+                    {{ template "tf-cat-3" . }}
                 </select>
             </div>
+
         </div>
 
         <div>
@@ -90,5 +85,45 @@
         <button type="submit">Добавить задачу</button>
     </div>
 </form>
+
+{{ end }}
+
+
+{{ block "tf-cat-2" . }}
+{{ $val := .Cat_1.Int32 }}
+<option selected disabled value="-1">Не выбрано!</option>
+{{ range .Categories }}
+{{ if eq .Parent.Int32 $val }}
+<option value="{{ .Id }}">{{ .Name }}</option>
+{{ end }}
+{{ end }}
+{{ end }}
+
+
+{{ block "tf-cat-3" . }}
+{{ $val := .Cat_2.Int32 }}
+<option selected disabled value="-1">Не выбрано!</option>
+{{ range .Categories }}
+{{ if eq .Parent.Int32 $val }}
+<option value="{{ .Id }}">{{ .Name }}</option>
+{{ end }}
+{{ end }}
+{{ end }}
+
+
+{{ block "tf-cat-1-res" . }}
+
+<div id="cat_2">
+    <select required name="cat_2" hx-post="/submit-task/cat-2" hx-swap="innerHTML" hx-target="#s3"
+        hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false">
+        {{ template "tf-cat-2" . }}
+    </select>
+</div>
+
+<div id="cat_3" hx-swap-oob="innerHTML">
+    <select required name="cat_3" id="s3">
+        {{ template "tf-cat-3" . }}
+    </select>
+</div>
 
 {{ end }}
