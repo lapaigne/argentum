@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"database/sql"
 	"fmt"
 	"html/template"
 	"io"
@@ -29,6 +30,9 @@ var data Data
 
 func main() {
 
+	data.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
+	data.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
+
 	fmt.Println("just so it'd be here")
 	e := echo.New()
 	e.Use(middleware.Logger())
@@ -42,6 +46,10 @@ func main() {
 
 	FetchRare()
 	FetchIncomplete()
+
+	for _, v := range data.Categories {
+		fmt.Println(v)
+	}
 
 	fmt.Println(len(data.Incomplete))
 	fmt.Println(len(data.Workers))
@@ -59,6 +67,7 @@ func main() {
 
 	e.POST("/submit-task", TaskFormHandler)
 	e.POST("/submit-task/cat-1", Cat1Handler)
+	e.POST("/submit-task/cat-2", Cat2Handler)
 
 	e.GET("/task-list", func(c echo.Context) error {
 		FetchIncomplete()

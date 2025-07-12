@@ -2,8 +2,10 @@ package main
 
 import (
 	"argentum/db"
+	"database/sql"
 	"errors"
 	"fmt"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -78,22 +80,36 @@ func TaskFormHandler(c echo.Context) error {
 	}
 
 	FetchIncomplete()
-	return c.Render(200, "task-list", data.Incomplete)
+
+	return c.Redirect(http.StatusSeeOther, "/task-list")
+
+	// return c.Render(200, "task-list", data.Incomplete)
 }
 
 func Cat1Handler(c echo.Context) error {
+
 	raw := c.FormValue("cat_1")
-	cat_1, err := strconv.Atoi(raw)
-
-	// put into html {{ $cat_1 }} instead
-
-	// perhaps replace only the data which would go there
-
-	fmt.Println(cat_1)
+	val, err := strconv.Atoi(raw)
 
 	if err != nil {
 		return err
 	}
 
-	return c.Render(200, "cat-2", cat_1)
+	data.Cat_1 = sql.NullInt32{Int32: int32(val), Valid: true}
+	data.Cat_2 = sql.NullInt32{Int32: int32(-1), Valid: true}
+	return c.Render(200, "tf-cat-1-res", data)
+}
+
+func Cat2Handler(c echo.Context) error {
+
+	raw := c.FormValue("cat_2")
+	val, err := strconv.Atoi(raw)
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(data.Cat_2.Int32)
+	data.Cat_2 = sql.NullInt32{Int32: int32(val), Valid: true}
+	return c.Render(200, "tf-cat-3", data)
 }

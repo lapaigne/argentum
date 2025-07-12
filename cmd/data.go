@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"database/sql"
 	"fmt"
 )
 
@@ -11,6 +12,8 @@ type Data struct {
 	Addresses  []db.Address
 	Categories []db.Category
 	Today      string
+	Cat_1      sql.NullInt32
+	Cat_2      sql.NullInt32
 }
 
 // fetch mostly static data: categories, workers, adresses, etc
