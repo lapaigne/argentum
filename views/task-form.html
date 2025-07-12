@@ -9,7 +9,7 @@
                 <select required name="cat_1" hx-post="/submit-task/cat-1" hx-target="#cat_2"
                     hx-trigger="change changed" hx-history="false" id="s1" hx-push-url="false">
                     <option selected disabled value="-1">Не выбрано!</option>
-                    {{ range .Categories }}
+                    {{ range .Raw.Categories }}
                     {{ if eq .Level 1}}
                     <option value="{{ .Id }}">{{ .Name }}</option>
                     {{ end }}
@@ -36,10 +36,8 @@
             <label>Адрес</label>
             <select required name="address">
                 <option disabled selected>Не выбран!</option>
-                {{ range .Addresses}}
-                <option value="{{ .Id }}">
-                    {{ .Address}}
-                </option>
+                {{ range $i, $v := .Mapped.Addresses}}
+                <option value="{{ $i }}">{{ $v }}</option>
                 {{ end }}
             </select>
         </div>
@@ -51,7 +49,7 @@
 
         <div>
             <label>Дата создания</label>
-            <input type="date" id="created" name="created" value="{{ .Today }}" hx-post="/submit-task/created">
+            <input type="date" id="created" name="created" value="{{ .Helper.Today }}" hx-post="/submit-task/created">
         </div>
 
         <div id="until-div">
@@ -69,10 +67,10 @@
 
         <div>
             <label>Исполнители</label>
-            <select id="actor-selector" required>
+            <select id="actor-selector" required hx-post="/submit-task/act" name="act">
                 <option selected disabled>Не выбран!</option>
-                {{ range .Workers}}
-                <option value="{{ .Id }}">{{ .F_name }} {{ .I_name }} {{ .O_name }}</option>
+                {{ range $i, $v := .Mapped.Workers }}
+                <option value="{{ $i }}">{{ $v }}</option>
                 {{ end }}
             </select>
         </div>
@@ -90,9 +88,9 @@
 
 
 {{ block "tf-cat-2" . }}
-{{ $val := .Cat_1.Int32 }}
+{{ $val := .Helper.Cat_1.Int32 }}
 <option selected disabled value="-1">Не выбрано!</option>
-{{ range .Categories }}
+{{ range .Raw.Categories }}
 {{ if eq .Parent.Int32 $val }}
 <option value="{{ .Id }}">{{ .Name }}</option>
 {{ end }}
@@ -101,9 +99,9 @@
 
 
 {{ block "tf-cat-3" . }}
-{{ $val := .Cat_2.Int32 }}
+{{ $val := .Helper.Cat_2.Int32 }}
 <option selected disabled value="-1">Не выбрано!</option>
-{{ range .Categories }}
+{{ range .Raw.Categories }}
 {{ if eq .Parent.Int32 $val }}
 <option value="{{ .Id }}">{{ .Name }}</option>
 {{ end }}

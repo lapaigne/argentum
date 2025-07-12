@@ -93,8 +93,8 @@ func Cat1Handler(c echo.Context) error {
 		return err
 	}
 
-	data.Cat_1 = sql.NullInt32{Int32: int32(val), Valid: true}
-	data.Cat_2 = sql.NullInt32{Int32: int32(-1), Valid: true}
+	data.Helper.Cat_1 = sql.NullInt32{Int32: int32(val), Valid: true}
+	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(-1), Valid: true}
 	return c.Render(200, "tf-cat-1-res", data)
 }
 
@@ -107,7 +107,12 @@ func Cat2Handler(c echo.Context) error {
 		return err
 	}
 
-	fmt.Println(data.Cat_2.Int32)
-	data.Cat_2 = sql.NullInt32{Int32: int32(val), Valid: true}
+	fmt.Println(data.Helper.Cat_2.Int32)
+	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(val), Valid: true}
 	return c.Render(200, "tf-cat-3", data)
+}
+
+func ActHandler(c echo.Context) error {
+
+	return c.Render(200, "tf-cat", data)
 }

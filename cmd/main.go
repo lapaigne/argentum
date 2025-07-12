@@ -30,8 +30,8 @@ var data Data
 
 func main() {
 
-	data.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
-	data.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
+	data.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
+	data.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
 
 	fmt.Println("just so it'd be here")
 	e := echo.New()
@@ -47,21 +47,12 @@ func main() {
 	FetchRare()
 	FetchIncomplete()
 
-	for _, v := range data.Categories {
-		fmt.Println(v)
-	}
-
-	fmt.Println(len(data.Incomplete))
-	fmt.Println(len(data.Workers))
-	fmt.Println(len(data.Categories))
-	fmt.Println(len(data.Addresses))
-
 	e.Router()
 
 	e.GET("/", func(c echo.Context) error { return c.Render(200, "index", nil) })
 
 	e.GET("/task-form", func(c echo.Context) error {
-		data.Today = time.Now().Format(time.DateOnly)
+		data.Helper.Today = time.Now().Format(time.DateOnly)
 		return c.Render(200, "task-form", data)
 	})
 
@@ -71,8 +62,15 @@ func main() {
 
 	e.GET("/task-list", func(c echo.Context) error {
 		FetchIncomplete()
-		return c.Render(200, "task-list", data.Incomplete)
+		return c.Render(200, "task-list", data)
 	})
+
+	e.GET("/auth", func(c echo.Context) error {
+		return c.Render(200, "auth", data)
+	})
+
+	e.POST("/submit-auth", AuthHandler)
+	e.POST("/submit-auth/tel", AuthTel)
 
 	e.Logger.Fatal(e.Start(":42069"))
 }
