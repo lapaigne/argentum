@@ -37,7 +37,7 @@ func AddTask(t Task) error {
 
 }
 
-func GetIncomplete() ([]Task, error) {
+func GetTasks() ([]Task, error) {
 
 	query := "SELECT * FROM public.tasks;"
 	rows, err := db.Query(query)

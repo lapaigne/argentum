@@ -31,25 +31,25 @@ type MappedData struct {
 	Categories map[int]string
 }
 
-func (d *MappedData) Init() {
+func (d *Data) Init() {
 
-	d.Workers = make(map[int]string)
-	d.Addresses = make(map[int]string)
-	d.Categories = make(map[int]string)
+	d.Mapped.Workers = make(map[int]string)
+	d.Mapped.Addresses = make(map[int]string)
+	d.Mapped.Categories = make(map[int]string)
 }
 
-func (d *MappedData) Fill(r *RawData) error {
+func (d *Data) Fill() error {
 
-	for _, v := range r.Workers {
-		d.Workers[v.Id] = v.F_name + " " + v.I_name + " " + v.O_name
+	for _, v := range d.Raw.Workers {
+		d.Mapped.Workers[v.Id] = v.F_name + " " + v.I_name + " " + v.O_name
 	}
 
-	for _, v := range r.Addresses {
-		d.Workers[v.Id] = v.Address
+	for _, v := range d.Raw.Addresses {
+		d.Mapped.Addresses[v.Id] = v.Address
 	}
 
-	for _, v := range r.Categories {
-		d.Workers[v.Id] = v.Name
+	for _, v := range d.Raw.Categories {
+		d.Mapped.Categories[v.Id] = v.Name
 	}
 
 	return nil
@@ -80,10 +80,10 @@ func FetchRare() error {
 	return nil
 }
 
-func FetchIncomplete() error {
+func FetchTasks() error {
 	var err error
 
-	data.Raw.Tasks, err = db.GetIncomplete()
+	data.Raw.Tasks, err = db.GetTasks()
 	if err != nil {
 		fmt.Printf("Error on fetching ALL incomplete tasks: %s", err)
 		return err
@@ -94,7 +94,7 @@ func FetchIncomplete() error {
 
 func Fetch() error {
 	var err error
-	_, err = db.GetIncomplete()
+	_, err = db.GetTasks()
 	if err != nil {
 		return err
 	}

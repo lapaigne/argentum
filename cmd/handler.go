@@ -77,7 +77,7 @@ func TaskFormHandler(c echo.Context) error {
 		return err
 	}
 
-	FetchIncomplete()
+	FetchTasks()
 
 	return c.Redirect(http.StatusSeeOther, "/task-list")
 
@@ -107,12 +107,10 @@ func Cat2Handler(c echo.Context) error {
 		return err
 	}
 
-	fmt.Println(data.Helper.Cat_2.Int32)
 	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(val), Valid: true}
 	return c.Render(200, "tf-cat-3", data)
 }
 
 func ActHandler(c echo.Context) error {
-
-	return c.Render(200, "tf-cat", data)
+	return c.Render(200, "tf-act", data)
 }

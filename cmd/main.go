@@ -45,7 +45,10 @@ func main() {
 	defer db.CloseConn()
 
 	FetchRare()
-	FetchIncomplete()
+	FetchTasks()
+
+	data.Init()
+	data.Fill()
 
 	e.Router()
 
@@ -57,11 +60,12 @@ func main() {
 	})
 
 	e.POST("/submit-task", TaskFormHandler)
+	e.POST("/submit-task/act", ActHandler)
 	e.POST("/submit-task/cat-1", Cat1Handler)
 	e.POST("/submit-task/cat-2", Cat2Handler)
 
 	e.GET("/task-list", func(c echo.Context) error {
-		FetchIncomplete()
+		FetchTasks()
 		return c.Render(200, "task-list", data)
 	})
 
