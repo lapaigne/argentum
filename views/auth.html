@@ -1,30 +1,30 @@
 {{ block "auth" . }}
 
-<div>
+<fieldset>
+    <form hx-post="/submit-auth">
 
-    <input type="tel">
+        <input type="tel" hx-post="/submit-auth/tel" hx-target="#tel-err" hx-push-url="false" hx-swap="outerHTML"
+            hx-trigger="change" name="tel">
+        <div id="tel-err">{{ template "tel-err" }}</div>
 
+        <input id="password " type="password" hx-post="submit-auth/pass" hx-history="false" name="pass">
 
-    <button id="login-w-pass">Войти с паролем</button>
-    <button id="login-w-code">Войти с кодом</button>
-
-</div>
-
-
-{{ end }}
-
-{{ block "password" .}}
+        <button type="submit">Авторизоваться</button>
+    </form>
+</fieldset>
 
 {{ end }}
 
-{{ block "code-input" . }}
 
+
+{{ define "tel-err" }}
+<div id="tel-err">{{ . }}</div>
 {{ end }}
 
-{{ block "failed" . }}
+{{ block "auth-failed" . }}
 <span>Не удалось авторизоваться</span>
 {{ end }}
 
-{{ block "successful" . }}
+{{ block "auth-ok" . }}
 
 {{ end }}
