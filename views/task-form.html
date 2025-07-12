@@ -1,6 +1,6 @@
 {{ block "task-form" . }}
 
-<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-push-url="task-list" hx-target="main">
+<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-push-url="/task-list">
     <div>
         <div id="comb-cat-wrap">
             <label>Категории задачи</label>
@@ -67,7 +67,7 @@
 
         <div>
             <label>Исполнители</label>
-            <select id="actor-selector" required hx-post="/submit-task/act" name="act">
+            <select id="actor-selector" required hx-post="/submit-task/act" name="act" hx-swap="afterend">
                 <option selected disabled>Не выбран!</option>
                 {{ range $i, $v := .Mapped.Workers }}
                 <option value="{{ $i }}">{{ $v }}</option>
@@ -124,4 +124,9 @@
     </select>
 </div>
 
+{{ end }}
+
+
+{{ block "tf-act" . }}
+<p>test</p>
 {{ end }}

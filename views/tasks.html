@@ -1,8 +1,8 @@
-{{ block "task-list" .Raw.Tasks }}
+{{ block "task-list" . }}
 
 <div>
     <h1>Задачи</h1>
-    {{ range . }}
+    {{ range .Raw.Tasks }}
     <div>
         <label>Категория 1</label>
         <p>{{ .Cat_1 }}</p>
