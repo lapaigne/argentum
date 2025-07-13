@@ -52,6 +52,7 @@ func main() {
 
 	e.Router()
 
+	e.GET("/split", func(c echo.Context) error { return c.Render(200, "split", nil) })
 	e.GET("/", func(c echo.Context) error { return c.Render(200, "index", nil) })
 
 	e.GET("/task-form", func(c echo.Context) error {

@@ -1,3 +1,18 @@
-body{
+body {
+    background-color: #eeeefe;
+}
 
+.half-split {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    height: 100%;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
 }
