@@ -4,18 +4,25 @@ import (
 	"argentum/db"
 	"database/sql"
 	"fmt"
+	"time"
+)
+
+const (
+	DDMMYYYY = "02-01-2006"
 )
 
 type Data struct {
 	Raw    RawData
 	Mapped MappedData
-	Helper HelperData
+	Helper Helper
 }
 
-type HelperData struct {
-	Today string
-	Cat_1 sql.NullInt32
-	Cat_2 sql.NullInt32
+type Helper struct {
+	Today   string
+	Cat_1   sql.NullInt32
+	Cat_2   sql.NullInt32
+	Format  func(time.Time) string
+	NFormat func(sql.NullTime) string
 }
 
 type RawData struct {
@@ -31,11 +38,27 @@ type MappedData struct {
 	Categories map[int]string
 }
 
+func Format(t time.Time) string {
+	d := t.Format(DDMMYYYY)
+	return d
+}
+
+func NFormat(t sql.NullTime) string {
+	if !t.Valid {
+		return "-"
+	}
+	d := t.Time.Format(DDMMYYYY)
+	return d
+}
+
 func (d *Data) Init() {
 
 	d.Mapped.Workers = make(map[int]string)
 	d.Mapped.Addresses = make(map[int]string)
 	d.Mapped.Categories = make(map[int]string)
+
+	d.Helper.Format = Format
+	d.Helper.NFormat = NFormat
 }
 
 func (d *Data) Fill() error {

@@ -70,6 +70,13 @@ func TaskFormHandler(c echo.Context) error {
 
 	t.Comment = c.FormValue("comment")
 
+	w, err := strconv.Atoi(c.FormValue("act"))
+	if err != nil {
+		return err
+	}
+
+	t.Worker = w
+
 	err = db.AddTask(t)
 
 	if err != nil {

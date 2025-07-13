@@ -17,24 +17,18 @@ type Task struct {
 	Until_date     sql.NullTime
 	Completed_date sql.NullTime
 	Comment        string
-}
-
-type TaskWorker struct {
-	Id        int
-	Task_id   int
-	Worker_id int
+	Worker         int
 }
 
 func AddTask(t Task) error {
 
 	query := `
 	INSERT INTO public.tasks 
-	(cat_1, cat_2, cat_3, "desc", addr_obj, created_date, until_date, comment)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+	(cat_1, cat_2, cat_3, "desc", addr_obj, created_date, until_date, comment, worker)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
 	`
-	_, err := db.Exec(query, t.Cat_1, t.Cat_2, t.Cat_3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment)
+	_, err := db.Exec(query, t.Cat_1, t.Cat_2, t.Cat_3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker)
 	return err
-
 }
 
 func GetTasks() ([]Task, error) {
@@ -49,10 +43,22 @@ func GetTasks() ([]Task, error) {
 	res := []Task{}
 	for rows.Next() {
 		var t Task
-		if err := rows.Scan(&t.Id, &t.Cat_1, &t.Cat_2, &t.Cat_3, &t.Desc, &t.Addr_obj, &t.Created_date, &t.Until_date, &t.Completed_date, &t.Comment); err != nil {
+		if err := rows.Scan(
+			&t.Id,
+			&t.Cat_1,
+			&t.Cat_2,
+			&t.Cat_3,
+			&t.Desc,
+			&t.Addr_obj,
+			&t.Created_date,
+			&t.Until_date,
+			&t.Completed_date,
+			&t.Comment,
+			&t.Worker,
+		); err != nil {
 			return nil, err
-
 		}
+
 		res = append(res, t)
 	}
 
@@ -63,15 +69,12 @@ func GetTasks() ([]Task, error) {
 	return res, nil
 }
 
-func TasksByWorker(id int) ([]Task, error) {
+func TasksByWorker(w int) ([]Task, error) {
 
 	res := []Task{}
-	query := "SELECT "
-	rows, err := db.Query(query)
+	query := "SELECT (id) FROM public.tasks WHERE 'actor' = $1"
+	rows, err := db.Query(query, w)
 	rows.Close()
-	if err != nil {
-		return res, fmt.Errorf("Failed query")
-	}
 
-	return res, nil
+	return res, err
 }
