@@ -16,15 +16,11 @@
         HEADER
     </header>
 
-    <hr>
-
     <main>
-        <button hx-get="/task-form" hx-swap="outerHTML" hx-target="main" hx-push-url="true">Добавить задачу</button>
+        <button hx-get="/new-task" hx-swap="innerHTML" hx-target="main" hx-push-url="true">Добавить задачу</button>
         <button hx-get="/task-list" hx-swap="outerHTML" hx-target="main" hx-push-url="true">Просмотреть задачи</button>
         <button hx-get="/auth" hx-swap="outerHTML" hx-target="body">Авторизация</button>
     </main>
-
-    <hr>
 
     <footer>
         FOOTER

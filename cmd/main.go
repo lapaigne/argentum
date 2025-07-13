@@ -55,9 +55,13 @@ func main() {
 	e.GET("/split", func(c echo.Context) error { return c.Render(200, "split", nil) })
 	e.GET("/", func(c echo.Context) error { return c.Render(200, "index", nil) })
 
-	e.GET("/task-form", func(c echo.Context) error {
+	e.GET("/new-task", func(c echo.Context) error {
 		data.Helper.Today = time.Now().Format(time.DateOnly)
-		return c.Render(200, "task-form", data)
+		if c.Request().Header.Get("HX-Request") == "true" {
+			return c.Render(200, "task-form", data)
+		} else {
+			return c.Render(200, "new-task", data)
+		}
 	})
 
 	e.POST("/submit-task", TaskFormHandler)

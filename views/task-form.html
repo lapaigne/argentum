@@ -1,6 +1,24 @@
+{{ block "new-task" . }}
+
+<header>
+    HEADER
+</header>
+
+<main>
+    {{ template "task-form" . }}
+</main>
+
+<footer>
+    FOOTER
+</footer>
+
+{{ end }}
+
+
+
 {{ block "task-form" . }}
 
-<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-push-url="/task-list">
+<form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-history="false" hx-push-url="/new-task">
     <div>
         <div id="comb-cat-wrap">
             <label>Категории задачи</label>
