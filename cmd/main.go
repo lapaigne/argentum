@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
+	"path/filepath"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -12,17 +14,52 @@ import (
 )
 
 type Templates struct {
-	templates *template.Template
+	templates map[string]*template.Template
 }
 
 func (t *Templates) Render(w io.Writer, name string, data any, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
+	v, ok := t.templates[name]
+	if !ok {
+		return fmt.Errorf("not found; %s", name)
+	}
+
+	return v.ExecuteTemplate(w, "base", data)
 }
 
-func NewTemplate() *Templates {
-	return &Templates{
-		templates: template.Must(template.ParseGlob("views/*.html")),
+func parse(p string) (map[string]*template.Template, error) {
+
+	templates := make(map[string]*template.Template)
+
+	files, err := filepath.Glob(filepath.Join(p, "*.html"))
+	if err != nil {
+		return nil, err
 	}
+
+	for _, file := range files {
+		if filepath.Base(file) == "base.html" {
+			continue
+		}
+
+		t, err := template.ParseFiles(filepath.Join(p, "base.html"), file)
+		if err != nil {
+			return nil, err
+		}
+
+		name := filepath.Base(file)
+		name = name[:len(name)-len(filepath.Ext(name))]
+
+		templates[name] = t
+	}
+
+	return templates, nil
+}
+
+func NewTemplates(p string) (*Templates, error) {
+	templates, err := parse(p)
+	if err != nil {
+		return nil, err
+	}
+	return &Templates{templates: templates}, nil
 }
 
 var data Data
@@ -35,7 +72,13 @@ func main() {
 
 	e.Static("/css", "views/css")
 
-	e.Renderer = NewTemplate()
+	templates, err := NewTemplates("views")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	e.Renderer = templates
 
 	db.OpenConn()
 	defer db.CloseConn()
@@ -45,8 +88,6 @@ func main() {
 
 	data.Init()
 	data.Fill()
-
-	e.Router()
 
 	e.GET("/split", func(c echo.Context) error { return c.Render(200, "split", nil) })
 	e.GET("/", func(c echo.Context) error { return c.Render(200, "index", nil) })
@@ -66,11 +107,12 @@ func main() {
 		return c.Render(200, "base", data)
 	})
 
+	e.GET("/page2", func(c echo.Context) error {
+		return c.Render(200, "page2", data)
+	})
+
 	e.GET("/page", func(c echo.Context) error {
-		if c.Request().Header.Get("HX-Request") == "true" {
-			return c.Render(200, "page", data)
-		}
-		return c.Render(200, "base", data)
+		return c.Render(200, "page", data)
 	})
 
 	e.POST("/submit-task", TaskFormHandler)
