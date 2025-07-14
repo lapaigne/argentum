@@ -57,6 +57,9 @@ func (d *Data) Init() {
 	d.Mapped.Addresses = make(map[int]string)
 	d.Mapped.Categories = make(map[int]string)
 
+	data.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
+	data.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
+
 	d.Helper.Format = Format
 	d.Helper.NFormat = NFormat
 }

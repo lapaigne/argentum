@@ -2,7 +2,6 @@ package main
 
 import (
 	"argentum/db"
-	"database/sql"
 	"fmt"
 	"html/template"
 	"io"
@@ -30,9 +29,6 @@ var data Data
 
 func main() {
 
-	data.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
-	data.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
-
 	fmt.Println("just so it'd be here")
 	e := echo.New()
 	e.Use(middleware.Logger())
@@ -59,9 +55,15 @@ func main() {
 		data.Helper.Today = time.Now().Format(time.DateOnly)
 		if c.Request().Header.Get("HX-Request") == "true" {
 			return c.Render(200, "task-form", data)
-		} else {
-			return c.Render(200, "new-task", data)
 		}
+		return c.Render(200, "new-task", data)
+	})
+
+	e.GET("/page", func(c echo.Context) error {
+		if c.Request().Header.Get("HX-Request") == "true" {
+			return c.Render(200, "page", data)
+		}
+		return c.Render(200, "base", data)
 	})
 
 	e.POST("/submit-task", TaskFormHandler)

@@ -29,3 +29,6 @@ tmp
 
 # task file temporary files
 .task
+
+# for go.sum and go.mod files in telescope
+.ignore
