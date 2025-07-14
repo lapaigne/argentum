@@ -16,11 +16,13 @@ type Templates struct {
 func (t *Templates) Render(w io.Writer, name string, data any, c echo.Context) error {
 	v, ok := t.templates[name]
 	if !ok {
-		return fmt.Errorf("not found; %s", name)
+		return fmt.Errorf("not found: %s", name)
 	}
 
-	if c.Request().Header.Get("HX-Request") == "true" {
+	if c.Request().Header.Get("HX-Target") == "content" {
 		return v.ExecuteTemplate(w, "content", data)
+	} else if c.Request().Header.Get("HX-Request") == "true" {
+		return v.ExecuteTemplate(w, name, data)
 	}
 
 	return v.ExecuteTemplate(w, "base", data)
@@ -55,6 +57,11 @@ func ParseTemplates(p string) (map[string]*template.Template, error) {
 		name = name[:len(name)-len(filepath.Ext(name))]
 
 		templates[name] = t
+	}
+
+	for _, v := range partials.Templates() {
+		name := v.Name()
+		templates[name] = partials
 	}
 
 	return templates, nil

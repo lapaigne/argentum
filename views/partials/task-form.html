@@ -91,7 +91,7 @@
 {{ end }}
 
 
-{{ block "tf-cat-2" . }}
+{{ define "tf-cat-2" }}
 {{ $val := .Helper.Cat_1.Int32 }}
 <option selected disabled value="-1">Не выбрано!</option>
 {{ range .Raw.Categories }}
@@ -102,7 +102,7 @@
 {{ end }}
 
 
-{{ block "tf-cat-3" . }}
+{{ define "tf-cat-3" }}
 {{ $val := .Helper.Cat_2.Int32 }}
 <option selected disabled value="-1">Не выбрано!</option>
 {{ range .Raw.Categories }}
@@ -113,24 +113,21 @@
 {{ end }}
 
 
-{{ block "tf-cat-1-res" . }}
-
+{{ define "tf-cat-1-res" }}
 <div id="cat_2">
     <select required name="cat_2" hx-post="/submit-task/cat-2" hx-swap="innerHTML" hx-target="#s3"
         hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false">
         {{ template "tf-cat-2" . }}
     </select>
 </div>
-
 <div id="cat_3" hx-swap-oob="innerHTML">
     <select required name="cat_3" id="s3">
         {{ template "tf-cat-3" . }}
     </select>
 </div>
-
 {{ end }}
 
 
-{{ block "tf-act" . }}
+{{ define "tf-act" }}
 <p>test</p>
 {{ end }}
