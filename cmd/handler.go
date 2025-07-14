@@ -13,6 +13,9 @@ import (
 )
 
 func TaskFormHandler(c echo.Context) error {
+
+	data.ResetHelper()
+
 	var err error
 	var t db.Task
 
@@ -86,6 +89,10 @@ func TaskFormHandler(c echo.Context) error {
 
 	FetchTasks()
 
+	data.Helper.Cat_1 = sql.NullInt32{Int32: int32(0), Valid: false}
+	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(0), Valid: false}
+	data.Helper.Addr = -1
+
 	return c.Redirect(http.StatusSeeOther, "/task-list")
 
 	// return c.Render(200, "task-list", data.Incomplete)
@@ -132,4 +139,8 @@ func AddrHandler(c echo.Context) error {
 
 func ActHandler(c echo.Context) error {
 	return c.Render(200, "tf-act", data)
+}
+
+func UntilHandler(c echo.Context) error {
+	return c.Render(200, "tf-until", data)
 }

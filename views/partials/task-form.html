@@ -1,7 +1,8 @@
 {{ define "task-form" }}
 
 <div style="background-color: #badbed;" class="left">
-    <form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-history="false" hx-push-url="/new-task">
+    <form hx-post="/submit-task" id="task-form" hx-target="#content" hx-swap="outerHTML" hx-history="false"
+        hx-push-url="false">
         <div>
             <div id="comb-cat-wrap">
                 <label>Категории задачи</label>
@@ -58,19 +59,22 @@
             <div id="until-div">
                 <div>
                     <label>Срок выполнения</label>
-                    <input type="date" id="do-until" name="do-until" hx-post="/submit-task/until" hx-target="#until-div"
-                        hx-swap="outerHTML">
+                    <input type="date" id="do-until" name="do-until" hx-post="/submit-task/until"
+                        hx-target="#until-test" hx-swap="innerHTML">
                 </div>
+                <div id="until-test">
 
+                </div>
                 <div>
                     <label>Без определенного срока</label>
                     <input type="checkbox" id="until-checkbox">
                 </div>
             </div>
 
-            <div>
+            <div id="act-div">
                 <label>Исполнители</label>
-                <select id="actor-selector" required hx-post="/submit-task/act" name="act" hx-swap="afterend">
+                <select id="actor-selector" required hx-post="/submit-task/act" name="act" hx-swap="afterend"
+                    hx-target="#act-div">
                     <option selected disabled>Не выбран!</option>
                     {{ range $i, $v := .Mapped.Workers }}
                     <option value="{{ $i }}">{{ $v }}</option>
@@ -129,5 +133,10 @@
 
 
 {{ define "tf-act" }}
+<p>test</p>
+{{ end }}
+
+
+{{ define "tf-until" }}
 <p>test</p>
 {{ end }}

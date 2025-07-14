@@ -53,14 +53,21 @@ func NFormat(t sql.NullTime) string {
 	return d
 }
 
+func (d *Data) ResetHelper() {
+	d.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
+	d.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
+
+	d.Helper.Addr = -1
+}
+
 func (d *Data) Init() {
 
 	d.Mapped.Workers = make(map[int]string)
 	d.Mapped.Addresses = make(map[int]string)
 	d.Mapped.Categories = make(map[int]string)
 
-	data.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
-	data.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
+	d.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
+	d.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
 
 	d.Helper.Format = Format
 	d.Helper.NFormat = NFormat
