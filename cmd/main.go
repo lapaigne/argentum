@@ -41,17 +41,11 @@ func main() {
 
 	e.GET("/new-task", func(c echo.Context) error {
 		data.Helper.Today = time.Now().Format(time.DateOnly)
-		if c.Request().Header.Get("HX-Request") == "true" {
-			return c.Render(200, "task-form", data)
-		}
-		return c.Render(200, "new-task", data)
+		return c.Render(200, "", data)
 	})
 
 	e.GET("/table", func(c echo.Context) error {
-		if c.Request().Header.Get("HX-Request") == "true" {
-			return c.Render(200, "table", data)
-		}
-		return c.Render(200, "base", data)
+		return c.Render(200, "table", data)
 	})
 
 	e.GET("/page2", func(c echo.Context) error {

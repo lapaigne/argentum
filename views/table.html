@@ -1,7 +1,4 @@
-{{ template "base" }}
-
 {{ define "content" }}
-{{ block "table" . }}
 
 {{ $mapped := .Mapped }}
 {{ $cats:= $mapped.Categories }}
@@ -53,4 +50,8 @@
 </table>
 
 {{ end }}
+
+
+{{ define "page" }}
+{{ template "base" . }}
 {{ end }}

@@ -1,9 +1,7 @@
-{{ template "base" . }}
-
 {{ define "content" }}
-{{ block "page" . }}
-
-<h1>PAGE</h1>
-
+<h3>PAGE 1</h3>
 {{ end }}
+
+{{ define "page" }}
+{{ template "base" . }}
 {{ end }}
