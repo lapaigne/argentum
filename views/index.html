@@ -1,11 +1,10 @@
 {{ define "content" }}
-<button hx-get="/page" hx-swap="innerHTML" hx-target="main" hx-push-url="true">PAGE</button>
+<button hx-get="/page" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">PAGE</button>
 <button hx-get="/new-task" hx-swap="innerHTML" hx-target="main" hx-push-url="true">Добавить задачу</button>
 <button hx-get="/task-list" hx-swap="outerHTML" hx-target="main" hx-push-url="true">Просмотреть задачи</button>
 <button hx-get="/auth" hx-swap="outerHTML" hx-target="body">Авторизация</button>
 {{ end }}
 
-{{ define "page2" }}
+{{ define "index" }}
 {{ template "base" . }}
-{{ template "content" . }}
 {{ end }}
