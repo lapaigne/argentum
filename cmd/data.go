@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	DDMMYYYY = "02-01-2006"
+	// DD.MM.YYYY
+	DateFormat = "02.01.2006"
 )
 
 type Data struct {
@@ -39,7 +40,7 @@ type MappedData struct {
 }
 
 func Format(t time.Time) string {
-	d := t.Format(DDMMYYYY)
+	d := t.Format(DateFormat)
 	return d
 }
 
@@ -47,7 +48,7 @@ func NFormat(t sql.NullTime) string {
 	if !t.Valid {
 		return "-"
 	}
-	d := t.Time.Format(DDMMYYYY)
+	d := t.Time.Format(DateFormat)
 	return d
 }
 

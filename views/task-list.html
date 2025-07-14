@@ -30,6 +30,9 @@
         <label>Срок выполнения</label>
         <p>{{ call $helper.NFormat .Until_date }}</p>
 
+        <label>Отмечено</label>
+        <p>{{ call $helper.NFormat .Mark_date }}</p>
+
         <label>Выполнено</label>
         <p>{{ call $helper.NFormat .Completed_date }}</p>
 

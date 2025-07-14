@@ -59,6 +59,13 @@ func main() {
 		return c.Render(200, "new-task", data)
 	})
 
+	e.GET("/table", func(c echo.Context) error {
+		if c.Request().Header.Get("HX-Request") == "true" {
+			return c.Render(200, "table", data)
+		}
+		return c.Render(200, "base", data)
+	})
+
 	e.GET("/page", func(c echo.Context) error {
 		if c.Request().Header.Get("HX-Request") == "true" {
 			return c.Render(200, "page", data)

@@ -15,6 +15,7 @@ type Task struct {
 	Addr_obj       int
 	Created_date   time.Time
 	Until_date     sql.NullTime
+	Mark_date      sql.NullTime
 	Completed_date sql.NullTime
 	Comment        string
 	Worker         int
@@ -52,6 +53,7 @@ func GetTasks() ([]Task, error) {
 			&t.Addr_obj,
 			&t.Created_date,
 			&t.Until_date,
+			&t.Mark_date,
 			&t.Completed_date,
 			&t.Comment,
 			&t.Worker,

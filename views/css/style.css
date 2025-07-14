@@ -16,3 +16,16 @@ body {
 .right {
     right: 0;
 }
+
+th,
+tr,
+td {
+    text-align: center;
+    border: 1px solid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid;
+}
