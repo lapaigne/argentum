@@ -35,7 +35,7 @@ tmp_dir = "tmp"
   watcher = "cyan"
 
 [log]
-  main_only = true
+  main_only = false
   silent = false
   time = false
 

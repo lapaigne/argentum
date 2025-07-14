@@ -30,17 +30,23 @@ func ParseTemplates(p string) (map[string]*template.Template, error) {
 
 	templates := make(map[string]*template.Template)
 
-	files, err := filepath.Glob(filepath.Join(p, "*.html"))
+	partials, err := template.ParseGlob(filepath.Join(p, "partials", "*.html"))
 	if err != nil {
 		return nil, err
 	}
 
-	for _, file := range files {
-		if filepath.Base(file) == "base.html" {
-			continue
+	pages, err := filepath.Glob(filepath.Join(p, "pages", "*.html"))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, file := range pages {
+		t, err := partials.Clone()
+		if err != nil {
+			return nil, err
 		}
 
-		t, err := template.ParseFiles(filepath.Join(p, "base.html"), file)
+		t, err = t.ParseFiles(file)
 		if err != nil {
 			return nil, err
 		}

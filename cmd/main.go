@@ -41,7 +41,7 @@ func main() {
 
 	e.GET("/new-task", func(c echo.Context) error {
 		data.Helper.Today = time.Now().Format(time.DateOnly)
-		return c.Render(200, "", data)
+		return c.Render(200, "tfpage", data)
 	})
 
 	e.GET("/table", func(c echo.Context) error {
@@ -58,6 +58,7 @@ func main() {
 
 	e.POST("/submit-task", TaskFormHandler)
 	e.POST("/submit-task/act", ActHandler)
+	e.POST("/submit-task/addr", AddrHandler)
 	e.POST("/submit-task/cat-1", Cat1Handler)
 	e.POST("/submit-task/cat-2", Cat2Handler)
 

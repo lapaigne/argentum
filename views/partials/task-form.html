@@ -1,0 +1,136 @@
+{{ define "task-form" }}
+
+<div style="background-color: #badbed;" class="left">
+    <form hx-post="/submit-task" id="task-form" hx-swap="outerHTML" hx-history="false" hx-push-url="/new-task">
+        <div>
+            <div id="comb-cat-wrap">
+                <label>Категории задачи</label>
+
+                <div id="cat_1">
+                    <select required name="cat_1" hx-post="/submit-task/cat-1" hx-target="#cat_2"
+                        hx-trigger="change changed" hx-history="false" id="s1" hx-push-url="false">
+                        <option selected disabled value="-1">Не выбрано!</option>
+                        {{ range .Raw.Categories }}
+                        {{ if eq .Level 1}}
+                        <option value="{{ .Id }}">{{ .Name }}</option>
+                        {{ end }}
+                        {{ end }}
+                    </select>
+                </div>
+
+                <div id="cat_2">
+                    <select required name="cat_2" hx-post="/submit-task/cat-2" hx-swap="innerHTML" hx-target="#s3"
+                        hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false">
+                        {{ template "tf-cat-2" . }}
+                    </select>
+                </div>
+
+                <div id="cat_3">
+                    <select required name="cat_3" id="s3">
+                        {{ template "tf-cat-3" . }}
+                    </select>
+                </div>
+
+            </div>
+
+            <div>
+                <label>Адрес</label>
+                <select required name="address" id="addr" hx-post="/submit-task/addr" hx-trigger="change changed"
+                    hx-target="#table" hx-swap="innerHTML" hx-history="false" hx-push-url="false">
+                    <option disabled selected>Не выбран!</option>
+                    {{ range $i, $v := .Mapped.Addresses}}
+                    <option value="{{ $i }}">{{ $v }}</option>
+                    {{ end }}
+                </select>
+            </div>
+
+            <div>
+                <label>Описание задачи</label>
+                <input type="text" id="description" name="desc">
+            </div>
+
+            <div>
+                <label>Дата создания</label>
+                <input type="date" id="created" name="created" value="{{ .Helper.Today }}"
+                    hx-post="/submit-task/created">
+            </div>
+
+            <div id="until-div">
+                <div>
+                    <label>Срок выполнения</label>
+                    <input type="date" id="do-until" name="do-until" hx-post="/submit-task/until" hx-target="#until-div"
+                        hx-swap="outerHTML">
+                </div>
+
+                <div>
+                    <label>Без определенного срока</label>
+                    <input type="checkbox" id="until-checkbox">
+                </div>
+            </div>
+
+            <div>
+                <label>Исполнители</label>
+                <select id="actor-selector" required hx-post="/submit-task/act" name="act" hx-swap="afterend">
+                    <option selected disabled>Не выбран!</option>
+                    {{ range $i, $v := .Mapped.Workers }}
+                    <option value="{{ $i }}">{{ $v }}</option>
+                    {{ end }}
+                </select>
+            </div>
+
+            <div>
+                <label>Комментарий</label>
+                <input type="text" id="comment" name="comment">
+            </div>
+
+            <button type="submit">Добавить задачу</button>
+        </div>
+    </form>
+</div>
+
+{{ end }}
+
+
+{{ block "tf-cat-2" . }}
+{{ $val := .Helper.Cat_1.Int32 }}
+<option selected disabled value="-1">Не выбрано!</option>
+{{ range .Raw.Categories }}
+{{ if eq .Parent.Int32 $val }}
+<option value="{{ .Id }}">{{ .Name }}</option>
+{{ end }}
+{{ end }}
+{{ end }}
+
+
+{{ block "tf-cat-3" . }}
+{{ $val := .Helper.Cat_2.Int32 }}
+<option selected disabled value="-1">Не выбрано!</option>
+{{ range .Raw.Categories }}
+{{ if eq .Parent.Int32 $val }}
+<option value="{{ .Id }}">{{ .Name }}</option>
+{{ end }}
+{{ end }}
+{{ end }}
+
+
+{{ block "tf-cat-1-res" . }}
+
+<div id="cat_2">
+    <select required name="cat_2" hx-post="/submit-task/cat-2" hx-swap="innerHTML" hx-target="#s3"
+        hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false">
+        {{ template "tf-cat-2" . }}
+    </select>
+</div>
+
+<div id="cat_3" hx-swap-oob="innerHTML">
+    <select required name="cat_3" id="s3">
+        {{ template "tf-cat-3" . }}
+    </select>
+</div>
+
+{{ end }}
+
+
+{{ block "tf-act" . }}
+<p>test</p>
+{{ end }}

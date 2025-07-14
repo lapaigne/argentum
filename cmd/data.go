@@ -22,6 +22,7 @@ type Helper struct {
 	Today   string
 	Cat_1   sql.NullInt32
 	Cat_2   sql.NullInt32
+	Addr    int
 	Format  func(time.Time) string
 	NFormat func(sql.NullTime) string
 }

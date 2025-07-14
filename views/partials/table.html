@@ -1,0 +1,51 @@
+{{ define "table" }}
+
+{{ $mapped := .Mapped }}
+{{ $cats:= $mapped.Categories }}
+{{ $workers := $mapped.Workers }}
+{{ $addrs:= $mapped.Addresses }}
+
+{{ $helper := .Helper }}
+{{ $tasks := .Raw.Tasks }}
+<div id="table" style="background-color: #aaddaa;" class="right">
+    <div id="table-filters">
+
+    </div>
+
+    <h2>Задачи на объекте: {{ index $addrs $helper.Addr }}</h2>
+
+    <table>
+
+        <tr>
+            <th>К1</th>
+            <th>К2</th>
+            <th>К3</th>
+            <th>Постановка</th>
+            <th>Создано</th>
+            <th>Срок</th>
+            <th>Отмечено</th>
+            <th>Выполнено</th>
+            <th>Исполнитель</th>
+        </tr>
+
+        {{ range $tasks }}
+        {{ if eq .Addr_obj $helper.Addr }}
+
+        <tr>
+            <td>{{ index $cats .Cat_1 }}</td>
+            <td>{{ index $cats .Cat_2 }}</td>
+            <td>{{ index $cats .Cat_3 }}</td>
+            <td>{{ .Desc }}</td>
+            <td>{{ call $helper.Format .Created_date }}</td>
+            <td>{{ call $helper.NFormat .Until_date }}</td>
+            <td>{{ call $helper.NFormat .Mark_date }}</td>
+            <td>{{ call $helper.NFormat .Completed_date }}</td>
+            <td>{{ index $workers .Worker }}</td>
+        </tr>
+
+        {{ end }}
+        {{ end }}
+    </table>
+</div>
+
+{{ end }}

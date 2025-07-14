@@ -118,6 +118,18 @@ func Cat2Handler(c echo.Context) error {
 	return c.Render(200, "tf-cat-3", data)
 }
 
+func AddrHandler(c echo.Context) error {
+	raw := c.FormValue("address")
+	val, err := strconv.Atoi(raw)
+
+	if err != nil {
+		return err
+	}
+
+	data.Helper.Addr = val
+	return c.Render(200, "table", data)
+}
+
 func ActHandler(c echo.Context) error {
 	return c.Render(200, "tf-act", data)
 }
