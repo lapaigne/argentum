@@ -37,7 +37,7 @@
             <div>
                 <label>Адрес</label>
                 <select required name="address" id="addr" hx-post="/submit-task/addr" hx-trigger="change changed"
-                    hx-target="#table" hx-swap="innerHTML" hx-history="false" hx-push-url="false">
+                    hx-target="#table" hx-swap="outerHTML" hx-history="false" hx-push-url="false">
                     <option disabled selected>Не выбран!</option>
                     {{ range $i, $v := .Mapped.Addresses}}
                     <option value="{{ $i }}">{{ $v }}</option>

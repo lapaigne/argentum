@@ -1,18 +1,24 @@
-{{ block "auth" . }}
+{{ define "auth" }}
+{{ template "base" . }}
+{{ end }}
 
-<fieldset>
-    <form hx-post="/submit-auth">
+{{ define "content" }}
+<div>
+    <form hx-post="/submit-auth" hx-target="#content" hx-swap="innerHTML">
 
         <input type="tel" hx-post="/submit-auth/tel" hx-target="#tel-err" hx-push-url="false" hx-swap="outerHTML"
             hx-trigger="change" name="tel">
         <div id="tel-err">{{ template "tel-err" }}</div>
 
-        <input id="password " type="password" hx-post="submit-auth/pass" hx-history="false" name="pass">
+        <input id="password" type="password" name="pass">
+
+        <div>
+
+        </div>
 
         <button type="submit">Авторизоваться</button>
     </form>
-</fieldset>
-
+</div>
 {{ end }}
 
 

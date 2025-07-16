@@ -134,7 +134,7 @@ func AddrHandler(c echo.Context) error {
 	}
 
 	data.Helper.Addr = val
-	return c.Render(200, "table", data)
+	return c.Render(200, "addr-table", data)
 }
 
 func ActHandler(c echo.Context) error {

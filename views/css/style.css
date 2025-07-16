@@ -15,9 +15,14 @@ header {
 }
 
 #content {
+    padding: 20px;
     flex-grow: 1;
     display: flex;
     height: 0;
+}
+
+.content {
+    width: 100%;
 }
 
 .left,
@@ -28,7 +33,7 @@ header {
 }
 
 .left {
-    width: 40%;
+    width: 25%;
 }
 
 .right {
@@ -40,6 +45,10 @@ header {
     display: flex;
     flex-grow: 1;
     height: 100%;
+}
+
+tr {
+    height: 20px;
 }
 
 th,

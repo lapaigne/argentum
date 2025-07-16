@@ -25,6 +25,7 @@ type Helper struct {
 	Addr    int
 	Format  func(time.Time) string
 	NFormat func(sql.NullTime) string
+	Sort    TaskDisplay
 }
 
 type RawData struct {
@@ -41,11 +42,13 @@ type MappedData struct {
 }
 
 func Format(t time.Time) string {
+
 	d := t.Format(DateFormat)
 	return d
 }
 
 func NFormat(t sql.NullTime) string {
+
 	if !t.Valid {
 		return "-"
 	}
@@ -54,6 +57,7 @@ func NFormat(t sql.NullTime) string {
 }
 
 func (d *Data) ResetHelper() {
+
 	d.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
 	d.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
 
@@ -71,6 +75,8 @@ func (d *Data) Init() {
 
 	d.Helper.Format = Format
 	d.Helper.NFormat = NFormat
+
+	// d.Helper.Sort = sorting
 }
 
 func (d *Data) Fill() error {

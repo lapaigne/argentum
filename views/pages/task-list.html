@@ -1,5 +1,9 @@
-{{ block "task-list" . }}
+{{ define "task-list" }}
+{{ template "base" . }}
+{{ end }}
 
+
+{{ define "content" }}
 <div>
     <h1>Задачи</h1>
     {{ $tasks := .Raw.Tasks }}
@@ -10,37 +14,37 @@
     {{ range $tasks }}
     <div>
         <label>Категория 1</label>
-        <p>{{ index $cats .Cat_1 }}</p>
+        <span>{{ index $cats .Cat_1 }}</span>
 
         <label>Категория 2</label>
-        <p>{{ index $cats .Cat_2 }}</p>
+        <span>{{ index $cats .Cat_2 }}</span>
 
         <label>Категория 3</label>
-        <p>{{ index $cats .Cat_3 }}</p>
+        <span>{{ index $cats .Cat_3 }}</span>
 
         <label>Описание</label>
-        <p>{{ .Desc }}</p>
+        <span>{{ .Desc }}</span>
 
         <label>Адрес</label>
-        <p>{{ index $adds .Addr_obj }}</p>
+        <span>{{ index $adds .Addr_obj }}</span>
 
         <label>Дата создания</label>
-        <p>{{ call $helper.Format .Created_date }}</p>
+        <span>{{ call $helper.Format .Created_date }}</span>
 
         <label>Срок выполнения</label>
-        <p>{{ call $helper.NFormat .Until_date }}</p>
+        <span>{{ call $helper.NFormat .Until_date }}</span>
 
         <label>Отмечено</label>
-        <p>{{ call $helper.NFormat .Mark_date }}</p>
+        <span>{{ call $helper.NFormat .Mark_date }}</span>
 
         <label>Выполнено</label>
-        <p>{{ call $helper.NFormat .Completed_date }}</p>
+        <span>{{ call $helper.NFormat .Completed_date }}</span>
 
         <label>Доп. комментарий</label>
-        <p>{{ .Comment }}</p>
+        <span>{{ .Comment }}</span>
 
         <label>Исполнитель</label>
-        <p>{{ index $ws .Worker }}</p>
+        <span>{{ index $ws .Worker }}</span>
     </div>
     <hr>
     {{ end }}

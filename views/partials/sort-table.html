@@ -1,4 +1,4 @@
-{{ define "addr-table" }}
+{{ define "sort-table" }}
 
 {{ $mapped := .Mapped }}
 {{ $cats:= $mapped.Categories }}
@@ -7,12 +7,12 @@
 
 {{ $helper := .Helper }}
 {{ $tasks := .Raw.Tasks }}
-<div id="table" style="background-color: #aaddaa;" class="right">
-    <div id="table-filters">
+{{ $filter := true }}
+<div id="sort-table" style="background-color: #aaddaa;" class="table content">
+    <div id="sort-table-filters">
+        <p>фильтры</p>
 
     </div>
-
-    <h2>Задачи на объекте: {{ index $addrs $helper.Addr }}</h2>
 
     <table>
 
@@ -21,26 +21,30 @@
             <th>К2</th>
             <th>К3</th>
             <th>Постановка</th>
+            <th>Объект</th>
             <th>Создано</th>
             <th>Срок</th>
             <th>Отмечено</th>
             <th>Выполнено</th>
             <th>Исполнитель</th>
+            <th>Комментарий</th>
         </tr>
 
         {{ range $tasks }}
-        {{ if eq .Addr_obj $helper.Addr }}
+        {{ if $filter }}
 
         <tr>
             <td>{{ index $cats .Cat_1 }}</td>
             <td>{{ index $cats .Cat_2 }}</td>
             <td>{{ index $cats .Cat_3 }}</td>
             <td>{{ .Desc }}</td>
+            <td>{{ index $addrs .Addr_obj }}</td>
             <td>{{ call $helper.Format .Created_date }}</td>
             <td>{{ call $helper.NFormat .Until_date }}</td>
             <td>{{ call $helper.NFormat .Mark_date }}</td>
             <td>{{ call $helper.NFormat .Completed_date }}</td>
             <td>{{ index $workers .Worker }}</td>
+            <td>{{ .Comment }}</td>
         </tr>
 
         {{ end }}
