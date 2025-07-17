@@ -1,26 +1,39 @@
 package main
 
 import (
+	"argentum/db"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 )
+
+var AUTHTIME = time.Now().Add(time.Minute * 5)
 
 func AuthHandler(c echo.Context) error {
 
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
 
-	if tel != "1234" || pass != "abcd" {
+	pwd := []byte(pass)
+
+	u, err := db.GetUser(tel)
+
+	if err != nil {
+		return err
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Hash), pwd); err != nil {
 		return echo.ErrUnauthorized
 	}
 
 	claims := &jwtClaims{
 		"admin",
 		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 5)),
+			ExpiresAt: jwt.NewNumericDate(AUTHTIME),
 		},
 	}
 

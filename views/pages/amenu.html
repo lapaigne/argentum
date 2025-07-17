@@ -1,0 +1,12 @@
+{{ define "content" }}
+<div>
+    <button hx-get="/d/page" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">PAGE</button>
+    <button hx-get="/new-task" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Добавить задачу</button>
+    <button hx-get="/task-list" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
+    <button hx-get="/tflist" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
+</div>
+{{ end }}
+
+{{ define "amenu" }}
+{{ template "base" . }}
+{{ end }}

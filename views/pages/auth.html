@@ -4,11 +4,11 @@
 
 {{ define "content" }}
 <div>
-    <form hx-post="/submit-auth" hx-target="#content" hx-swap="innerHTML">
+    <form hx-post="/submit-auth" hx-target="#content" hx-swap="innerHTML" hx-push-url="/menu">
 
         <input type="tel" hx-post="/submit-auth/tel" hx-target="#tel-err" hx-push-url="false" hx-swap="outerHTML"
             hx-trigger="change" name="tel">
-        <div id="tel-err">{{ template "tel-err" }}</div>
+        <div id="tel-err">{{ template "tel-err" . }}</div>
 
         <input id="password" type="password" name="pass">
 
@@ -19,16 +19,6 @@
         <button type="submit">Авторизоваться</button>
     </form>
 </div>
-{{ end }}
-
-
-
-{{ define "tel-err" }}
-<div id="tel-err">{{ . }}</div>
-{{ end }}
-
-{{ block "auth-failed" . }}
-<span>Не удалось авторизоваться</span>
 {{ end }}
 
 {{ block "auth-ok" . }}
