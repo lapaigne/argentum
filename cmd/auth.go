@@ -2,7 +2,6 @@ package main
 
 import (
 	"argentum/db"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -12,6 +11,11 @@ import (
 )
 
 var AUTHTIME = time.Now().Add(time.Minute * 5)
+
+type jwtClaims struct {
+	Level int `json:"level"`
+	jwt.RegisteredClaims
+}
 
 func AuthHandler(c echo.Context) error {
 
@@ -23,7 +27,7 @@ func AuthHandler(c echo.Context) error {
 	u, err := db.GetUser(tel)
 
 	if err != nil {
-		return err
+		return echo.ErrUnauthorized
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(u.Hash), pwd); err != nil {
@@ -31,7 +35,7 @@ func AuthHandler(c echo.Context) error {
 	}
 
 	claims := &jwtClaims{
-		"admin",
+		u.Level,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(AUTHTIME),
 		},
@@ -55,17 +59,12 @@ func AuthHandler(c echo.Context) error {
 
 	c.SetCookie(cookie)
 
-	return c.Redirect(http.StatusSeeOther, "/index")
+	return c.Redirect(http.StatusSeeOther, "/menu")
 }
 
 func AuthTel(c echo.Context) error {
 	tel := c.FormValue("tel")
 	return c.Render(200, "tel-err", tel)
-}
-
-type jwtClaims struct {
-	Name string `json:"name"`
-	jwt.RegisteredClaims
 }
 
 func JWTCooked() echo.MiddlewareFunc {
@@ -76,6 +75,19 @@ func JWTCooked() echo.MiddlewareFunc {
 				c.Request().Header.Set("Authorization", "Bearer "+cookie.Value)
 			}
 			return next(c)
+		}
+	}
+}
+
+func JWTRoles(minLevel int) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			user := c.Get("user").(*jwt.Token)
+			claims := user.Claims.(*jwtClaims)
+			if claims.Level >= minLevel {
+				return next(c)
+			}
+			return echo.ErrForbidden
 		}
 	}
 }

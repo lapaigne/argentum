@@ -5,13 +5,20 @@ type User struct {
 	Worker int
 	Login  string
 	Hash   string
+	Level  int
+}
+
+var AccessLevels = map[string]int{
+	"admin":      100,
+	"dispatcher": 50,
+	"worker":     10,
 }
 
 func GetUser(login string) (User, error) {
 
 	var u User
 	query := "SELECT * FROM public.users WHERE login = $1"
-	err := db.QueryRow(query, login).Scan(&u.Id, &u.Worker, &u.Login, &u.Hash)
+	err := db.QueryRow(query, login).Scan(&u.Id, &u.Worker, &u.Login, &u.Hash, &u.Level)
 	if err != nil {
 		return User{}, err
 	}
