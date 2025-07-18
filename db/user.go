@@ -28,7 +28,12 @@ func GetUser(login string) (User, error) {
 
 func AddUser(u User) error {
 
-	// query := "INSERT INTO public.users"
+	query := "INSERT INTO public.users (worker, login, hash, level) VALUES ($1, $2, $3, $4)"
+
+	_, err := db.Exec(query, u.Worker, u.Login, u.Hash, u.Level)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

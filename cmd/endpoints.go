@@ -15,8 +15,6 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 	e.GET("/", func(c echo.Context) error { return c.Render(200, "auth", nil) })
 	e.POST("/submit-auth", AuthHandler)
 
-	e.GET("/menu", func(c echo.Context) error { return c.Render(200, "dmenu", nil) })
-
 	e.GET("/new-task", func(c echo.Context) error {
 		data.Helper.Today = time.Now().Format(time.DateOnly)
 		return c.Render(200, "tfpage", data)

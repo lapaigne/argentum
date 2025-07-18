@@ -13,6 +13,7 @@ import (
 var AUTHTIME = time.Now().Add(time.Minute * 5)
 
 type jwtClaims struct {
+	UID   int `json:"uid"`
 	Level int `json:"level"`
 	jwt.RegisteredClaims
 }
@@ -35,6 +36,7 @@ func AuthHandler(c echo.Context) error {
 	}
 
 	claims := &jwtClaims{
+		u.Id,
 		u.Level,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(AUTHTIME),
@@ -59,7 +61,16 @@ func AuthHandler(c echo.Context) error {
 
 	c.SetCookie(cookie)
 
-	return c.Redirect(http.StatusSeeOther, "/menu")
+	switch claims.Level {
+	case 10:
+		return c.Redirect(http.StatusSeeOther, "/w/menu")
+	case 50:
+		return c.Redirect(http.StatusSeeOther, "/d/menu")
+	case 100:
+		return c.Redirect(http.StatusSeeOther, "/a/menu")
+	default:
+		return echo.ErrUnauthorized
+	}
 }
 
 func AuthTel(c echo.Context) error {

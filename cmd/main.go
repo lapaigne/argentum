@@ -45,11 +45,21 @@ func main() {
 		SigningKey: []byte("secret"),
 	}
 
+	w := e.Group("/w")
+
+	w.Use(JWTCooked())
+	w.Use(echojwt.WithConfig(config))
+	w.Use(JWTRoles(db.AccessLevels["worker"]))
+
+	w.GET("/menu", func(c echo.Context) error { return c.Render(200, "wmenu", nil) })
+
 	d := e.Group("/d")
 
 	d.Use(JWTCooked())
 	d.Use(echojwt.WithConfig(config))
 	d.Use(JWTRoles(db.AccessLevels["dispatcher"]))
+
+	d.GET("/menu", func(c echo.Context) error { return c.Render(200, "dmenu", nil) })
 
 	d.GET("/tflist", func(c echo.Context) error {
 		return c.Render(200, "tflist", data)
@@ -60,6 +70,9 @@ func main() {
 	a.Use(echojwt.WithConfig(config))
 	a.Use(JWTRoles(db.AccessLevels["admin"]))
 
+	a.GET("/menu", func(c echo.Context) error { return c.Render(200, "amenu", nil) })
+
 	endpoints.Setup(e)
+
 	e.Logger.Fatal(e.Start(":42069"))
 }
