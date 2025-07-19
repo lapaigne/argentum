@@ -5,7 +5,6 @@
 {{ define "content" }}
 <div>
     <form hx-post="/submit-auth" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
-
         <input type="tel" hx-post="/submit-auth/tel" hx-target="#tel-err" hx-push-url="false" hx-swap="outerHTML"
             hx-trigger="change" name="tel">
         <div id="tel-err">{{ template "tel-err" . }}</div>

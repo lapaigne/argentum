@@ -13,7 +13,7 @@ var endpoints Endpoints
 func (p Endpoints) Setup(e *echo.Echo) error {
 
 	e.GET("/", func(c echo.Context) error { return c.Render(200, "auth", nil) })
-	e.POST("/submit-auth", AuthHandler)
+	e.POST("/submit-auth", Login)
 
 	e.GET("/new-task", func(c echo.Context) error {
 		data.Helper.Today = time.Now().Format(time.DateOnly)

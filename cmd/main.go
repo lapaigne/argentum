@@ -20,6 +20,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	e.HTTPErrorHandler = ErrorHandler
+
 	e.Static("/css", "views/css")
 
 	templates, err := NewTemplates("views")
@@ -48,6 +50,7 @@ func main() {
 	w := e.Group("/w")
 
 	w.Use(JWTCooked())
+	w.Use(AutoRefreshJWT)
 	w.Use(echojwt.WithConfig(config))
 	w.Use(JWTRoles(db.AccessLevels["worker"]))
 
@@ -56,6 +59,7 @@ func main() {
 	d := e.Group("/d")
 
 	d.Use(JWTCooked())
+	d.Use(AutoRefreshJWT)
 	d.Use(echojwt.WithConfig(config))
 	d.Use(JWTRoles(db.AccessLevels["dispatcher"]))
 
@@ -66,7 +70,9 @@ func main() {
 	})
 
 	a := e.Group("/a")
+
 	a.Use(JWTCooked())
+	a.Use(AutoRefreshJWT)
 	a.Use(echojwt.WithConfig(config))
 	a.Use(JWTRoles(db.AccessLevels["admin"]))
 
