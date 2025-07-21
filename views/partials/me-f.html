@@ -1,5 +1,43 @@
 {{ define "me-f" }}
+{{ $helper := .Helper }}
+{{ $addrs := .Mapped.Addresses }}
+{{ $cats := .Mapped.Categories }}
 
 
+<div id="mytasks" class="table">
+    <table>
+        <tr>
+            <th>Категория</th>
+            <th>Описание</th>
+            <th>Адрес</th>
+            <th>Срок</th>
+            <th>Подтвердить</th>
+        </tr>
+        {{ range $i, $v := .Raw.Tasks }}
+        <tr>
+            <div id="mt-row-{{ $i }}">
+                <td>{{ index $cats $v.Cat_1 }} {{ index $cats $v.Cat_2 }} {{ index $cats $v.Cat_3 }}</td>
+                <td>{{ $v.Desc }}</td>
+                <td>{{ index $addrs $v.Addr_obj }}</td>
+                <td>{{ call $helper.NFormat $v.Until_date }}</td>
+                <td>
+                    <input type="checkbox" id="conf{{ $i }}" hx-post="/w/me/{{ $i }}" hx-target="#mt-row-{{ $i }}-split"
+                        hx-swap="innerHTML">
+                </td>
+                <div id="mt-row-{{ $i }}-split">
+
+                </div>
+            </div>
+        </tr>
+        {{ end }}
+    </table>
+</div>
+
+{{ end }}
+
+{{ define "mt-one" }}
+
+<div id="mt-left"></div>
+<div id="mt-right"></div>
 
 {{ end }}

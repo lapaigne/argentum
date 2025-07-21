@@ -55,6 +55,8 @@ func main() {
 	w.Use(JWTRoles(db.AccessLevels["worker"]))
 
 	w.GET("/menu", func(c echo.Context) error { return c.Render(200, "wmenu", nil) })
+	w.GET("/me", func(c echo.Context) error { return c.Render(200, "me", data) })
+	w.POST("/me/:id", endpoints.W_ConfirmTask)
 
 	d := e.Group("/d")
 

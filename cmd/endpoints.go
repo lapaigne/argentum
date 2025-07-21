@@ -1,6 +1,10 @@
 package main
 
 import (
+	"argentum/db"
+	"fmt"
+	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -41,6 +45,27 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 	e.POST("/submit-auth/tel", AuthTel)
 
 	return nil
+}
+
+func (p Endpoints) W_ConfirmTask(c echo.Context) error {
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(id)
+
+	var tasks []db.Task
+
+	for _, v := range data.Raw.Tasks {
+		if v.Worker == id {
+			tasks = append(tasks, v)
+		}
+	}
+
+	return c.NoContent(http.StatusNoContent)
+	// return c.Render(200, "me", nil)
 }
 
 func (p Endpoints) AddTask(c echo.Context) error {
