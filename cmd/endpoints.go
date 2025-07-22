@@ -16,7 +16,10 @@ var endpoints Endpoints
 
 func (p Endpoints) Setup(e *echo.Echo) error {
 
-	e.GET("/", func(c echo.Context) error { return c.Render(200, "auth", nil) })
+	e.GET("/signin", func(c echo.Context) error { return c.Render(200, "signin", nil) })
+
+	e.GET("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "signin") })
+
 	e.POST("/submit-auth", Login)
 
 	e.GET("/new-task", func(c echo.Context) error {

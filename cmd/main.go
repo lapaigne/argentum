@@ -4,6 +4,7 @@ import (
 	"argentum/db"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -47,38 +48,38 @@ func main() {
 		SigningKey: []byte("secret"),
 	}
 
-	w := e.Group("/w")
+	e.GET("/me", func(c echo.Context) error {
+		return c.Render(200, "me", data)
+	},
+		JWTCooked(),
+		AutoRefreshJWT,
+		echojwt.WithConfig(config),
+	)
 
-	w.Use(JWTCooked())
-	w.Use(AutoRefreshJWT)
-	w.Use(echojwt.WithConfig(config))
-	w.Use(JWTRoles(db.AccessLevels["worker"]))
+	e.POST("/me/:id", endpoints.W_ConfirmTask)
 
-	w.GET("/menu", func(c echo.Context) error { return c.Render(200, "wmenu", nil) })
-	w.GET("/me", func(c echo.Context) error { return c.Render(200, "me", data) })
-	w.POST("/me/:id", endpoints.W_ConfirmTask)
+	e.GET("/menu", func(c echo.Context) error {
+		acc := GetClaims(c).Level
+		switch acc {
+		case db.AccessLevels["worker"]:
+			return c.Render(200, "wmenu", nil)
+		case db.AccessLevels["dispatcher"]:
+			return c.Render(200, "dmenu", nil)
+		case db.AccessLevels["admin"]:
+			return c.Render(200, "amenu", nil)
+		default:
+			return echo.ErrUnauthorized
+		}
 
-	d := e.Group("/d")
+	},
+		JWTCooked(),
+		AutoRefreshJWT,
+		echojwt.WithConfig(config),
+	)
 
-	d.Use(JWTCooked())
-	d.Use(AutoRefreshJWT)
-	d.Use(echojwt.WithConfig(config))
-	d.Use(JWTRoles(db.AccessLevels["dispatcher"]))
-
-	d.GET("/menu", func(c echo.Context) error { return c.Render(200, "dmenu", nil) })
-
-	d.GET("/tflist", func(c echo.Context) error {
+	e.GET("/tflist", func(c echo.Context) error {
 		return c.Render(200, "tflist", data)
 	})
-
-	a := e.Group("/a")
-
-	a.Use(JWTCooked())
-	a.Use(AutoRefreshJWT)
-	a.Use(echojwt.WithConfig(config))
-	a.Use(JWTRoles(db.AccessLevels["admin"]))
-
-	a.GET("/menu", func(c echo.Context) error { return c.Render(200, "amenu", nil) })
 
 	endpoints.Setup(e)
 

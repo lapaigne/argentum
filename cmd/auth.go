@@ -27,7 +27,7 @@ func authTime() time.Time {
 }
 
 func refTime() time.Time {
-	return time.Now().Add(time.Hour * 24)
+	return time.Now().Add(time.Minute * 5)
 }
 
 func Login(c echo.Context) error {
@@ -106,16 +106,13 @@ func Login(c echo.Context) error {
 	c.SetCookie(refCookie)
 
 	switch claims.Level {
-	case 10:
-		return c.Redirect(http.StatusSeeOther, "/w/menu")
-	case 50:
-		return c.Redirect(http.StatusSeeOther, "/d/menu")
-	case 100:
-		return c.Redirect(http.StatusSeeOther, "/a/menu")
+	case 10, 50, 100:
+		return c.Redirect(http.StatusSeeOther, "/menu")
 	default:
 		fmt.Println("default err")
 		return echo.ErrUnauthorized
 	}
+
 }
 
 func Logout(c echo.Context) error {
@@ -164,6 +161,12 @@ func JWTRoles(minLevel int) echo.MiddlewareFunc {
 			return echo.ErrForbidden
 		}
 	}
+}
+
+func GetClaims(c echo.Context) *jwtClaims {
+
+	user := c.Get("user").(*jwt.Token)
+	return user.Claims.(*jwtClaims)
 }
 
 func Refresh(c echo.Context) error {
@@ -228,7 +231,6 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 			})
 
 			if err == nil {
-				fmt.Println("not refreshing for some dumb reason")
 				return next(c)
 			}
 		}
@@ -236,7 +238,7 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 		refCookie, err := c.Cookie("ref")
 		if err != nil {
 			fmt.Println(err)
-			return c.Redirect(http.StatusSeeOther, "/")
+			return c.Redirect(http.StatusSeeOther, "/signin")
 		}
 
 		refToken, err := jwt.ParseWithClaims(refCookie.Value, &jwtClaims{}, func(t *jwt.Token) (any, error) {
@@ -244,12 +246,12 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil || !refToken.Valid {
-			return c.Redirect(http.StatusSeeOther, "/")
+			return c.Redirect(http.StatusSeeOther, "/signin")
 		}
 
 		claims, ok := refToken.Claims.(*jwtClaims)
 		if !ok {
-			return c.Redirect(http.StatusSeeOther, "/")
+			return c.Redirect(http.StatusSeeOther, "/signin")
 		}
 
 		newClaims := &jwtClaims{
