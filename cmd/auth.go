@@ -61,6 +61,7 @@ func Login(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+
 	cookie := &http.Cookie{
 		Name:     "token",
 		Value:    t,
@@ -141,6 +142,7 @@ func AuthTel(c echo.Context) error {
 func JWTCooked() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
+
 			cookie, err := c.Cookie("token")
 			if err == nil {
 				c.Request().Header.Set("Authorization", "Bearer "+cookie.Value)
@@ -153,6 +155,7 @@ func JWTCooked() echo.MiddlewareFunc {
 func JWTRoles(minLevel int) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
+
 			user := c.Get("user").(*jwt.Token)
 			claims := user.Claims.(*jwtClaims)
 			if claims.Level >= minLevel {
@@ -169,60 +172,14 @@ func GetClaims(c echo.Context) *jwtClaims {
 	return user.Claims.(*jwtClaims)
 }
 
-func Refresh(c echo.Context) error {
-
-	refCookie, err := c.Cookie("ref")
-	if err != nil {
-		return echo.ErrUnauthorized
-	}
-
-	refToken, err := jwt.ParseWithClaims(refCookie.Value, &jwtClaims{}, func(t *jwt.Token) (any, error) {
-		return []byte(refsecret), nil
-	})
-
-	if err != nil || !refToken.Valid {
-		return echo.ErrUnauthorized
-	}
-
-	claims, ok := refToken.Claims.(*jwtClaims)
-	if !ok {
-		return echo.ErrUnauthorized
-	}
-
-	if err := db.ValidateToken(refCookie.Value, claims.UID); err != nil {
-		fmt.Println("invalid token")
-		return echo.ErrUnauthorized
-	}
-
-	newClaims := &jwtClaims{
-		UID:   claims.UID,
-		Level: claims.Level,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(authTime()),
-		},
-	}
-
-	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, newClaims)
-	s, err := newToken.SignedString([]byte("secret"))
-	if err != nil {
-		return err
-	}
-
-	c.SetCookie(&http.Cookie{
-		Name:     "token",
-		Value:    s,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   false,
-		SameSite: http.SameSiteLaxMode,
-		Expires:  newClaims.ExpiresAt.Time,
-	})
-
-	return c.NoContent(204)
-}
-
 func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+
+		path := c.Request().URL.Path
+		if public[path] {
+			return next(c)
+		}
+
 		cookie, err := c.Cookie("token")
 		if err == nil {
 			acc := cookie.Value
@@ -235,8 +192,11 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
+		fmt.Println(err)
+
 		refCookie, err := c.Cookie("ref")
 		if err != nil {
+			fmt.Println("no ref cookie")
 			fmt.Println(err)
 			return c.Redirect(http.StatusSeeOther, "/signin")
 		}

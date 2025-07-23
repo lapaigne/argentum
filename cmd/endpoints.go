@@ -17,9 +17,7 @@ var endpoints Endpoints
 func (p Endpoints) Setup(e *echo.Echo) error {
 
 	e.GET("/signin", func(c echo.Context) error { return c.Render(200, "signin", nil) })
-
 	e.GET("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "signin") })
-
 	e.POST("/submit-auth", Login)
 
 	e.GET("/new-task", func(c echo.Context) error {
@@ -50,7 +48,29 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 	return nil
 }
 
+func (p Endpoints) Menu(c echo.Context) error {
+	acc := GetClaims(c).Level
+	switch acc {
+	case db.AccessLevels["worker"]:
+		return c.Render(200, "wmenu", nil)
+	case db.AccessLevels["dispatcher"]:
+		return c.Render(200, "dmenu", nil)
+	case db.AccessLevels["admin"]:
+		return c.Render(200, "amenu", nil)
+	default:
+		return echo.ErrUnauthorized
+	}
+}
+
 func (p Endpoints) W_ConfirmTask(c echo.Context) error {
+	acc := GetClaims(c).Level
+	switch acc {
+	case db.AccessLevels["worker"]:
+	case db.AccessLevels["dispatcher"]:
+	case db.AccessLevels["admin"]:
+	default:
+		return echo.ErrUnauthorized
+	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
