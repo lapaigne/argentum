@@ -1,0 +1,103 @@
+/* input-button.css */
+
+/* Inputs, selects, textareas */
+input[type="tel"],
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    font-family: inherit;
+    /* inherit from body */
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #222;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type="tel"]:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #0056b3;
+    /* less bright blue */
+    box-shadow: 0 0 3px 1px rgba(0, 86, 179, 0.5);
+    background-color: #fff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+/* Buttons and input buttons */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border: 1px solid #0056b3;
+    /* less bright blue */
+    border-radius: 4px;
+    background-color: white;
+    color: #0056b3;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    user-select: none;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* Secondary variant (white buttons) */
+button.white,
+input.white[type="button"],
+input.white[type="submit"],
+input.white[type="reset"] {
+    border-color: #ddd;
+    color: #555;
+    background-color: white;
+}
+
+button.white:hover,
+input.white[type="button"]:hover,
+input.white[type="submit"]:hover,
+input.white[type="reset"]:hover {
+    background-color: #eee;
+    border-color: #bbb;
+    color: #333;
+}

@@ -1,78 +1,95 @@
-body {
+/* style.css — GENERAL + LAYOUT — Modern & clean, ASP.NET-like vibe */
+
+/* Reset box sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: #eeeefe;
+    padding: 0;
 }
 
+/* Base font and colors */
+html,
+body {
+    height: 100%;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #f3f4f6;
+    /* light gray */
+    color: #1e1e1e;
+}
+
+/* Body as vertical flex container */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
 header {
-    height: 60px;
+    height: 56px;
+    background: #ffffff;
+    border-bottom: 1px solid #d1d5db;
+    /* subtle gray */
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #111827;
+    padding: 0 24px;
     flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+/* Main content fills remaining space */
 #content {
-    padding: 20px;
     flex-grow: 1;
-    display: flex;
-    height: 0;
-}
-
-.content {
+    padding: 24px 48px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
+    min-height: 0;
+    overflow-y: auto;
 }
 
-.left,
-.right {
-    padding: 1rem;
-    box-sizing: border-box;
-    height: 100%;
+/* Scrollbar styling (optional) */
+#content::-webkit-scrollbar {
+    width: 8px;
 }
 
-.left {
-    width: 25%;
+#content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
 }
 
-.right {
-    flex-grow: 1;
+#content::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.split-container {
-    flex: 1;
-    display: flex;
-    flex-grow: 1;
-    height: 100%;
-}
+/* No max-width or horizontal margins to fill width */
+/* Desktop only, no responsive changes */
 
-tr {
-    height: 20px;
-}
+@media (max-width: 767px) {
+    body {
+        font-size: 14px;
+        background-color: #ffffff;
+        /* lighter on mobile */
+    }
 
-th,
-tr,
-td {
-    text-align: center;
-    border: 1px solid;
-}
+    header {
+        height: 48px;
+        font-size: 1rem;
+        padding: 0 16px;
+    }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid;
-}
-
-.col {
-    min-width: 100px;
-}
-
-
-#mt-exp {
-    padding: 1rem;
-    margin-top: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: #f9f9f9;
+    #content {
+        padding: 16px 16px;
+        border-radius: 0;
+        box-shadow: none;
+    }
 }

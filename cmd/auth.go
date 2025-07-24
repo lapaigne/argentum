@@ -4,6 +4,7 @@ import (
 	"argentum/db"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -177,6 +178,10 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 
 		path := c.Request().URL.Path
 		if public[path] {
+			return next(c)
+		}
+
+		if strings.HasPrefix(path, "/css/") {
 			return next(c)
 		}
 

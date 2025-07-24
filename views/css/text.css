@@ -1,0 +1,79 @@
+/* text.css - Typography and text styling */
+
+body,
+input,
+button,
+select,
+textarea {
+    font-family: Roboto, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    font-size: 18px;
+    /* bumped up for better readability */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+    color: #222;
+}
+
+h1 {
+    font-size: 2.75rem;
+}
+
+h2 {
+    font-size: 2.25rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+p {
+    margin: 0 0 1.25rem 0;
+    font-size: 1.125rem;
+}
+
+small,
+.small {
+    font-size: 1rem;
+    color: #666;
+}
+
+a {
+    color: #0078d4;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    text-decoration: underline;
+    color: #005a9e;
+}
+
+strong {
+    font-weight: 700;
+}
+
+em {
+    font-style: italic;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}

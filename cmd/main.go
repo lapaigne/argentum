@@ -4,6 +4,7 @@ import (
 	"argentum/db"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -53,7 +54,7 @@ func main() {
 		SigningKey: []byte("secret"),
 		Skipper: func(c echo.Context) bool {
 			path := c.Request().URL.Path
-			return public[path]
+			return public[path] || strings.HasPrefix(path, "/css/")
 		},
 	}
 

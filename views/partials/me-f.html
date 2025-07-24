@@ -4,42 +4,40 @@
 {{ $addrs := .Mapped.Addresses }}
 {{ $cats := .Mapped.Categories }}
 
+<div class="task-wrapper">
+    <div id="mytasks" class="left">
 
-<div id="mytasks" class="table">
-    <table>
-        <tr>
-            <th class="cat col">Категория</th>
-            <th class="desc col">Описание</th>
-            <th class="addr col">Адрес</th>
-            <th class="until col">Срок</th>
-            <th class="mark_date col">Отметка</th>
-            <th class="mark col">Подтвердить</th>
-        </tr>
-        {{ range $i, $v := .Raw.Tasks }}
-        <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
-            hx-trigger="click">
-            {{ $md := call $helper.NFormat $v.Mark_date }}
-            <td>{{ index $cats $v.Cat_1 }} <br> {{ index $cats $v.Cat_2 }} <br> {{ index $cats $v.Cat_3 }}</td>
-            <td>{{ $v.Desc }}</td>
-            <td>{{ index $addrs $v.Addr_obj }}</td>
-            <td>{{ call $helper.NFormat $v.Until_date }}</td>
-            <td>{{ $md }}</td>
-            <td id="conf-btn-{{ $v.Id }}">
-                {{ if eq $md "-" }}
-                <input type="button" id="conf-{{ $i }}" hx-post="/me/conf-{{ $v.Id }}">
-                {{ end }}
-            </td>
-        </tr>
-        {{ end }}
-    </table>
+        <table>
+            <thead>
+                <th class="cat col">Категория</th>
+                <th class="desc col">Описание</th>
+                <th class="addr col">Адрес</th>
+                <th class="until col">Срок</th>
+                <th class="mark_date col">Отметка</th>
+                <th class="mark col">Подтвердить</th>
+            </thead>
+            {{ range $i, $v := .Raw.Tasks }}
+            <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
+                hx-trigger="click">
+                {{ $md := call $helper.NFormat $v.Mark_date }}
+                <td>{{ index $cats $v.Cat_1 }} <br> {{ index $cats $v.Cat_2 }} <br> {{ index $cats $v.Cat_3 }}</td>
+                <td class="desc">{{ $v.Desc }}</td>
+                <td>{{ index $addrs $v.Addr_obj }}</td>
+                <td>{{ call $helper.NFormat $v.Until_date }}</td>
+                <td>{{ $md }}</td>
+                <td id="conf-btn-{{ $v.Id }}">
+                    {{ if eq $md "-" }}
+                    <input type="button" id="conf-{{ $i }}" hx-post="/me/conf-{{ $v.Id }}">
+                    {{ end }}
+                </td>
+            </tr>
+            {{ end }}
+        </table>
+    </div>
 
-    <div id="mt-exp">
+    <div id="mt-exp" class="right">
     </div>
 </div>
-
-<style>
-
-</style>
 
 {{ end }}
 
