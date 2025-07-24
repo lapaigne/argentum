@@ -32,12 +32,38 @@ func AddTask(t Task) error {
 	return err
 }
 
-func GetTasks() ([]Task, error) {
+// m is completed_date
+//
+// c is completed_date
+func UpdateTask(id int, m sql.NullTime, c sql.NullTime) (bool, error) {
+
+	query := `SELECT "mark_date", "completed_date" FROM public.tasks WHERE id = $1`
+	var md, cd sql.NullTime
+
+	if err := db.QueryRow(query, id).Scan(&md, &cd); err != nil {
+		return false, err
+	}
+
+	if cd.Valid && c.Valid || md.Valid && m.Valid {
+		return false, fmt.Errorf(`non-null task status for task %d`, id)
+	}
+
+	query = `UPDATE public.tasks SET "mark_date" = $1, "completed_date" = $2 WHERE id = $3`
+
+	_, err := db.Exec(query, m, c, id)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func GetAllTasks() ([]Task, error) {
 
 	query := "SELECT * FROM public.tasks;"
 	rows, err := db.Query(query)
 	if err != nil {
-		return nil, fmt.Errorf("Failed query")
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -76,7 +102,7 @@ func TasksByWorker(w int) ([]Task, error) {
 	res := []Task{}
 	query := "SELECT (id) FROM public.tasks WHERE 'actor' = $1"
 	rows, err := db.Query(query, w)
-	rows.Close()
+	defer rows.Close()
 
 	return res, err
 }

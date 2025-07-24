@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"database/sql"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -62,7 +63,7 @@ func (p Endpoints) Menu(c echo.Context) error {
 	}
 }
 
-func (p Endpoints) W_ConfirmTask(c echo.Context) error {
+func (p Endpoints) Me_ExpandTask(c echo.Context) error {
 	acc := GetClaims(c).Level
 	switch acc {
 	case db.AccessLevels["worker"]:
@@ -77,14 +78,48 @@ func (p Endpoints) W_ConfirmTask(c echo.Context) error {
 		return err
 	}
 
-	fmt.Println(id)
+	FetchTasks()
 
-	var tasks []db.Task
+	ctx := struct {
+		Task   *db.Task
+		Cats   map[int]string
+		Addrs  map[int]string
+		Helper Helper
+	}{
+		Task:   data.Mapped.Tasks[id],
+		Cats:   data.Mapped.Categories,
+		Addrs:  data.Mapped.Addresses,
+		Helper: data.Helper,
+	}
 
-	for _, v := range data.Raw.Tasks {
-		if v.Worker == id {
-			tasks = append(tasks, v)
-		}
+	return c.Render(200, "mt-exp", ctx)
+}
+
+func (p Endpoints) Me_ConfirmTask(c echo.Context) error {
+	acc := GetClaims(c).Level
+	switch acc {
+	case db.AccessLevels["worker"]:
+	case db.AccessLevels["dispatcher"]:
+	case db.AccessLevels["admin"]:
+	default:
+		return echo.ErrUnauthorized
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
+
+	now := time.Now().Round(time.Hour * 24)
+	ok, err := db.UpdateTask(id, sql.NullTime{Time: now, Valid: true}, sql.NullTime{Valid: false})
+
+	if err != nil {
+		println(err)
+	}
+
+	if ok {
+		FetchTasks()
+		fmt.Println("updated")
 	}
 
 	return c.NoContent(http.StatusNoContent)

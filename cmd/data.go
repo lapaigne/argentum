@@ -39,6 +39,7 @@ type MappedData struct {
 	Workers    map[int]string
 	Addresses  map[int]string
 	Categories map[int]string
+	Tasks      map[int]*db.Task
 }
 
 func Format(t time.Time) string {
@@ -69,6 +70,7 @@ func (d *Data) Init() {
 	d.Mapped.Workers = make(map[int]string)
 	d.Mapped.Addresses = make(map[int]string)
 	d.Mapped.Categories = make(map[int]string)
+	d.Mapped.Tasks = make(map[int]*db.Task)
 
 	d.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
 	d.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
@@ -91,6 +93,10 @@ func (d *Data) Fill() error {
 
 	for _, v := range d.Raw.Categories {
 		d.Mapped.Categories[v.Id] = v.Name
+	}
+
+	for _, v := range d.Raw.Tasks {
+		d.Mapped.Tasks[v.Id] = &v
 	}
 
 	return nil
@@ -124,7 +130,7 @@ func FetchRare() error {
 func FetchTasks() error {
 	var err error
 
-	data.Raw.Tasks, err = db.GetTasks()
+	data.Raw.Tasks, err = db.GetAllTasks()
 	if err != nil {
 		fmt.Printf("Error on fetching ALL incomplete tasks: %s", err)
 		return err
@@ -135,7 +141,7 @@ func FetchTasks() error {
 
 func Fetch() error {
 	var err error
-	_, err = db.GetTasks()
+	_, err = db.GetAllTasks()
 	if err != nil {
 		return err
 	}

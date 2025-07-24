@@ -65,7 +65,8 @@ func main() {
 
 	e.GET("/me", func(c echo.Context) error { return c.Render(200, "me", data) })
 
-	e.POST("/me/:id", endpoints.W_ConfirmTask)
+	e.POST("/me/conf-:id", endpoints.Me_ConfirmTask)
+	e.POST("/me/exp-:id", endpoints.Me_ExpandTask)
 
 	e.GET("/menu", endpoints.Menu)
 

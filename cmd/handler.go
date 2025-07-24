@@ -34,10 +34,6 @@ func TaskFormHandler(c echo.Context) error {
 
 	t.Created_date = date
 
-	// structurize the categories
-	// perhaps add an extra field for level (w/ vals as 1,2 or 3)
-	// use proper parser
-
 	c1, err := strconv.Atoi(c.FormValue("cat_1"))
 	if err != nil {
 		fmt.Println("cat 1")
