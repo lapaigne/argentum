@@ -198,7 +198,7 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 		if err != nil {
 			fmt.Println("no ref cookie")
 			fmt.Println(err)
-			return c.Redirect(http.StatusSeeOther, "/signin")
+			return echo.ErrUnauthorized
 		}
 
 		refToken, err := jwt.ParseWithClaims(refCookie.Value, &jwtClaims{}, func(t *jwt.Token) (any, error) {
@@ -206,12 +206,12 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil || !refToken.Valid {
-			return c.Redirect(http.StatusSeeOther, "/signin")
+			return echo.ErrUnauthorized
 		}
 
 		claims, ok := refToken.Claims.(*jwtClaims)
 		if !ok {
-			return c.Redirect(http.StatusSeeOther, "/signin")
+			return echo.ErrUnauthorized
 		}
 
 		newClaims := &jwtClaims{
@@ -225,7 +225,7 @@ func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
 		newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, newClaims)
 		s, err := newToken.SignedString([]byte("secret"))
 		if err != nil {
-			return c.Redirect(http.StatusSeeOther, "/")
+			return echo.ErrUnauthorized
 		}
 
 		c.SetCookie(&http.Cookie{

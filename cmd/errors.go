@@ -21,7 +21,16 @@ func ErrorHandler(err error, c echo.Context) {
 	}
 
 	if code == 401 {
-		c.Redirect(http.StatusSeeOther, "/")
+
+		if public[c.Request().URL.Path] {
+			return
+		}
+
+		if c.Request().Header.Get("HX-Request") == "true" {
+			c.NoContent(http.StatusUnauthorized)
+		} else {
+			c.Redirect(http.StatusSeeOther, "/signin")
+		}
 		return
 	}
 
