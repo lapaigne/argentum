@@ -32,3 +32,5 @@ tmp
 
 # for go.sum and go.mod files in telescope
 .ignore
+
+argentum

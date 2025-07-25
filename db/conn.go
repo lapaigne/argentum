@@ -13,7 +13,12 @@ var db *sql.DB
 
 func OpenConn() {
 	// TODO: use proper <USER>, <PASSWORD>, <HOST>
-	connStr := fmt.Sprintf("user=lapaigne password=%s dbname=aqua host=laptopaigne sslmode=verify-full", os.Getenv("PSQLPASS"))
+	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s sslmode=verify-full",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PSWD"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("DB_HOST"),
+	)
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {

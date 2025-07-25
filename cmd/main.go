@@ -5,6 +5,7 @@ import (
 	"argentum/emb"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -30,7 +31,7 @@ func main() {
 
 	e.HTTPErrorHandler = ErrorHandler
 
-	e.Static("/css", "views/css")
+	e.Static("/css", "emb/views/css")
 
 	templates, err := emb.NewTemplates("views")
 	if err != nil {
@@ -76,5 +77,6 @@ func main() {
 
 	endpoints.Setup(e)
 
-	e.Logger.Fatal(e.Start(":42069"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
+
 }

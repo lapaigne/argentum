@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"database/sql"
 	"fmt"
 	"net/http"
 	"strings"
@@ -31,7 +32,33 @@ func refTime() time.Time {
 	return time.Now().Add(time.Minute * 5)
 }
 
+func Register(c echo.Context) error {
+
+	tel := c.FormValue("tel")
+	pass := c.FormValue("pass")
+	pwd := []byte(pass)
+
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	u := db.User{
+		Worker: 0,
+		Login:  tel,
+		Hash:   string(hash),
+		Level:  0,
+		Token:  sql.NullString{},
+	}
+
+	db.AddUser(u)
+
+	return nil
+}
+
 func Login(c echo.Context) error {
+
+	fmt.Println("shall be logged")
 
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
@@ -44,7 +71,7 @@ func Login(c echo.Context) error {
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(u.Hash), pwd); err != nil {
-		fmt.Println("compare hash")
+		fmt.Println("compare hash err")
 		return echo.ErrUnauthorized
 	}
 
