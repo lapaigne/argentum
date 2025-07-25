@@ -34,7 +34,6 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 		if err != nil || !token.Valid {
 			return c.Redirect(http.StatusSeeOther, "/signin")
 		}
-
 		return c.Redirect(http.StatusSeeOther, "/menu")
 	})
 
@@ -45,7 +44,7 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 		return c.Render(200, "tfpage", data)
 	})
 
-	e.POST("/submit-task", endpoints.AddTask)
+	// e.POST("/submit-task", endpoints.AddTask)
 
 	e.POST("/submit-task", TaskFormHandler)
 	e.POST("/submit-task/act", ActHandler)
@@ -101,11 +100,13 @@ func (p Endpoints) Me_ExpandTask(c echo.Context) error {
 	FetchTasks()
 
 	ctx := struct {
+		UID    int
 		Task   *db.Task
 		Cats   map[int]string
 		Addrs  map[int]string
 		Helper Helper
 	}{
+		UID:    id,
 		Task:   data.Mapped.Tasks[id],
 		Cats:   data.Mapped.Categories,
 		Addrs:  data.Mapped.Addresses,

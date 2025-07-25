@@ -66,8 +66,6 @@ func Login(c echo.Context) error {
 
 	u, err := db.GetUser(tel)
 
-	fmt.Println(u)
-
 	if err != nil {
 		fmt.Println("get user err")
 		return echo.ErrUnauthorized

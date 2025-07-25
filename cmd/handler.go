@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"net/http"
 	"strconv"
 	"time"
 
@@ -89,9 +88,7 @@ func TaskFormHandler(c echo.Context) error {
 	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(0), Valid: false}
 	data.Helper.Addr = -1
 
-	return c.Redirect(http.StatusSeeOther, "/task-list")
-
-	// return c.Render(200, "task-list", data.Incomplete)
+	return c.Render(200, "tflist", data)
 }
 
 func Cat1Handler(c echo.Context) error {

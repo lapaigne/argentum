@@ -17,7 +17,6 @@
                 <th class="addr col">Адрес</th>
                 <th class="until col">Срок</th>
                 <th class="mark_date col">Отметка</th>
-                <th class="mark col">Подтвердить</th>
             </thead>
             {{ range $i, $v := .Raw.Tasks }}
             {{ if eq $v.Worker $uid }}
@@ -29,11 +28,6 @@
                 <td>{{ index $addrs $v.Addr_obj }}</td>
                 <td>{{ call $helper.NFormat $v.Until_date }}</td>
                 <td>{{ $md }}</td>
-                <td id="conf-btn-{{ $v.Id }}">
-                    {{ if eq $md "-" }}
-                    <input type="button" id="conf-{{ $i }}" hx-post="/me/conf-{{ $v.Id }}">
-                    {{ end }}
-                </td>
             </tr>
             {{ end }}
             {{ end }}
@@ -53,14 +47,16 @@
 
 {{ define "mt-exp" }}
 
+{{ $uid := .UID }}
 {{ $helper := .Helper }}
 {{ $addrs := .Addrs }}
 {{ $cats := .Cats }}
 {{ $v := .Task }}
 
+{{ $md := call $helper.NFormat $v.Mark_date }}
+
 <div id="mt-left">
 
-    {{ $md := call $helper.NFormat $v.Mark_date }}
     <p>{{ index $cats $v.Cat_1 }} <br> {{ index $cats $v.Cat_2 }} <br> {{ index $cats $v.Cat_3 }}</p>
     <p>{{ index $addrs $v.Addr_obj }}</p>
     <p>{{ call $helper.NFormat $v.Until_date }}</p>
@@ -70,6 +66,12 @@
 <div id="mt-right">
     <p>{{ $v.Desc }}</p>
     <p>{{ $v.Comment }}</p>
+</div>
+
+<div>
+    {{ if eq $md "-" }}
+    <button id="conf" hx-post="/me/conf-{{ $uid }}">Подтвердить</button>
+    {{ end }}
 </div>
 
 {{ end }}
