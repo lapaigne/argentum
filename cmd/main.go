@@ -31,8 +31,6 @@ func main() {
 
 	e.HTTPErrorHandler = ErrorHandler
 
-	e.Static("/css", "emb/views/css")
-
 	templates, err := emb.NewTemplates("views")
 	if err != nil {
 		log.Fatal(err)
@@ -65,6 +63,18 @@ func main() {
 		AutoRefreshJWT,
 		echojwt.WithConfig(config),
 	)
+
+	e.GET("/css/:fn", func(c echo.Context) error {
+		fn := c.Param("fn")
+		f, err := emb.EFS.ReadFile("views/css/" + fn)
+		fmt.Println(string(fn))
+		if err != nil {
+			fmt.Println(err)
+			return echo.ErrNotFound
+		}
+
+		return c.Blob(200, "text/css", f)
+	})
 
 	e.GET("/me", func(c echo.Context) error { return c.Render(200, "me", data) })
 
