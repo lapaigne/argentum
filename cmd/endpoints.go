@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
@@ -18,7 +19,25 @@ var endpoints Endpoints
 func (p Endpoints) Setup(e *echo.Echo) error {
 
 	e.GET("/signin", func(c echo.Context) error { return c.Render(200, "signin", nil) })
-	e.GET("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "signin") })
+	e.POST("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "/") })
+
+	e.GET("/", func(c echo.Context) error {
+		cookie, err := c.Cookie("token")
+		if err != nil || cookie == nil {
+			return c.Redirect(http.StatusSeeOther, "/signin")
+		}
+
+		token, err := jwt.ParseWithClaims(cookie.Value, &jwtClaims{}, func(t *jwt.Token) (any, error) {
+			return []byte("secret"), nil
+		})
+
+		if err != nil || !token.Valid {
+			return c.Redirect(http.StatusSeeOther, "/signin")
+		}
+
+		return c.Redirect(http.StatusSeeOther, "/menu")
+	})
+
 	e.POST("/submit-auth", Login)
 
 	e.GET("/new-task", func(c echo.Context) error {
@@ -64,6 +83,7 @@ func (p Endpoints) Menu(c echo.Context) error {
 }
 
 func (p Endpoints) Me_ExpandTask(c echo.Context) error {
+
 	acc := GetClaims(c).Level
 	switch acc {
 	case db.AccessLevels["worker"]:
@@ -96,6 +116,7 @@ func (p Endpoints) Me_ExpandTask(c echo.Context) error {
 }
 
 func (p Endpoints) Me_ConfirmTask(c echo.Context) error {
+
 	acc := GetClaims(c).Level
 	switch acc {
 	case db.AccessLevels["worker"]:

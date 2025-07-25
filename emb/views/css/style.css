@@ -93,3 +93,68 @@ header {
         box-shadow: none;
     }
 }
+
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    background-color: #0056b3;
+    /* match button blue */
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.page-header .site-title {
+    color: white;
+    text-decoration: none;
+}
+
+.page-header .site-title:hover {
+    text-decoration: underline;
+}
+
+.signout-btn {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.signout-btn:hover {
+    background: white;
+    color: #0056b3;
+    /* same blue on hover */
+}
+
+/* Shared styles for header links/buttons */
+.header-link {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+/* Optional: hover effect */
+.header-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Optional: active focus style for accessibility */
+.header-link:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}

@@ -65,6 +65,9 @@ func Login(c echo.Context) error {
 	pwd := []byte(pass)
 
 	u, err := db.GetUser(tel)
+
+	fmt.Println(u)
+
 	if err != nil {
 		fmt.Println("get user err")
 		return echo.ErrUnauthorized
@@ -76,7 +79,7 @@ func Login(c echo.Context) error {
 	}
 
 	claims := &jwtClaims{
-		u.Id,
+		u.Worker,
 		u.Level,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(authTime()),
@@ -103,7 +106,7 @@ func Login(c echo.Context) error {
 	c.SetCookie(cookie)
 
 	refClaims := &jwtClaims{
-		u.Id,
+		u.Worker,
 		u.Level,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(refTime()),
@@ -117,7 +120,7 @@ func Login(c echo.Context) error {
 		return err
 	}
 
-	if err := db.UpdateToken(s, u.Id); err != nil {
+	if err := db.UpdateToken(s, u.Worker); err != nil {
 		fmt.Println(err)
 		return err
 	}
@@ -157,7 +160,19 @@ func Logout(c echo.Context) error {
 		SameSite: http.SameSiteLaxMode,
 	}
 
+	refCookie := &http.Cookie{
+		Name:     "ref",
+		Value:    "",
+		Path:     "/",
+		Expires:  time.Unix(0, 0),
+		MaxAge:   -1,
+		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteLaxMode,
+	}
+
 	c.SetCookie(cookie)
+	c.SetCookie(refCookie)
 
 	return c.Redirect(http.StatusSeeOther, "/")
 }
@@ -189,6 +204,7 @@ func JWTRoles(minLevel int) echo.MiddlewareFunc {
 			if claims.Level >= minLevel {
 				return next(c)
 			}
+
 			return echo.ErrForbidden
 		}
 	}

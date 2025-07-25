@@ -1,0 +1,10 @@
+{{ define "header" }}
+
+<header class="page-header">
+    <button hx-post="/" hx-target="body" class="header-link">SK</button>
+    <button hx-post="/signout" hx-target="body" hx-swap="outerHTML" class="signout-btn" type="button">
+        Выйти
+    </button>
+</header>
+
+{{ end }}

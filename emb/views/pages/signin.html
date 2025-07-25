@@ -3,9 +3,14 @@
 {{ end }}
 
 {{ define "content" }}
-<form hx-post="/submit-auth" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
-    <input type="tel" name="tel">
-    <input id="password" type="password" name="pass">
-    <button type="submit">Авторизоваться</button>
-</form>
+<link rel="stylesheet" href="/css/auth.css">
+
+<div class="auth-wrapper">
+    <form hx-post="/submit-auth" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
+        <input type="tel" name="tel">
+        <input id="password" type="password" name="pass">
+
+        <button type="submit">Войти</button>
+    </form>
+</div>
 {{ end }}

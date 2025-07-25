@@ -64,10 +64,11 @@ func main() {
 		echojwt.WithConfig(config),
 	)
 
+	e.POST("/signout", Logout)
+
 	e.GET("/css/:fn", func(c echo.Context) error {
 		fn := c.Param("fn")
 		f, err := emb.EFS.ReadFile("views/css/" + fn)
-		fmt.Println(string(fn))
 		if err != nil {
 			fmt.Println(err)
 			return echo.ErrNotFound
@@ -76,7 +77,26 @@ func main() {
 		return c.Blob(200, "text/css", f)
 	})
 
-	e.GET("/me", func(c echo.Context) error { return c.Render(200, "me", data) })
+	e.GET("/me", func(c echo.Context) error {
+
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*jwtClaims)
+		uid := claims.UID
+
+		ctx := struct {
+			Raw    RawData
+			Mapped MappedData
+			Helper Helper
+			UID    int
+		}{
+			Raw:    data.Raw,
+			Mapped: data.Mapped,
+			Helper: data.Helper,
+			UID:    uid,
+		}
+
+		return c.Render(200, "me", ctx)
+	})
 
 	e.POST("/me/conf-:id", endpoints.Me_ConfirmTask)
 	e.POST("/me/exp-:id", endpoints.Me_ExpandTask)

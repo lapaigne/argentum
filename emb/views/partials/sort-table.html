@@ -8,15 +8,14 @@
 {{ $helper := .Helper }}
 {{ $tasks := .Raw.Tasks }}
 {{ $filter := true }}
-<div id="sort-table" style="background-color: #aaddaa;" class="table content">
+<div id="sort-table" class="table content">
     <div id="sort-table-filters">
         <p>фильтры</p>
 
     </div>
 
     <table>
-
-        <tr>
+        <thead>
             <th>К1</th>
             <th>К2</th>
             <th>К3</th>
@@ -28,7 +27,7 @@
             <th>Выполнено</th>
             <th>Исполнитель</th>
             <th>Комментарий</th>
-        </tr>
+        </thead>
 
         {{ range $tasks }}
         {{ if $filter }}

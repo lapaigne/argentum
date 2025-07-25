@@ -3,6 +3,9 @@
 {{ $helper := .Helper }}
 {{ $addrs := .Mapped.Addresses }}
 {{ $cats := .Mapped.Categories }}
+{{ $uid := .UID }}
+
+<link rel="stylesheet" href="/css/me.css">
 
 <div class="task-wrapper">
     <div id="mytasks" class="left">
@@ -17,6 +20,7 @@
                 <th class="mark col">Подтвердить</th>
             </thead>
             {{ range $i, $v := .Raw.Tasks }}
+            {{ if eq $v.Worker $uid }}
             <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
                 hx-trigger="click">
                 {{ $md := call $helper.NFormat $v.Mark_date }}
@@ -31,6 +35,7 @@
                     {{ end }}
                 </td>
             </tr>
+            {{ end }}
             {{ end }}
         </table>
     </div>
