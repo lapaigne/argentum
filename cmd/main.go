@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"argentum/emb"
 	"fmt"
 	"log"
 	"strings"
@@ -31,7 +32,7 @@ func main() {
 
 	e.Static("/css", "views/css")
 
-	templates, err := NewTemplates("views")
+	templates, err := emb.NewTemplates("views")
 	if err != nil {
 		log.Fatal(err)
 	}
