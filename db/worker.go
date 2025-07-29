@@ -1,6 +1,7 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 )
 
@@ -8,7 +9,8 @@ type Worker struct {
 	Id     int
 	F_name string
 	I_name string
-	O_name string // this string might be empty
+	O_name string
+	Role   sql.NullInt32
 }
 
 func AddWorker(f, i, o string) error {
@@ -36,7 +38,7 @@ func GetWorker(id int) (Worker, error) {
 
 func GetWorkers() ([]Worker, error) {
 
-	rows, err := db.Query("SELECT id, f_name, i_name, o_name FROM public.workers")
+	rows, err := db.Query("SELECT id, f_name, i_name, o_name,  role FROM public.workers")
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +47,7 @@ func GetWorkers() ([]Worker, error) {
 	var res []Worker
 	for rows.Next() {
 		var w Worker
-		if err := rows.Scan(&w.Id, &w.F_name, &w.I_name, &w.O_name); err != nil {
+		if err := rows.Scan(&w.Id, &w.F_name, &w.I_name, &w.O_name, &w.Role); err != nil {
 			return res, err
 		}
 		res = append(res, w)

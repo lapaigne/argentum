@@ -36,10 +36,18 @@ type RawData struct {
 }
 
 type MappedData struct {
-	Workers    map[int]string
-	Addresses  map[int]string
-	Categories map[int]string
-	Tasks      map[int]*db.Task
+	ProperWorkers map[int]*db.Worker
+	Workers       map[int]string
+	Addresses     map[int]string
+	Categories    map[int]string
+	Tasks         map[int]*db.Task
+	WorkersDifs   map[int]*WorkersDif
+}
+
+type WorkersDif struct {
+	Before db.Worker
+	After  db.Worker
+	Update bool
 }
 
 func Format(t time.Time) string {
@@ -68,6 +76,7 @@ func (d *Data) ResetHelper() {
 func (d *Data) Init() {
 
 	d.Mapped.Workers = make(map[int]string)
+	d.Mapped.ProperWorkers = make(map[int]*db.Worker)
 	d.Mapped.Addresses = make(map[int]string)
 	d.Mapped.Categories = make(map[int]string)
 	d.Mapped.Tasks = make(map[int]*db.Task)
@@ -82,6 +91,10 @@ func (d *Data) Init() {
 }
 
 func (d *Data) Fill() error {
+
+	for _, v := range d.Raw.Workers {
+		d.Mapped.ProperWorkers[v.Id] = &v
+	}
 
 	for _, v := range d.Raw.Workers {
 		d.Mapped.Workers[v.Id] = v.F_name + " " + v.I_name + " " + v.O_name
@@ -145,6 +158,6 @@ func Fetch() error {
 	if err != nil {
 		return err
 	}
-	return nil
 
+	return nil
 }

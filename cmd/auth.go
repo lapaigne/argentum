@@ -23,13 +23,31 @@ type jwtClaims struct {
 	jwt.RegisteredClaims
 }
 
-func authTime() time.Time {
-	return time.Now().Add(time.Minute * 1)
+func checkLevel(c echo.Context, min int) error {
 
+	acc := GetClaims(c).Level
+
+	if acc < min {
+		return echo.ErrUnauthorized
+	}
+
+	switch acc {
+	case db.AccessLevels["worker"]:
+	case db.AccessLevels["dispatcher"]:
+	case db.AccessLevels["admin"]:
+	default:
+		return echo.ErrUnauthorized
+	}
+
+	return nil
+}
+
+func authTime() time.Time {
+	return time.Now().Add(time.Minute * 15)
 }
 
 func refTime() time.Time {
-	return time.Now().Add(time.Minute * 5)
+	return time.Now().Add(time.Hour * 24)
 }
 
 func Register(c echo.Context) error {

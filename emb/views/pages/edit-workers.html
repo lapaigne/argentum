@@ -1,0 +1,47 @@
+{{ define "content" }}
+{{ $workers := .Raw.Workers }}
+<div>
+    <div id="">
+        <!-- search by name -->
+        <input type="text">
+
+        <!-- put form on the side for new worker -->
+        <button>ADD</button>
+
+        <!-- delete marked -->
+        <button>DEL</button>
+
+        <button>APPLY</button>
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <!-- <th>N</th> -->
+                <th>FULLNAME</th>
+                <th>ROLE</th>
+            </thead>
+            {{ range $workers }}
+            <tr id="ew-{{ .Id }}" hx-post="/edit-workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
+                hx-trigger="click">
+                <!-- <td>{{ .Id }}</td> -->
+                {{ template "ew-row" . }}
+            </tr>
+            {{ end }}
+        </table>
+    </div>
+
+    <div>
+        <h3>Данные</h3>
+        <div id="ew-panel">
+
+        </div>
+    </div>
+</div>
+{{ end }}
+
+
+
+{{ define "edit-workers" }}
+{{ template "base" . }}
+{{ end }}

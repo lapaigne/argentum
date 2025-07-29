@@ -140,12 +140,45 @@ func (p Endpoints) Me_ConfirmTask(c echo.Context) error {
 	}
 
 	if ok {
-		FetchTasks()
+
+		if err := FetchTasks(); err != nil {
+			fmt.Println(err)
+		}
+
+		if err := data.Fill(); err != nil {
+			fmt.Println(err)
+		}
+
 		fmt.Println("updated")
 	}
 
 	return c.NoContent(http.StatusNoContent)
 	// return c.Render(200, "me", nil)
+}
+
+func (p Endpoints) EditWorkers(c echo.Context) error {
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
+
+	w := data.Mapped.ProperWorkers[id]
+	d := struct {
+		Worker *db.Worker
+		Target string
+	}{
+		Worker: w,
+		Target: fmt.Sprintf("ew-%d", id),
+	}
+
+	acc := GetClaims(c).Level
+	if acc != db.AccessLevels["admin"] {
+		fmt.Println(acc)
+		return echo.ErrUnauthorized
+	}
+
+	return c.Render(200, "ew-upd", d)
 }
 
 func (p Endpoints) AddTask(c echo.Context) error {

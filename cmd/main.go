@@ -79,6 +79,8 @@ func main() {
 
 	e.GET("/me", func(c echo.Context) error {
 
+		data.Fill()
+
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*jwtClaims)
 		uid := claims.UID
@@ -104,6 +106,24 @@ func main() {
 	e.GET("/menu", endpoints.Menu)
 
 	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data) })
+
+	e.GET("/edit-workers", func(c echo.Context) error { return c.Render(200, "edit-workers", data) })
+
+	e.POST("/edit-workers/edit-:id", endpoints.EditWorkers)
+
+	e.POST("/edit-workers/upd", func(c echo.Context) error {
+		f := c.FormValue("f_name")
+		i := c.FormValue("i_name")
+		o := c.FormValue("o_name")
+
+		d := db.Worker{
+			F_name: f,
+			I_name: i,
+			O_name: o,
+		}
+
+		return c.Render(200, "ew-row", d)
+	})
 
 	endpoints.Setup(e)
 

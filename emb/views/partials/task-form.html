@@ -1,7 +1,7 @@
 {{ define "task-form" }}
 
 <div class="left">
-    <form hx-post="/submit-task" id="task-form" hx-target="#content" hx-swap="innerHTML" hx-push-url="/tflist">
+    <form hx-post="/submit-task" id="task-form" hx-target="#content" hx-swap="innerHTML" hx-push-url="false">
         <div>
             <div id="comb-cat-wrap">
                 <label>Категории задачи</label>
