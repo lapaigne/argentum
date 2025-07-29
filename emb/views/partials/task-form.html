@@ -34,7 +34,7 @@
                     hx-target="#table" hx-swap="outerHTML" hx-history="false" hx-push-url="false">
                     <option disabled selected>Не выбран!</option>
                     {{ range $i, $v := .Mapped.Addresses}}
-                    <option value="{{ $i }}">{{ $v }}</option>
+                    <option value="{{ $i }}">{{ $i }} - {{ $v }}</option>
                     {{ end }}
                 </select>
             </div>
