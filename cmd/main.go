@@ -24,7 +24,6 @@ var public = map[string]bool{
 
 func main() {
 
-	fmt.Println("just so it'd be here")
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -59,7 +58,7 @@ func main() {
 	}
 
 	e.Use(
-		JWTCooked(),
+		JWTCooked,
 		AutoRefreshJWT,
 		echojwt.WithConfig(config),
 	)
@@ -125,8 +124,22 @@ func main() {
 		return c.Render(200, "ew-row", d)
 	})
 
+	// TODO:
+	// switch all wildcards inside similar functions
+	// e.POST("/edit-workers/*", func(c echo.Context) error {
+	// 	return c.NoContent(204)
+	// })
+
+	e.POST("/edit-workers/add-panel", func(c echo.Context) error {
+
+		if err := isAdminErr(c); err != nil {
+			return err
+		}
+
+		return c.Render(200, "ew-add", nil)
+	})
+
 	endpoints.Setup(e)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
-
 }

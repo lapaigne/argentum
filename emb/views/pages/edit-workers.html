@@ -6,7 +6,7 @@
         <input type="text">
 
         <!-- put form on the side for new worker -->
-        <button>ADD</button>
+        <button hx-post="/edit-workers/add-panel" hx-target="#ew-panel" hx-swap="innerHTML">ADD</button>
 
         <!-- delete marked -->
         <button>DEL</button>

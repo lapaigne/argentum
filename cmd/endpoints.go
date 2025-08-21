@@ -174,7 +174,6 @@ func (p Endpoints) EditWorkers(c echo.Context) error {
 
 	acc := GetClaims(c).Level
 	if acc != db.AccessLevels["admin"] {
-		fmt.Println(acc)
 		return echo.ErrUnauthorized
 	}
 

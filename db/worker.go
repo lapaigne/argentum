@@ -38,7 +38,7 @@ func GetWorker(id int) (Worker, error) {
 
 func GetWorkers() ([]Worker, error) {
 
-	rows, err := db.Query("SELECT id, f_name, i_name, o_name,  role FROM public.workers")
+	rows, err := db.Query("SELECT id, f_name, i_name, o_name, role FROM public.workers")
 	if err != nil {
 		return nil, err
 	}

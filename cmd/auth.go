@@ -23,6 +23,16 @@ type jwtClaims struct {
 	jwt.RegisteredClaims
 }
 
+func isAdminErr(c echo.Context) error {
+
+	acc := GetClaims(c).Level
+	if acc != db.AccessLevels["admin"] {
+		return echo.ErrUnauthorized
+	}
+
+	return nil
+}
+
 func checkLevel(c echo.Context, min int) error {
 
 	acc := GetClaims(c).Level
@@ -75,8 +85,6 @@ func Register(c echo.Context) error {
 }
 
 func Login(c echo.Context) error {
-
-	fmt.Println("shall be logged")
 
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
@@ -198,16 +206,14 @@ func AuthTel(c echo.Context) error {
 	return c.Render(200, "tel-err", tel)
 }
 
-func JWTCooked() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
+func JWTCooked(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
 
-			cookie, err := c.Cookie("token")
-			if err == nil {
-				c.Request().Header.Set("Authorization", "Bearer "+cookie.Value)
-			}
-			return next(c)
+		cookie, err := c.Cookie("token")
+		if err == nil {
+			c.Request().Header.Set("Authorization", "Bearer "+cookie.Value)
 		}
+		return next(c)
 	}
 }
 
