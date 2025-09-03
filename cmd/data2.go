@@ -57,42 +57,56 @@ func (d *Data) Fetch() error {
 	for _, v := range workers {
 		d.Server.Workers[v.Id] = v
 	}
-	d.Server.MWorker = workers[len(workers)-1].Id
+	if len(workers) == 0 {
+		d.Server.MWorker = 0
+	} else {
+		d.Server.MWorker = workers[len(workers)-1].Id
+	}
 
-	fmt.Println(d.Server.MWorker)
+	tasks, err := db.GetAllTasks()
+	if err != nil {
+		return err
+	}
+	d.Server.Tasks = nil
+	d.Server.Tasks = make(map[int]db.Task)
+	for _, v := range tasks {
+		d.Server.Tasks[v.Id] = v
+	}
+	if len(tasks) == 0 {
+		d.Server.MTask = 0
+	} else {
+		d.Server.MTask = tasks[len(tasks)-1].Id
+	}
 
-	// tasks, err := db.GetAllTasks()
-	// if err != nil {
-	// 	return err
-	// }
-	// d.Server.Tasks = nil
-	// d.Server.Tasks = make(map[int]db.Task)
-	// for _, v := range tasks {
-	// 	d.Server.Tasks[v.Id] = v
-	// }
-	// d.Server.MTask = tasks[len(tasks)-1].Id
+	cats, err := db.GetCategories()
+	if err != nil {
+		return err
+	}
+	d.Server.Cats = nil
+	d.Server.Cats = make(map[int]db.Category)
+	for _, v := range cats {
+		d.Server.Cats[v.Id] = v
+	}
+	if len(cats) == 0 {
+		d.Server.MCat = 0
+	} else {
+		d.Server.MCat = cats[len(cats)-1].Id
+	}
 
-	// cats, err := db.GetCategories()
-	// if err != nil {
-	// 	return err
-	// }
-	// d.Server.Cats = nil
-	// d.Server.Cats = make(map[int]db.Category)
-	// for _, v := range cats {
-	// 	d.Server.Cats[v.Id] = v
-	// }
-	// d.Server.MCat = cats[len(cats)-1].Id
-
-	// addrs, err := db.GetAddresses()
-	// if err != nil {
-	// 	return err
-	// }
-	// d.Server.Addrs = nil
-	// d.Server.Addrs = make(map[int]db.Address)
-	// for _, v := range addrs {
-	// 	d.Server.Addrs[v.Id] = v
-	// }
-	// d.Server.MAddr = addrs[len(addrs)-1].Id
+	addrs, err := db.GetAddresses()
+	if err != nil {
+		return err
+	}
+	d.Server.Addrs = nil
+	d.Server.Addrs = make(map[int]db.Address)
+	for _, v := range addrs {
+		d.Server.Addrs[v.Id] = v
+	}
+	if len(addrs) == 0 {
+		d.Server.MAddr = 0
+	} else {
+		d.Server.MAddr = addrs[len(addrs)-1].Id
+	}
 
 	return nil
 }
