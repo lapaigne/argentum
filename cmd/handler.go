@@ -13,7 +13,7 @@ import (
 
 func TaskFormHandler(c echo.Context) error {
 
-	data.ResetHelper()
+	data_old.ResetHelper()
 
 	var err error
 	var t db.Task
@@ -84,11 +84,11 @@ func TaskFormHandler(c echo.Context) error {
 
 	FetchTasks()
 
-	data.Helper.Cat_1 = sql.NullInt32{Int32: int32(0), Valid: false}
-	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(0), Valid: false}
-	data.Helper.Addr = -1
+	data_old.Helper.Cat_1 = sql.NullInt32{Int32: int32(0), Valid: false}
+	data_old.Helper.Cat_2 = sql.NullInt32{Int32: int32(0), Valid: false}
+	data_old.Helper.Addr = -1
 
-	return c.Render(200, "tflist", data)
+	return c.Render(200, "tflist", data_old)
 }
 
 func Cat1Handler(c echo.Context) error {
@@ -100,9 +100,9 @@ func Cat1Handler(c echo.Context) error {
 		return err
 	}
 
-	data.Helper.Cat_1 = sql.NullInt32{Int32: int32(val), Valid: true}
-	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(-1), Valid: true}
-	return c.Render(200, "tf-cat-1-res", data)
+	data_old.Helper.Cat_1 = sql.NullInt32{Int32: int32(val), Valid: true}
+	data_old.Helper.Cat_2 = sql.NullInt32{Int32: int32(-1), Valid: true}
+	return c.Render(200, "tf-cat-1-res", data_old)
 }
 
 func Cat2Handler(c echo.Context) error {
@@ -114,8 +114,8 @@ func Cat2Handler(c echo.Context) error {
 		return err
 	}
 
-	data.Helper.Cat_2 = sql.NullInt32{Int32: int32(val), Valid: true}
-	return c.Render(200, "tf-cat-3", data)
+	data_old.Helper.Cat_2 = sql.NullInt32{Int32: int32(val), Valid: true}
+	return c.Render(200, "tf-cat-3", data_old)
 }
 
 func AddrHandler(c echo.Context) error {
@@ -126,14 +126,14 @@ func AddrHandler(c echo.Context) error {
 		return err
 	}
 
-	data.Helper.Addr = val
-	return c.Render(200, "addr-table", data)
+	data_old.Helper.Addr = val
+	return c.Render(200, "addr-table", data_old)
 }
 
 func ActHandler(c echo.Context) error {
-	return c.Render(200, "tf-act", data)
+	return c.Render(200, "tf-act", data_old)
 }
 
 func UntilHandler(c echo.Context) error {
-	return c.Render(200, "tf-until", data)
+	return c.Render(200, "tf-until", data_old)
 }

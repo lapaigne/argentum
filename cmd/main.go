@@ -14,6 +14,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+var data_old Data_old
 var data Data
 
 var public = map[string]bool{
@@ -43,8 +44,14 @@ func main() {
 	FetchRare()
 	FetchTasks()
 
-	data.Init()
-	data.Fill()
+	if err := data.Fetch(); err != nil {
+		fmt.Println(err)
+	}
+
+	data.ResetLocal()
+
+	data_old.Init()
+	data_old.Fill()
 
 	config := echojwt.Config{
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
@@ -78,21 +85,21 @@ func main() {
 
 	e.GET("/me", func(c echo.Context) error {
 
-		data.Fill()
+		data_old.Fill()
 
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*jwtClaims)
 		uid := claims.UID
 
 		ctx := struct {
-			Raw    RawData
-			Mapped MappedData
+			Raw    RawData0
+			Mapped MappedData0
 			Helper Helper
 			UID    int
 		}{
-			Raw:    data.Raw,
-			Mapped: data.Mapped,
-			Helper: data.Helper,
+			Raw:    data_old.Raw,
+			Mapped: data_old.Mapped,
+			Helper: data_old.Helper,
 			UID:    uid,
 		}
 
@@ -104,7 +111,7 @@ func main() {
 
 	e.GET("/menu", endpoints.Menu)
 
-	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data) })
+	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
 
 	e.GET("/edit-workers", func(c echo.Context) error { return c.Render(200, "edit-workers", data) })
 

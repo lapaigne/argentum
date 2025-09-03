@@ -12,9 +12,9 @@ const (
 	DateFormat = "02.01.2006"
 )
 
-type Data struct {
-	Raw    RawData
-	Mapped MappedData
+type Data_old struct {
+	Raw    RawData0
+	Mapped MappedData0
 	Helper Helper
 }
 
@@ -28,14 +28,14 @@ type Helper struct {
 	Sort    TaskDisplay
 }
 
-type RawData struct {
+type RawData0 struct {
 	Tasks      []db.Task
 	Workers    []db.Worker
 	Addresses  []db.Address
 	Categories []db.Category
 }
 
-type MappedData struct {
+type MappedData0 struct {
 	ProperWorkers map[int]*db.Worker
 	Workers       map[int]string
 	Addresses     map[int]string
@@ -65,7 +65,7 @@ func NFormat(t sql.NullTime) string {
 	return d
 }
 
-func (d *Data) ResetHelper() {
+func (d *Data_old) ResetHelper() {
 
 	d.Helper.Cat_1 = sql.NullInt32{Int32: -1, Valid: true}
 	d.Helper.Cat_2 = sql.NullInt32{Int32: -1, Valid: true}
@@ -73,7 +73,7 @@ func (d *Data) ResetHelper() {
 	d.Helper.Addr = -1
 }
 
-func (d *Data) Init() {
+func (d *Data_old) Init() {
 
 	d.Mapped.Workers = make(map[int]string)
 	d.Mapped.ProperWorkers = make(map[int]*db.Worker)
@@ -90,7 +90,7 @@ func (d *Data) Init() {
 	// d.Helper.Sort = sorting
 }
 
-func (d *Data) Fill() error {
+func (d *Data_old) Fill() error {
 
 	for _, v := range d.Raw.Workers {
 		d.Mapped.ProperWorkers[v.Id] = &v
@@ -119,19 +119,19 @@ func (d *Data) Fill() error {
 func FetchRare() error {
 	var err error
 
-	data.Raw.Workers, err = db.GetWorkers()
+	data_old.Raw.Workers, err = db.GetWorkers()
 	if err != nil {
 		fmt.Printf("Error on getting workers list: %s", err)
 		return err
 	}
 
-	data.Raw.Addresses, err = db.GetAddresses()
+	data_old.Raw.Addresses, err = db.GetAddresses()
 	if err != nil {
 		fmt.Printf("Error on getting addresses list: %s", err)
 		return err
 	}
 
-	data.Raw.Categories, err = db.GetCategories()
+	data_old.Raw.Categories, err = db.GetCategories()
 	if err != nil {
 		fmt.Printf("Error on getting categories list: %s", err)
 		return err
@@ -143,7 +143,7 @@ func FetchRare() error {
 func FetchTasks() error {
 	var err error
 
-	data.Raw.Tasks, err = db.GetAllTasks()
+	data_old.Raw.Tasks, err = db.GetAllTasks()
 	if err != nil {
 		fmt.Printf("Error on fetching ALL incomplete tasks: %s", err)
 		return err

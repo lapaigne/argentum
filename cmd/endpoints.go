@@ -40,8 +40,8 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 	e.POST("/submit-auth", Login)
 
 	e.GET("/new-task", func(c echo.Context) error {
-		data.Helper.Today = time.Now().Format(time.DateOnly)
-		return c.Render(200, "tfpage", data)
+		data_old.Helper.Today = time.Now().Format(time.DateOnly)
+		return c.Render(200, "tfpage", data_old)
 	})
 
 	// e.POST("/submit-task", endpoints.AddTask)
@@ -55,11 +55,11 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 
 	e.GET("/task-list", func(c echo.Context) error {
 		FetchTasks()
-		return c.Render(200, "task-list", data)
+		return c.Render(200, "task-list", data_old)
 	})
 
 	e.GET("/auth", func(c echo.Context) error {
-		return c.Render(200, "auth", data)
+		return c.Render(200, "auth", data_old)
 	})
 
 	e.POST("/submit-auth/tel", AuthTel)
@@ -107,10 +107,10 @@ func (p Endpoints) Me_ExpandTask(c echo.Context) error {
 		Helper Helper
 	}{
 		UID:    id,
-		Task:   data.Mapped.Tasks[id],
-		Cats:   data.Mapped.Categories,
-		Addrs:  data.Mapped.Addresses,
-		Helper: data.Helper,
+		Task:   data_old.Mapped.Tasks[id],
+		Cats:   data_old.Mapped.Categories,
+		Addrs:  data_old.Mapped.Addresses,
+		Helper: data_old.Helper,
 	}
 
 	return c.Render(200, "mt-exp", ctx)
@@ -145,7 +145,7 @@ func (p Endpoints) Me_ConfirmTask(c echo.Context) error {
 			fmt.Println(err)
 		}
 
-		if err := data.Fill(); err != nil {
+		if err := data_old.Fill(); err != nil {
 			fmt.Println(err)
 		}
 
@@ -163,7 +163,7 @@ func (p Endpoints) EditWorkers(c echo.Context) error {
 		return err
 	}
 
-	w := data.Mapped.ProperWorkers[id]
+	w := data_old.Mapped.ProperWorkers[id]
 	d := struct {
 		Worker *db.Worker
 		Target string

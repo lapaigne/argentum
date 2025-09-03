@@ -1,7 +1,6 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 )
 
@@ -10,7 +9,20 @@ type Worker struct {
 	F_name string
 	I_name string
 	O_name string
-	Role   sql.NullInt32
+}
+
+func (w Worker) Compare(o Worker) (bool, error) {
+
+	fio := w.F_name == o.F_name && w.I_name == o.I_name && w.O_name == o.O_name
+	ids := w.Id == o.Id
+	if fio {
+		if !ids {
+			return false, fmt.Errorf("Duplicate worker %s %s %s", w.F_name, w.I_name, w.O_name)
+		}
+		return true, nil
+	}
+
+	return false, nil
 }
 
 func AddWorker(f, i, o string) error {
@@ -38,7 +50,7 @@ func GetWorker(id int) (Worker, error) {
 
 func GetWorkers() ([]Worker, error) {
 
-	rows, err := db.Query("SELECT id, f_name, i_name, o_name, role FROM public.workers")
+	rows, err := db.Query("SELECT id, f_name, i_name, o_name FROM public.workers")
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +59,7 @@ func GetWorkers() ([]Worker, error) {
 	var res []Worker
 	for rows.Next() {
 		var w Worker
-		if err := rows.Scan(&w.Id, &w.F_name, &w.I_name, &w.O_name, &w.Role); err != nil {
+		if err := rows.Scan(&w.Id, &w.F_name, &w.I_name, &w.O_name); err != nil {
 			return res, err
 		}
 		res = append(res, w)

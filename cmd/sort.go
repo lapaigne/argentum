@@ -27,7 +27,7 @@ func SortHandler(c echo.Context) error {
 	sk := c.QueryParam("sort")
 	// order := c.QueryParam("order")
 
-	tasks := data.Mapped.Tasks
+	tasks := data_old.Mapped.Tasks
 
 	sort.Slice(tasks, func(i, j int) bool {
 		var less bool
