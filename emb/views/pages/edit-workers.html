@@ -1,5 +1,5 @@
 {{ define "content" }}
-{{ $workers := .Local.Workers }}
+{{ $workers := .Local.UWs }}
 {{ $count := .Local.MWorker }}
 <div>
     <div id="">
@@ -25,8 +25,8 @@
             {{ range $workers }}
             <tr id="ew-{{ .Id }}" hx-post="/edit-workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
                 hx-trigger="click">
-                <td>{{ .F_name }} {{ .I_name }} {{ .O_name }}</td>
-                <td>THERE SHALL BE DATA PULLED FROM USERS</td>
+                <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
+                <td>{{ .U.Level }}</td>
                 <!-- <td>{{ .Id }}</td> -->
             </tr>
             {{ end }}

@@ -59,3 +59,27 @@ func AddUser(u User) error {
 
 	return nil
 }
+
+func GetUsers() ([]User, error) {
+
+	rows, err := db.Query("SELECT id, worker, login, level FROM public.users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var res []User
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.Id, &u.Worker, &u.Login, &u.Level); err != nil {
+			return res, err
+		}
+		res = append(res, u)
+	}
+
+	if err = rows.Err(); err != nil {
+		return res, err
+	}
+
+	return res, nil
+}

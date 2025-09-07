@@ -2,7 +2,6 @@ package main
 
 import (
 	"argentum/db"
-	"fmt"
 )
 
 const (
@@ -29,13 +28,19 @@ type Mapped struct {
 	Tasks   map[int]db.Task
 	Cats    map[int]db.Category
 	Addrs   map[int]db.Address
-	Users   map[int]db.User
+	UWs     map[int]UserWorker
 
 	MWorker int
 	MTask   int
 	MCat    int
 	MAddr   int
 	MUser   int
+}
+
+type UserWorker struct {
+	Id int
+	W  db.Worker
+	U  db.User
 }
 
 type RawData struct {
@@ -52,8 +57,20 @@ func (d *Data) Fetch() error {
 	if err != nil {
 		return err
 	}
+
+	users, err := db.GetUsers()
+	if err != nil {
+		return err
+	}
+
+	um := make(map[int]db.User)
+	for _, v := range users {
+		um[v.Worker] = v
+	}
+
 	d.Server.Workers = nil
 	d.Server.Workers = make(map[int]db.Worker)
+
 	for _, v := range workers {
 		d.Server.Workers[v.Id] = v
 	}
@@ -61,6 +78,13 @@ func (d *Data) Fetch() error {
 		d.Server.MWorker = 0
 	} else {
 		d.Server.MWorker = workers[len(workers)-1].Id
+	}
+
+	d.Server.UWs = nil
+	d.Server.UWs = make(map[int]UserWorker)
+
+	for _, v := range workers {
+		d.Server.UWs[v.Id] = UserWorker{Id: v.Id, W: v, U: um[v.Id]}
 	}
 
 	tasks, err := db.GetAllTasks()
