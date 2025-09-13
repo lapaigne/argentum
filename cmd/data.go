@@ -41,13 +41,6 @@ type MappedData0 struct {
 	Addresses     map[int]string
 	Categories    map[int]string
 	Tasks         map[int]*db.Task
-	WorkersDifs   map[int]*WorkersDif
-}
-
-type WorkersDif struct {
-	Before db.Worker
-	After  db.Worker
-	Update bool
 }
 
 func Format(t time.Time) string {

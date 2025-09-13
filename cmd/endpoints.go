@@ -163,12 +163,14 @@ func (p Endpoints) EditWorkers(c echo.Context) error {
 		return err
 	}
 
-	w := data_old.Mapped.ProperWorkers[id]
-	d := struct {
+	// NOTE: due to be replaced with proper data struct
+	// also replace templates in [ew-f.html : ew-upd] form
+	w0 := data_old.Mapped.ProperWorkers[id]
+	d0 := struct {
 		Worker *db.Worker
 		Target string
 	}{
-		Worker: w,
+		Worker: w0,
 		Target: fmt.Sprintf("ew-%d", id),
 	}
 
@@ -177,9 +179,14 @@ func (p Endpoints) EditWorkers(c echo.Context) error {
 		return echo.ErrUnauthorized
 	}
 
-	return c.Render(200, "ew-upd", d)
+	return c.Render(200, "ew-upd", d0)
 }
 
 func (p Endpoints) AddTask(c echo.Context) error {
 	return nil
+}
+
+func (p Endpoints) EditAddresses(c echo.Context) error {
+
+	return c.Render(200, "ea-upd", nil)
 }

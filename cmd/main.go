@@ -48,8 +48,6 @@ func main() {
 		fmt.Println(err)
 	}
 
-	data.ResetLocal()
-
 	data_old.Init()
 	data_old.Fill()
 
@@ -122,10 +120,12 @@ func main() {
 		i := c.FormValue("i_name")
 		o := c.FormValue("o_name")
 
-		d := db.Worker{
-			F_name: f,
-			I_name: i,
-			O_name: o,
+		d := UserWorker{
+			W: db.Worker{
+				F_name: f,
+				I_name: i,
+				O_name: o,
+			},
 		}
 
 		return c.Render(200, "ew-row", d)
