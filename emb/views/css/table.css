@@ -96,11 +96,3 @@ th {
     cursor: pointer;
     position: relative;
 }
-
-th.asc::after {
-    content: " ▲";
-}
-
-th:not(.asc)::after {
-    content: " ▼";
-}

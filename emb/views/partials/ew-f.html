@@ -1,3 +1,10 @@
+{{ define "ew-row" }}
+<td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
+<td>{{ .U.Level }}</td>
+{{ end }}
+
+
+
 {{ define "ew-add" }}
 <form hx-post="/edit-workers/add" id="ew-add-f">
     <div>

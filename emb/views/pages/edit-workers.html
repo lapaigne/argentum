@@ -1,22 +1,35 @@
 {{ define "content" }}
-{{ $workers := .Local.UWs }}
-{{ $count := .Local.MWorker }}
+{{ $workers := .UWs }}
+{{ $count := .MWorker }}
+
+
+<script>
+
+    function initSorter(target) {
+        let table = new DataTable("#" + target)
+    }
+
+    function sortTable() {
+        let target = document.getElementById("ew-table")
+        let rows = Array.from(target.rows).slice(1)
+
+        let table = new DataTable("#ew-table")
+    }
+
+</script>
+
 <div>
     <div id="">
+        <button onclick="sortTable()">SORT</button>
         <!-- search by name -->
-        <input type="text">
-
-        <!-- put form on the side for new worker -->
         <button hx-post="/edit-workers/add-panel" hx-target="#ew-panel" hx-swap="innerHTML">ADD</button>
-
         <!-- delete marked -->
         <button>DEL</button>
-
         <button>APPLY</button>
     </div>
 
     <div>
-        <table>
+        <table id="ew-table">
             <thead>
                 <!-- <th>N</th> -->
                 <th>FULLNAME</th>
@@ -25,9 +38,7 @@
             {{ range $workers }}
             <tr id="ew-{{ .Id }}" hx-post="/edit-workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
                 hx-trigger="click">
-                <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
-                <td>{{ .U.Level }}</td>
-                <!-- <td>{{ .Id }}</td> -->
+                {{ template "ew-row" . }}
             </tr>
             {{ end }}
         </table>
