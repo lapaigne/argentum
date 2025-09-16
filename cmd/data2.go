@@ -28,6 +28,8 @@ type UserWorker struct {
 	Id int
 	W  db.Worker
 	U  db.User
+	DW bool
+	DU bool
 }
 
 type RawData struct {

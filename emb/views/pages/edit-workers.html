@@ -4,23 +4,14 @@
 
 
 <script>
-
     function initSorter(target) {
         let table = new DataTable("#" + target)
     }
-
-    function sortTable() {
-        let target = document.getElementById("ew-table")
-        let rows = Array.from(target.rows).slice(1)
-
-        let table = new DataTable("#ew-table")
-    }
-
 </script>
 
 <div>
     <div id="">
-        <button onclick="sortTable()">SORT</button>
+        <button onclick="initSorter('ew-table')">SORT</button>
         <!-- search by name -->
         <button hx-post="/edit-workers/add-panel" hx-target="#ew-panel" hx-swap="innerHTML">ADD</button>
         <!-- delete marked -->
