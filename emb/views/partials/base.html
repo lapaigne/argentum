@@ -38,7 +38,7 @@
 
         function dataTableInit() {
             $('#content .datatable').each(function () {
-                console.log('DataTables init:', this.id, 'Rows:', $(this).find('tbody tr').length)
+                // console.log('DataTables init:', this.id, 'Rows:', $(this).find('tbody tr').length)
                 if ($.fn.DataTable.isDataTable(this)) {
                     $(this).DataTable().clear().destroy()
                 }
@@ -53,10 +53,34 @@
         })
 
         htmx.on('htmx:afterSwap', function (e) {
-            console.log('afterswap')
-            if (e.target.id == "content" || (e.target.closest && e.target.closest(".datatable"))) {
+            const sw = (sel) => (e.target.closest && e.target.closest(sel))
+            const te = sw(".datatable")
+
+            if (te) {
+                const table = $(te).DataTable()
+                const row = $(e.target).closest('tr')
+
+                if (row.length) {
+                    const rid = row.attr('id')
+                    const dt = table.row('#' + rid)
+                    if (dt.any()) {
+                        dt.data(
+                            row.children().map((_, td) => $(td).html()).get()
+                        ).draw(false)
+                    } else {
+                        table.row.add(
+                            row.children().map((_, td) => $(td).html()).get()
+                        ).draw(false)
+                    }
+                }
+                return
+            }
+
+            if (e.target.id == "content" || sw(".datatable")) {
+                // console.log(e.target)
                 dataTableInit()
             }
+
         })
     </script>
 </body>

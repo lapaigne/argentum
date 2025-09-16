@@ -4,12 +4,6 @@ import (
 	"argentum/db"
 )
 
-const (
-	Added = iota
-	Deleted
-	Edited
-)
-
 type Data struct {
 	Workers map[int]db.Worker
 	Tasks   map[int]db.Task
@@ -25,11 +19,12 @@ type Data struct {
 }
 
 type UserWorker struct {
-	Id int
-	W  db.Worker
-	U  db.User
-	DW bool
-	DU bool
+	Id  int
+	W   db.Worker
+	U   db.User
+	DW  bool // if true, update worker
+	DU  bool // if true, update user
+	New bool // if true, add new user and new worker
 }
 
 type RawData struct {

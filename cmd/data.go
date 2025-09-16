@@ -25,7 +25,6 @@ type Helper struct {
 	Addr    int
 	Format  func(time.Time) string
 	NFormat func(sql.NullTime) string
-	Sort    TaskDisplay
 }
 
 type RawData0 struct {
