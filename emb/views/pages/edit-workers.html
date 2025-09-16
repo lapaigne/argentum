@@ -3,35 +3,28 @@
 {{ $count := .MWorker }}
 
 
-<script>
-    function initSorter(target) {
-        let table = new DataTable("#" + target)
-    }
-</script>
-
 <div>
     <div id="">
-        <button onclick="initSorter('ew-table')">SORT</button>
-        <!-- search by name -->
         <button hx-post="/edit-workers/add-panel" hx-target="#ew-panel" hx-swap="innerHTML">ADD</button>
-        <!-- delete marked -->
         <button>DEL</button>
         <button>APPLY</button>
     </div>
 
     <div>
-        <table id="ew-table">
+        <table class="datatable" id="ew-table">
             <thead>
                 <!-- <th>N</th> -->
                 <th>FULLNAME</th>
                 <th>ROLE</th>
             </thead>
-            {{ range $workers }}
-            <tr id="ew-{{ .Id }}" hx-post="/edit-workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
-                hx-trigger="click">
-                {{ template "ew-row" . }}
-            </tr>
-            {{ end }}
+            <tbody>
+                {{ range $workers }}
+                <tr id="ew-{{ .Id }}" hx-post="/edit-workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
+                    hx-trigger="click">
+                    {{ template "ew-row" . }}
+                </tr>
+                {{ end }}
+            </tbody>
         </table>
     </div>
 

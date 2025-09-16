@@ -35,6 +35,29 @@
                 window.location.href = "/signin";
             }
         });
+
+        function dataTableInit() {
+            $('#content .datatable').each(function () {
+                console.log('DataTables init:', this.id, 'Rows:', $(this).find('tbody tr').length)
+                if ($.fn.DataTable.isDataTable(this)) {
+                    $(this).DataTable().clear().destroy()
+                }
+
+                $(this).DataTable()
+            })
+
+        }
+
+        $(document).ready(function () {
+            dataTableInit()
+        })
+
+        htmx.on('htmx:afterSwap', function (e) {
+            console.log('afterswap')
+            if (e.target.id == "content" || (e.target.closest && e.target.closest("#content"))) {
+                dataTableInit()
+            }
+        })
     </script>
 </body>
 

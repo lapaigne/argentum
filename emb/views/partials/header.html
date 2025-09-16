@@ -1,8 +1,8 @@
 {{ define "header" }}
 
 <header class="page-header">
-    <button hx-post="/" hx-target="body" class="header-link">SK</button>
-    <button hx-post="/signout" hx-target="body" hx-swap="outerHTML" class="signout-btn" type="button">
+    <button hx-post="/" hx-target="#content" class="header-link" hx-push-url="true">SK</button>
+    <button hx-post="/signout" hx-target="#content" class="signout-btn" type="button">
         Выйти
     </button>
 </header>
