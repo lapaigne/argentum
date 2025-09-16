@@ -54,7 +54,7 @@
 
         htmx.on('htmx:afterSwap', function (e) {
             console.log('afterswap')
-            if (e.target.id == "content" || (e.target.closest && e.target.closest("#content"))) {
+            if (e.target.id == "content" || (e.target.closest && e.target.closest(".datatable"))) {
                 dataTableInit()
             }
         })
