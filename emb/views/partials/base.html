@@ -43,7 +43,28 @@
                     $(this).DataTable().clear().destroy()
                 }
 
-                $(this).DataTable()
+                $(this).DataTable({
+                    pageLength: 25,
+                    lengthMenu: [25, 50, -1],
+                    info: false,
+                    language: {
+                        search: "Найти:",
+                        lengthMenu: "Количество строк на странице _MENU_ ",
+                        lengthLabels: {
+                            "-1": "Все"
+                        },
+                        infoEmpty: "Отображение: Данные не найдены",
+                        zeroRecords: "Поиск: Данные не найдены",
+                        processing: "Обработка...",
+                        paginate: {
+                            first: "Начало",
+                            previous: "Назад",
+                            next: "Дальше",
+                            last: "Конец"
+                        },
+                    }
+                })
+
             })
 
         }
