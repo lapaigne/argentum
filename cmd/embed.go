@@ -1,7 +1,6 @@
-package emb
+package main
 
 import (
-	"embed"
 	"fmt"
 	"html/template"
 	"io"
@@ -13,9 +12,6 @@ import (
 type Templates struct {
 	templates map[string]*template.Template
 }
-
-//go:embed views/partials/*.html views/pages/*.html views/css/*.css
-var EFS embed.FS
 
 func (t *Templates) Render(w io.Writer, name string, data any, c echo.Context) error {
 	v, ok := t.templates[name]
@@ -37,35 +33,29 @@ func ParseTemplates(p string) (map[string]*template.Template, error) {
 
 	templates := make(map[string]*template.Template)
 
-	partials, err := template.ParseFS(EFS, filepath.Join(p, "partials", "*.html"))
+	partials, err := template.ParseGlob(filepath.Join(p, "partials", "*.html"))
 	if err != nil {
 		return nil, err
 	}
 
-	pages, err := EFS.ReadDir(filepath.Join(p, "pages"))
+	pages, err := filepath.Glob(filepath.Join(p, "pages", "*.html"))
 	if err != nil {
 		return nil, err
 	}
 
 	for _, file := range pages {
 
-		if file.IsDir() {
-			continue
-		}
-
-		pfp := filepath.Join(p, "pages", file.Name())
-
 		t, err := partials.Clone()
 		if err != nil {
 			return nil, err
 		}
 
-		t, err = t.ParseFS(EFS, pfp)
+		t, err = t.ParseFiles(file)
 		if err != nil {
 			return nil, err
 		}
 
-		name := file.Name()
+		name := filepath.Base(file)
 		name = name[:len(name)-len(filepath.Ext(name))]
 
 		templates[name] = t

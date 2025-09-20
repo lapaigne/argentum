@@ -2,7 +2,6 @@ package main
 
 import (
 	"argentum/db"
-	"argentum/emb"
 	"fmt"
 	"log"
 	"os"
@@ -31,7 +30,7 @@ func main() {
 
 	e.HTTPErrorHandler = ErrorHandler
 
-	templates, err := emb.NewTemplates("views")
+	templates, err := NewTemplates("views")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,16 +69,15 @@ func main() {
 
 	e.POST("/signout", Logout)
 
-	e.GET("/css/:fn", func(c echo.Context) error {
-		fn := c.Param("fn")
-		f, err := emb.EFS.ReadFile("views/css/" + fn)
-		if err != nil {
-			fmt.Println(err)
-			return echo.ErrNotFound
-		}
-
-		return c.Blob(200, "text/css", f)
-	})
+	// e.GET("/css/:fn", func(c echo.Context) error {
+	// 	fn := c.Param("fn")
+	// 	f, err := .ReadFile("views/css/" + fn)
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		return echo.ErrNotFound
+	// 	}
+	// 	return c.Blob(200, "text/css", f)
+	// })
 
 	e.GET("/me", func(c echo.Context) error {
 
