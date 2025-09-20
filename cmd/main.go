@@ -35,6 +35,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	e.Static("/css", "views/css")
+
 	e.Renderer = templates
 
 	db.OpenConn()
