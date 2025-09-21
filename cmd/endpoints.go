@@ -158,28 +158,28 @@ func (p Endpoints) Me_ConfirmTask(c echo.Context) error {
 
 func (p Endpoints) EditWorkers(c echo.Context) error {
 
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return err
-	}
-
-	// NOTE: due to be replaced with proper data struct
-	// also replace templates in [ew-f.html : ew-upd] form
-	w0 := data_old.Mapped.ProperWorkers[id]
-	d0 := struct {
-		Worker *db.Worker
-		Target string
-	}{
-		Worker: w0,
-		Target: fmt.Sprintf("ew-%d", id),
-	}
-
 	acc := GetClaims(c).Level
 	if acc != db.AccessLevels["admin"] {
 		return echo.ErrUnauthorized
 	}
 
-	return c.Render(200, "ew-upd", d0)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
+
+	uw := data.UWs[id]
+	d := struct {
+		W      db.Worker
+		U      db.User
+		Target string
+	}{
+		W:      uw.W,
+		U:      uw.U,
+		Target: fmt.Sprintf("ew-%d", id),
+	}
+
+	return c.Render(200, "ew-upd", d)
 }
 
 func (p Endpoints) AddTask(c echo.Context) error {

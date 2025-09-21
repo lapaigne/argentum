@@ -126,6 +126,7 @@ func main() {
 				I_name: i,
 				O_name: o,
 			},
+			U: db.User{},
 		}
 
 		return c.Render(200, "ew-row", d)

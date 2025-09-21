@@ -29,10 +29,13 @@
 {{ define "ew-upd" }}
 <form hx-post="/edit-workers/upd" id="ew-upd-f" hx-target="#{{ .Target }}">
     <div>
-        <input type="text" name="f_name" value="{{ .Worker.F_name }}">
-        <input type="text" name="i_name" value="{{ .Worker.I_name }}">
-        <input type="text" name="o_name" value="{{ .Worker.O_name }}">
+        <input type="text" name="f_name" value="{{ .W.F_name }}">
+        <input type="text" name="i_name" value="{{ .W.I_name }}">
+        <input type="text" name="o_name" value="{{ .W.O_name }}">
     </div>
+    <p>
+        {{ .U.Level }}
+    </p>
     <select>
     </select>
     <button type="submit">UPD</button>
