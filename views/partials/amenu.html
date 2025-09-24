@@ -1,15 +1,14 @@
-{{ define "content" }}
+{{ define "amenu" }}
+
 <div>
     ADMIN PANEL
 </div>
-<div>
+<div class="menu-buttons">
     <button hx-get="/new-task" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Добавить задачу</button>
     <button hx-get="/tflist" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
     <button hx-get="/me" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Мои задачи</button>
     <button hx-get="/edit-workers" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Workers</button>
 </div>
+
 {{ end }}
 
-{{ define "amenu" }}
-{{ template "base" . }}
-{{ end }}
