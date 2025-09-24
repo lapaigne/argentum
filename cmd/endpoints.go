@@ -37,7 +37,7 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 		return c.Redirect(http.StatusSeeOther, "/menu")
 	})
 
-	e.POST("/submit-auth", Login)
+	e.POST("/submit-auth", login)
 
 	e.GET("/new-task", func(c echo.Context) error {
 		data_old.Helper.Today = time.Now().Format(time.DateOnly)
@@ -46,7 +46,7 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 
 	// e.POST("/submit-task", endpoints.AddTask)
 
-	e.POST("/submit-task", TaskFormHandler)
+	e.POST("/submit-task", taskFormHandler)
 	e.POST("/submit-task/act", ActHandler)
 	e.POST("/submit-task/addr", AddrHandler)
 	e.POST("/submit-task/until", UntilHandler)
@@ -62,13 +62,13 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 		return c.Render(200, "auth", data_old)
 	})
 
-	e.POST("/submit-auth/tel", AuthTel)
+	e.POST("/submit-auth/tel", authTel)
 
 	return nil
 }
 
 func (p Endpoints) Menu(c echo.Context) error {
-	acc := GetClaims(c).Level
+	acc := getClaims(c).Level
 	switch acc {
 	case db.AccessLevels["worker"]:
 		return c.Render(200, "wmenu", nil)
@@ -83,7 +83,7 @@ func (p Endpoints) Menu(c echo.Context) error {
 
 func (p Endpoints) Me_ExpandTask(c echo.Context) error {
 
-	acc := GetClaims(c).Level
+	acc := getClaims(c).Level
 	switch acc {
 	case db.AccessLevels["worker"]:
 	case db.AccessLevels["dispatcher"]:
@@ -118,7 +118,7 @@ func (p Endpoints) Me_ExpandTask(c echo.Context) error {
 
 func (p Endpoints) Me_ConfirmTask(c echo.Context) error {
 
-	acc := GetClaims(c).Level
+	acc := getClaims(c).Level
 	switch acc {
 	case db.AccessLevels["worker"]:
 	case db.AccessLevels["dispatcher"]:
@@ -158,7 +158,7 @@ func (p Endpoints) Me_ConfirmTask(c echo.Context) error {
 
 func (p Endpoints) EditWorkers(c echo.Context) error {
 
-	acc := GetClaims(c).Level
+	acc := getClaims(c).Level
 	if acc != db.AccessLevels["admin"] {
 		return echo.ErrUnauthorized
 	}

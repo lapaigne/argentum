@@ -53,33 +53,19 @@ func main() {
 	data_old.Fill()
 
 	config := echojwt.Config{
+		SigningKey: []byte(accSecret),
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
 			return new(jwtClaims)
 		},
-		SigningKey: []byte("secret"),
 		Skipper: func(c echo.Context) bool {
 			path := c.Request().URL.Path
 			return public[path] || strings.HasPrefix(path, "/css/")
 		},
 	}
 
-	e.Use(
-		JWTCooked,
-		AutoRefreshJWT,
-		echojwt.WithConfig(config),
-	)
+	e.Use(jwtMiddleware(config))
 
-	e.POST("/signout", Logout)
-
-	// e.GET("/css/:fn", func(c echo.Context) error {
-	// 	fn := c.Param("fn")
-	// 	f, err := .ReadFile("views/css/" + fn)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		return echo.ErrNotFound
-	// 	}
-	// 	return c.Blob(200, "text/css", f)
-	// })
+	e.POST("/signout", logout)
 
 	e.GET("/me", func(c echo.Context) error {
 
@@ -131,12 +117,6 @@ func main() {
 
 		return c.Render(200, "ew-row", d)
 	})
-
-	// TODO:
-	// switch all wildcards inside similar functions
-	// e.POST("/edit-workers/*", func(c echo.Context) error {
-	// 	return c.NoContent(204)
-	// })
 
 	e.POST("/edit-workers/add-panel", func(c echo.Context) error {
 

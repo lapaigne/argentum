@@ -11,7 +11,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func TaskFormHandler(c echo.Context) error {
+func authTel(c echo.Context) error {
+	tel := c.FormValue("tel")
+	return c.Render(200, "tel-err", tel)
+}
+
+func taskFormHandler(c echo.Context) error {
 
 	data_old.ResetHelper()
 
