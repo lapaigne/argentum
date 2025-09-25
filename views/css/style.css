@@ -49,6 +49,10 @@ img {
     max-height: 100%;
 }
 
+.sort-block {
+    display: flex;
+}
+
 /* Main content fills remaining space */
 #content {
     height: 100%;
@@ -113,6 +117,10 @@ img {
         border-radius: 0;
         box-shadow: none;
     }
+
+    .sort-block {
+        width: 350px;
+    }
 }
 /* Desktop */
 @media (min-width: 1024px) {
@@ -149,6 +157,10 @@ img {
         padding: 16px 16px;
         border-radius: 0;
         box-shadow: none;
+    }
+
+    .sort-block {
+        width: 350px;
     }
 }
 

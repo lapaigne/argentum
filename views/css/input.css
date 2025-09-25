@@ -12,7 +12,9 @@ textarea {
     font-size: 16px;
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-color: #fff;
     color: #222;
     width: 100%;

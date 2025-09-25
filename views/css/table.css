@@ -1,7 +1,7 @@
 /* tables.css */
 
 /* Base table styling */
-table {
+.datatable table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #ccc;
@@ -13,7 +13,7 @@ table {
 }
 
 /* Header cells */
-thead th {
+.datatable thead th {
     background-color: #f3f6fa;
     color: #1a3e72;
     font-weight: 600;
@@ -24,7 +24,7 @@ thead th {
 }
 
 /* Body cells */
-tbody td {
+.datatable tbody td {
     padding: 0.75rem 1rem;
     border: 1px solid #ccc;
     vertical-align: middle;
@@ -33,39 +33,39 @@ tbody td {
 }
 
 /* Optional column widths (adjust as needed) */
-.col.cat {
+.datatable .col.cat {
     min-width: 120px;
 }
 
-.col.desc {
+.datatable .col.desc {
     min-width: 250px;
     text-align: left;
 }
 
-.col.addr {
+.datatable .col.addr {
     min-width: 150px;
 }
 
-.col.until,
-.col.mark_date,
-.col.mark {
+.datatable .col.until,
+.datatable .col.mark_date,
+.datatable .col.mark {
     min-width: 100px;
 }
 
 /* Row hover effect */
-tbody tr:hover {
+.datatable tbody tr:hover {
     background-color: #e9f0ff;
     cursor: pointer;
 }
 
 /* Disabled button style in table */
-input[type="button"][disabled] {
+.datatable input[type="button"][disabled] {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
 /* Buttons inside table */
-td input[type="button"] {
+.datatable td input[type="button"] {
     padding: 6px 12px;
     font-size: 14px;
     border: 1px solid #1a3e72;
@@ -76,23 +76,23 @@ td input[type="button"] {
     transition: background-color 0.3s ease;
 }
 
-td input[type="button"]:hover {
+.datatable td input[type="button"]:hover {
     background-color: #c3d2f6;
 }
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
-    table {
+    .datatable table {
         font-size: 14px;
     }
 
-    .col.desc {
+    .datatable .col.desc {
         min-width: auto;
     }
 }
 
 
-th {
+.datatable th {
     cursor: pointer;
     position: relative;
 }
