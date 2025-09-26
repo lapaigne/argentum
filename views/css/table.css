@@ -1,6 +1,17 @@
 /* tables.css */
 
 /* Base table styling */
+.table-filters table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    background-color: #fff;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
 .datatable table {
     width: 100%;
     border-collapse: collapse;
@@ -13,6 +24,16 @@
 }
 
 /* Header cells */
+.table-filters thead th {
+    background-color: #f3f6fa;
+    color: #1a3e72;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    user-select: none;
+}
+
 .datatable thead th {
     background-color: #f3f6fa;
     color: #1a3e72;
@@ -23,7 +44,15 @@
     user-select: none;
 }
 
-/* Body cells */
+    /* Body cells */
+.table-filters tbody td {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+    text-align: center;
+    word-break: break-word;
+}
+
 .datatable tbody td {
     padding: 0.75rem 1rem;
     border: 1px solid #ccc;
@@ -32,39 +61,67 @@
     word-break: break-word;
 }
 
+
 /* Optional column widths (adjust as needed) */
+.table-filters,
 .datatable .col.cat {
     min-width: 120px;
 }
 
+.table-filters,
 .datatable .col.desc {
     min-width: 250px;
     text-align: left;
 }
 
+.table-filters,
 .datatable .col.addr {
     min-width: 150px;
 }
 
+.table-filters,
 .datatable .col.until,
+.table-filters,
 .datatable .col.mark_date,
+.table-filters,
 .datatable .col.mark {
     min-width: 100px;
 }
 
 /* Row hover effect */
+.table-filters tbody tr:hover {
+    background-color: #e9f0ff;
+    cursor: pointer;
+}
+
 .datatable tbody tr:hover {
     background-color: #e9f0ff;
     cursor: pointer;
 }
 
 /* Disabled button style in table */
+.table-filters input[type="button"][disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .datatable input[type="button"][disabled] {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
 /* Buttons inside table */
+.table-filters td input[type="button"] {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #1a3e72;
+    background-color: #e1e8f7;
+    color: #1a3e72;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 .datatable td input[type="button"] {
     padding: 6px 12px;
     font-size: 14px;
@@ -76,22 +133,29 @@
     transition: background-color 0.3s ease;
 }
 
+.table-filters td input[type="button"]:hover {
+    background-color: #c3d2f6;
+}
+
 .datatable td input[type="button"]:hover {
     background-color: #c3d2f6;
 }
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
+    .table-filters,
     .datatable table {
         font-size: 14px;
     }
 
+    .table-filters,
     .datatable .col.desc {
         min-width: auto;
     }
 }
 
 
+.table-filters,
 .datatable th {
     cursor: pointer;
     position: relative;
