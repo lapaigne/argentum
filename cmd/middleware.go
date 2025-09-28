@@ -67,7 +67,7 @@ func jwtMiddleware(config echojwt.Config) echo.MiddlewareFunc {
 
 			aTime := accTime(time.Now())
 
-			signed, _, err := signToken(refClaims.UID, refClaims.Level, aTime, refSecret)
+			signed, claims, err := signToken(refClaims.UID, refClaims.Level, aTime, accSecret)
 			if err != nil {
 				fmt.Println(err)
 				return echo.ErrUnauthorized
@@ -75,7 +75,13 @@ func jwtMiddleware(config echojwt.Config) echo.MiddlewareFunc {
 
 			setCookie(c, "token", signed, aTime)
 			c.Request().Header.Set("Authorization", "Bearer "+signed)
-			return echojwt.WithConfig(config)(next)(c)
+
+			c.Set("user", &jwt.Token{
+				Claims: claims,
+				Valid:  true,
+			})
+
+			return next(c)
 		}
 	}
 }

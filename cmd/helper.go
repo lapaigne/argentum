@@ -8,7 +8,7 @@ import (
 )
 
 func accTime(now time.Time) time.Time {
-	return now.Add(time.Minute * 15)
+	return now.Add(time.Minute * 1)
 }
 
 func refTime(now time.Time) time.Time {
@@ -31,13 +31,13 @@ func getClaims(c echo.Context) *jwtClaims {
 	return claims
 }
 
-func signToken(uid, level int, time time.Time, secret string) (string, *jwtClaims, error) {
+func signToken(uid, level int, t time.Time, secret string) (string, *jwtClaims, error) {
 
 	claims := &jwtClaims{
 		UID:   uid,
 		Level: level,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time),
+			ExpiresAt: jwt.NewNumericDate(t),
 		},
 	}
 

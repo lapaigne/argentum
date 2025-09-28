@@ -22,15 +22,14 @@
 </head>
 
 <body>
-
     {{ template "header" . }}
 
     <div id="content">
         {{ block "content" . }} {{ end }}
     </div>
+
     <script>
         document.body.addEventListener('htmx:responseError', function (e) {
-            console.log(e)
             if (e.detail.xhr.status == 401) {
                 window.location.href = "/signin";
             }

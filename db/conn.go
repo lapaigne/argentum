@@ -18,6 +18,7 @@ func OpenConn() {
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_HOST"),
 	)
+
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
