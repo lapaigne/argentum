@@ -35,12 +35,8 @@ header {
     font-size: 1.2rem;
 }
 
-.main-content {
-    height: 100%;
-}
-
 .menu {
-    margin: 10px;
+    padding: 10px;
     text-align: center;
 }
 

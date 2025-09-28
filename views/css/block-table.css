@@ -17,39 +17,54 @@
     margin-bottom: 10px;
     border-collapse: collapse;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
     padding: 10px
 }
 
 #block-table tbody tr {
     width: 100%;
-    display: block;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
     margin-top: 5px;
     margin-bottom: 5px;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
+#block-table tbody td:nth-child(1) {
+    grid-column: 1 / 4;
+}
+
+#block-table tbody td:nth-child(2) {
+    white-space: normal;
+}
+
+#block-table tbody td:nth-child(5) {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
 #block-table tbody td {
-    display: block;
     text-align: center;
-    border-bottom: none;
+    /*border-bottom: none;*/
+    /*white-space: wrap;*/
+    border: 1px solid #ccc;
+
+    /*min-width: 150px;*/
 }
 
 #block-table tbody td::before {
-    content: attr(data-lable);
+    content: attr(data-label);
     margin-right: 10px;
     font-weight: bold;
     display: block;
 }
 
-#block-table tbody td:nth-child(odd) {
-    background-color: rgba(255, 255, 255, 0.63);
-    border-radius: 10px;
-}
-
-#block-table tbody td:nth-child(even) {
-    background-color: rgba(228, 228, 228, 0.34);
+#block-table span {
+    display: grid;
 }
 
 /* Tablet */
@@ -67,7 +82,28 @@
     }
 
     #block-table tbody td {
+        align-content: center;
         display: flex;
+    }
+
+    #block-table tbody tr {
+        grid-template-columns: 50px 250px auto;
+        grid-template-rows: auto auto auto;
+    }
+
+    #block-table tbody td:nth-child(1) {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 4;
+    }
+
+    #block-table tbody td:nth-child(5) {
+        grid-column-start: 3;
+        grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 4;
+        display: grid;
     }
 }
 
@@ -86,6 +122,27 @@
     }
 
     #block-table tbody td {
+        align-content: center;
         display: flex;
+    }
+
+    #block-table tbody tr {
+        grid-template-columns: 50px 250px auto;
+        grid-template-rows: auto auto auto;
+    }
+
+    #block-table tbody td:nth-child(1) {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 4;
+    }
+
+    #block-table tbody td:nth-child(5) {
+        grid-column-start: 3;
+        grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 4;
+        display: grid;
     }
 }

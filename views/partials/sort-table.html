@@ -23,17 +23,17 @@
             {{ range $tasks }}
             {{ if $filter }}
             <tr>
-                <td data-lable="Статус">
+                <td data-label="">
                     {{ call $helper.NFormat .Completed_date }}
                 </td>
-                <td data-lable="Категории">
-                    {{ index $cats .Cat_1 }}
-                    {{ index $cats .Cat_2 }}
-                    {{ index $cats .Cat_3 }}
+                <td data-label="Категории">
+                    <span>{{ index $cats .Cat_1 }}&nbsp</span>
+                    <span>{{ index $cats .Cat_2 }}&nbsp</span>
+                    <span>{{ index $cats .Cat_3 }}</span>
                 </td>
-                <td data-lable="Постановка">{{ .Desc }}</td>
-                <td data-lable="Объект">{{ index $addrs .Addr_obj }}</td>
-                <td data-lable="Исполнитель">{{ index $workers .Worker }}</td>
+                <td data-label="Объект">{{ index $addrs .Addr_obj }}</td>
+                <td data-label="Исполнитель">{{ index $workers .Worker }}</td>
+                <td data-label="Постановка">{{ .Desc }}</td>
             </tr>
             {{ end }}
             {{ end }}
