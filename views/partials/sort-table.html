@@ -9,23 +9,19 @@
 {{ $tasks := .Raw.Tasks }}
 {{ $filter := true }}
 <div id="sort-table" class="table content">
-    <div id="sort-table-filters">
-        <div class="sort-block">
-            <select id="sort-select">
-                <option value="stat">Статус</option>
-                <option value="cat">Категории</option>
-                <option value="desc">Постановка</option>
-                <option value="obj">Объект</option>
-                <option value="worker">Исполнитель</option>
-            </select>
-            <button id="sort-btn">▼</button>
-        </div>
-    </div>
-
-    <table class="block-table">
-        {{ range $tasks }}
-        {{ if $filter }}
+    <table id="block-table" class="datatable">
+        <thead>
+            <tr>
+                <th>Статус</th>
+                <th>Категории</th>
+                <th>Постановка</th>
+                <th>Объект</th>
+                <th>Исполнитель</th>
+            </tr>
+        </thead>
         <tbody>
+            {{ range $tasks }}
+            {{ if $filter }}
             <tr>
                 <td data-lable="Статус">
                     {{ call $helper.NFormat .Completed_date }}
@@ -39,93 +35,10 @@
                 <td data-lable="Объект">{{ index $addrs .Addr_obj }}</td>
                 <td data-lable="Исполнитель">{{ index $workers .Worker }}</td>
             </tr>
+            {{ end }}
+            {{ end }}
         </tbody>
-        {{ end }}
-        {{ end }}
     </table>
-    <script>
-        function getTableData() {
-            const tbodyList = document.querySelectorAll('#sort-table table.block-table tbody');
-            const data = [];
-
-            tbodyList.forEach(tbody => {
-                const row = tbody.querySelector('tr');
-                const cells = row.querySelectorAll('td');
-
-                data.push({
-                    completed_date: cells[0].textContent.trim(),
-                    categories: cells[1].textContent.trim().split(/\s+/).filter(cat => cat !== ''),
-                    description: cells[2].textContent.trim(),
-                    address: cells[3].textContent.trim(),
-                    worker: cells[4].textContent.trim(),
-                    tbodyElement: tbody
-                });
-            });
-
-            return data;
-        }
-
-        function sortTable(column, ascending = true) {
-            const table = document.querySelector('#sort-table table.block-table');
-            const data = getTableData();
-
-            data.sort((a, b) => {
-                let valueA, valueB;
-
-                switch(column) {
-                    case 'stat':
-                        valueA = a.completed_date;
-                        valueB = b.completed_date;
-                        break;
-                    case 'cat':
-                        valueA = a.categories.join(' ').toLowerCase();
-                        valueB = b.categories.join(' ').toLowerCase();
-                        break;
-                    case 'desc':
-                        valueA = a.description.toLowerCase();
-                        valueB = b.description.toLowerCase();
-                        break;
-                    case 'obj':
-                        valueA = a.address.toLowerCase();
-                        valueB = b.address.toLowerCase();
-                        break;
-                    case 'worker':
-                        valueA = a.worker.toLowerCase();
-                        valueB = b.worker.toLowerCase();
-                        break;
-                }
-
-                if (valueA < valueB) return ascending ? -1 : 1;
-                if (valueA > valueB) return ascending ? 1 : -1;
-                return 0;
-            });
-
-            table.innerHTML = '';
-
-            data.forEach(item => {
-                table.appendChild(item.tbodyElement);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const sortBtn = document.getElementById('sort-btn');
-            const sortSelect = document.getElementById('sort-select');
-            let isAscending = true;
-
-            sortSelect.addEventListener('change', function (event) {
-                sortTable(event.target.value, isAscending);
-                isAscending = !isAscending;
-            })
-
-            sortBtn.addEventListener('click', function() {
-                const selectedColumn = sortSelect.value;
-                sortTable(selectedColumn, isAscending);
-
-                isAscending = !isAscending;
-                sortBtn.textContent = isAscending ? '▼' : '▲';
-            });
-        });
-    </script>
 </div>
 
 {{ end }}

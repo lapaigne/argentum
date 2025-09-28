@@ -1,8 +1,19 @@
 /* tables.css */
 
-.block-table tbody {
+#block-table thead tr {
     display: flex;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#block-table thead th {
+    flex: 1;
+    min-width: 150px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#block-table tbody {
     margin-bottom: 10px;
     border-collapse: collapse;
     border: 1px solid #ccc;
@@ -10,50 +21,71 @@
     padding: 10px
 }
 
-.block-table tbody tr {
+#block-table tbody tr {
     width: 100%;
     display: block;
-}
-
-.block-table tbody td {
-    display: block;
+    margin-top: 5px;
     margin-bottom: 5px;
-    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
-.block-table tbody td::before {
+#block-table tbody td {
+    display: block;
+    text-align: center;
+    border-bottom: none;
+}
+
+#block-table tbody td::before {
     content: attr(data-lable);
     margin-right: 10px;
     font-weight: bold;
     display: block;
 }
 
-.block-table tbody td:nth-child(odd) {
+#block-table tbody td:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.63);
+    border-radius: 10px;
 }
 
-.block-table tbody td:nth-child(even) {
+#block-table tbody td:nth-child(even) {
     background-color: rgba(228, 228, 228, 0.34);
 }
 
 /* Tablet */
 @media (min-width: 768px) {
-    .block-table tbody td {
+    #block-table tbody td {
         text-align: left;
     }
 
-    .block-table tbody td::before {
-        display: inline-grid;
+    #block-table thead th {
+        display: table-cell;
+    }
+
+    #block-table thead th {
+        text-align: left;
+    }
+
+    #block-table tbody td {
+        display: flex;
     }
 }
 
 /* Desktop */
 @media (min-width: 1024px) {
-    .block-table tbody td {
+    #block-table tbody td {
         text-align: left;
     }
 
-    .block-table tbody td::before {
-        display: inline-grid;
+    #block-table thead th {
+        display: table-cell;
+    }
+
+    #block-table thead th {
+        text-align: left;
+    }
+
+    #block-table tbody td {
+        display: flex;
     }
 }

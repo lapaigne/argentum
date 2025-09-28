@@ -12,7 +12,7 @@
     color: #333;
 }
 
-.datatable table {
+#ew-table table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #ccc;
@@ -34,7 +34,7 @@
     user-select: none;
 }
 
-.datatable thead th {
+#ew-table thead th {
     background-color: #f3f6fa;
     color: #1a3e72;
     font-weight: 600;
@@ -53,7 +53,7 @@
     word-break: break-word;
 }
 
-.datatable tbody td {
+#ew-table tbody td {
     padding: 0.75rem 1rem;
     border: 1px solid #ccc;
     vertical-align: middle;
@@ -64,27 +64,27 @@
 
 /* Optional column widths (adjust as needed) */
 .table-filters,
-.datatable .col.cat {
+#ew-table .col.cat {
     min-width: 120px;
 }
 
 .table-filters,
-.datatable .col.desc {
+#ew-table .col.desc {
     min-width: 250px;
     text-align: left;
 }
 
 .table-filters,
-.datatable .col.addr {
+#ew-table .col.addr {
     min-width: 150px;
 }
 
 .table-filters,
-.datatable .col.until,
+#ew-table .col.until,
 .table-filters,
-.datatable .col.mark_date,
+#ew-table .col.mark_date,
 .table-filters,
-.datatable .col.mark {
+#ew-table .col.mark {
     min-width: 100px;
 }
 
@@ -94,7 +94,7 @@
     cursor: pointer;
 }
 
-.datatable tbody tr:hover {
+#ew-table tbody tr:hover {
     background-color: #e9f0ff;
     cursor: pointer;
 }
@@ -105,7 +105,7 @@
     cursor: not-allowed;
 }
 
-.datatable input[type="button"][disabled] {
+#ew-table input[type="button"][disabled] {
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -122,7 +122,7 @@
     transition: background-color 0.3s ease;
 }
 
-.datatable td input[type="button"] {
+#ew-table td input[type="button"] {
     padding: 6px 12px;
     font-size: 14px;
     border: 1px solid #1a3e72;
@@ -137,26 +137,26 @@
     background-color: #c3d2f6;
 }
 
-.datatable td input[type="button"]:hover {
+#ew-table td input[type="button"]:hover {
     background-color: #c3d2f6;
 }
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
     .table-filters,
-    .datatable table {
+    #ew-table table {
         font-size: 14px;
     }
 
     .table-filters,
-    .datatable .col.desc {
+    #ew-table .col.desc {
         min-width: auto;
     }
 }
 
 
 .table-filters,
-.datatable th {
+#ew-table th {
     cursor: pointer;
     position: relative;
 }
