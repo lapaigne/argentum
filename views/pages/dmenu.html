@@ -1,0 +1,17 @@
+{{ define "content" }}
+<div class="menu">
+    <div>
+        DISPATCHER PANEL
+    </div>
+    <div class="menu-buttons">
+        <button hx-get="/new-task" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Добавить задачу</button>
+        <button hx-get="/task-list" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
+        <button hx-get="/d/tflist" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
+    </div>
+</div>
+
+{{ end }}
+
+{{ define "dmenu" }}
+{{ template "base" . }}
+{{ end }}

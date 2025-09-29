@@ -1,0 +1,117 @@
+.form-date {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-date div {
+    padding-bottom: 5px;
+}
+
+.mob-check {
+    width: 20px;
+    height: 20px;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .form-start {
+        display: grid;
+        grid-template-columns: 250px auto;
+        grid-template-rows: auto auto;
+    }
+
+    .form-start div {
+        margin: 10px;
+    }
+
+    .form-start #cat_1, #cat_2, #cat_3 {
+        margin: 0;
+    }
+
+    #description {
+        height: 87.5%;
+    }
+
+    .form-start div:nth-child(3) {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
+
+    .form-executor {
+        display: grid;
+        grid-template-columns: 250px auto;
+        align-items: baseline;
+    }
+
+    .form-executor div {
+        margin: 10px;
+    }
+
+    .form-date {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .form-date div {
+        margin: 10px;
+        padding-bottom: 0;
+    }
+
+    #comb-cat-wrap {
+        justify-content: space-between;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .form-start {
+        display: grid;
+        grid-template-columns: 250px auto;
+        grid-template-rows: auto auto;
+    }
+
+    .form-start div {
+        margin: 10px;
+    }
+
+    .form-start #cat_1, #cat_2, #cat_3 {
+        margin: 0;
+    }
+
+    .form-start div:nth-child(3) {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
+
+    .form-executor {
+        display: grid;
+        grid-template-columns: 250px auto;
+        align-items: baseline;
+    }
+
+    .form-executor div {
+        margin: 10px;
+    }
+
+    .form-date {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .form-date div {
+        margin: 10px;
+        padding-bottom: 0;
+    }
+
+    #description {
+        height: 87.5%;
+    }
+
+    #comb-cat-wrap {
+        justify-content: space-between;
+    }
+}

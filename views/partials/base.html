@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/css/input.css">
     <link rel="stylesheet" href="/css/table.css">
     <link rel="stylesheet" href="/css/block-table.css">
+    <link rel="stylesheet" href="/css/me.css">
+    <link rel="stylesheet" href="/css/task-form.css">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css">
@@ -25,10 +27,6 @@
 <body>
 
     {{ template "header" . }}
-    <div class="main-content">
-        <div class="menu">
-            {{ template "amenu" . }}
-        </div>
         <div id="content">
             {{ block "content" . }} {{ end }}
         </div>
@@ -109,7 +107,6 @@
 
             })
         </script>
-    </div>
 </body>
 
 </html>

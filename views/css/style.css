@@ -12,6 +12,7 @@
 /* Base font and colors */
 html, body {
     height: 100%;
+    width: 100%;
     background-color: #f3f4f6;
     color: #1e1e1e;
 }
@@ -89,13 +90,9 @@ img {
         padding: 0 1.5rem;
     }
 
-    .main-content {
-        display: flex;
-        justify-content: space-between;
-    }
-
     .menu {
-        width: 20%;
+        margin: 0 auto;
+        width: 50%;
         text-align: center;
     }
 
@@ -112,16 +109,22 @@ img {
         padding: 16px 16px;
         border-radius: 0;
         box-shadow: none;
+        width: 100%;
     }
 
     .sort-block {
         width: 350px;
     }
 }
+
 /* Desktop */
 @media (min-width: 1024px) {
     body {
 
+    }
+
+    #content {
+        width: 60%;
     }
 
     header {
@@ -130,13 +133,9 @@ img {
         padding: 0 16px;
     }
 
-    .main-content {
-        display: flex;
-        justify-content: space-between;
-    }
-
     .menu {
-        width: 20%;
+        margin: 0 auto;
+        width: 50%;
         text-align: center;
     }
 

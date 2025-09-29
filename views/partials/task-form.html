@@ -1,87 +1,90 @@
 {{ define "task-form" }}
 
-<div class="left">
+<div>
     <form hx-post="/submit-task" id="task-form" hx-target="#content" hx-swap="innerHTML" hx-push-url="false">
         <div>
-            <div id="comb-cat-wrap">
-                <label>Категории задачи</label>
-
-                <div id="cat_1">
-                    <select required name="cat_1" hx-post="/submit-task/cat-1" hx-target="#cat_2"
-                        hx-trigger="change changed" hx-history="false" id="s1" hx-push-url="false">
-                        {{ template "tf-cat-1" . }}
-                    </select>
+            <div class="form-start">
+                <div id="comb-cat-wrap">
+                    <label>Категории задачи</label>
+                    <div id="cat_1">
+                        <select required name="cat_1" hx-post="/submit-task/cat-1" hx-target="#cat_2"
+                            hx-trigger="change changed" hx-history="false" id="s1" hx-push-url="false">
+                            {{ template "tf-cat-1" . }}
+                        </select>
+                    </div>
+                    <div id="cat_2">
+                        <select required name="cat_2" hx-post="/submit-task/cat-2" hx-swap="innerHTML" hx-target="#s3"
+                            hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false">
+                            {{ template "tf-cat-2" . }}
+                        </select>
+                    </div>
+                    <div id="cat_3">
+                        <select required name="cat_3" id="s3">
+                            {{ template "tf-cat-3" . }}
+                        </select>
+                    </div>
                 </div>
 
-                <div id="cat_2">
-                    <select required name="cat_2" hx-post="/submit-task/cat-2" hx-swap="innerHTML" hx-target="#s3"
-                        hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false">
-                        {{ template "tf-cat-2" . }}
-                    </select>
-                </div>
-
-                <div id="cat_3">
-                    <select required name="cat_3" id="s3">
-                        {{ template "tf-cat-3" . }}
-                    </select>
-                </div>
-
-            </div>
-
-            <div>
-                <label>Адрес</label>
-                <select required name="address" id="addr" hx-post="/submit-task/addr" hx-trigger="change changed"
-                    hx-target="#table" hx-swap="outerHTML" hx-history="false" hx-push-url="false">
-                    <option disabled selected>Не выбран!</option>
-                    {{ range $i, $v := .Mapped.Addresses}}
-                    <option value="{{ $i }}">{{ $i }} - {{ $v }}</option>
-                    {{ end }}
-                </select>
-            </div>
-
-            <div>
-                <label>Описание задачи</label>
-                <input type="text" id="description" name="desc">
-            </div>
-
-            <div>
-                <label>Дата создания</label>
-                <input type="date" id="created" name="created" value="{{ .Helper.Today }}"
-                    hx-post="/submit-task/created">
-            </div>
-
-            <div id="until-div">
                 <div>
-                    <label>Срок выполнения</label>
-                    <input type="date" id="do-until" name="do-until" hx-post="/submit-task/until"
-                        hx-target="#until-test" hx-swap="innerHTML">
+                    <label>Адрес</label>
+                    <select required name="address" id="addr" hx-post="/submit-task/addr" hx-trigger="change changed"
+                        hx-target="#table" hx-swap="outerHTML" hx-history="false" hx-push-url="false">
+                        <option disabled selected>Не выбран!</option>
+                        {{ range $i, $v := .Mapped.Addresses}}
+                        <option value="{{ $i }}">{{ $i }} - {{ $v }}</option>
+                        {{ end }}
+                    </select>
                 </div>
-                <div id="until-test">
 
-                </div>
                 <div>
-                    <label>Без определенного срока</label>
-                    <input type="checkbox" id="until-checkbox">
+                    <label>Описание задачи</label>
+<!--                    <input type="text" id="description" name="desc">-->
+                    <textarea style="resize: none" id="description" name="desc"></textarea>
                 </div>
             </div>
 
-            <div id="act-div">
-                <label>Исполнители</label>
-                <select id="actor-selector" required hx-post="/submit-task/act" name="act" hx-swap="afterend"
-                    hx-target="#act-div">
-                    <option selected disabled>Не выбран!</option>
-                    {{ range $i, $v := .Mapped.Workers }}
-                    <option value="{{ $i }}">{{ $v }}</option>
-                    {{ end }}
-                </select>
-            </div>
+            <div class="form-executor">
+                <div id="act-div">
+                    <label>Исполнители</label>
+                    <select id="actor-selector" required hx-post="/submit-task/act" name="act" hx-swap="afterend"
+                            hx-target="#act-div">
+                        <option selected disabled>Не выбран!</option>
+                        {{ range $i, $v := .Mapped.Workers }}
+                        <option value="{{ $i }}">{{ $v }}</option>
+                        {{ end }}
+                    </select>
+                </div>
 
-            <div>
-                <label>Комментарий</label>
-                <input type="text" id="comment" name="comment">
+                <div>
+                    <label>Комментарий</label>
+                    <input type="text" id="comment" name="comment">
+                </div>
             </div>
+            <div class="form-date">
+                <div>
+                    <label>Дата создания</label>
+                    <input type="date" id="created" name="created" value="{{ .Helper.Today }}"
+                           hx-post="/submit-task/created">
+                </div>
 
-            <button type="submit">Добавить задачу</button>
+                <div id="until-div">
+                    <div style="text-align: end">
+                        <label>Срок выполнения</label>
+                        <input type="date" id="do-until" name="do-until" hx-post="/submit-task/until"
+                               hx-target="#until-test" hx-swap="innerHTML">
+                    </div>
+                    <div id="until-test">
+
+                    </div>
+                    <div style="display: flex; align-items: end; flex-direction: column; text-align: end">
+                        <label>Без определенного срока&nbsp</label>
+                        <input class="mob-check" type="checkbox" id="until-checkbox">
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center">
+                <button type="submit">Добавить задачу</button>
+            </div>
         </div>
     </form>
 </div>
