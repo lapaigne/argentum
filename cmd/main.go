@@ -15,18 +15,17 @@ import (
 
 var data_old Data_old
 var data Data
+var helper = Helper{
+	Levels: &db.AccessLevels,
+}
 
 var public = map[string]bool{
 	"/signin":      true,
 	"/submit-auth": true,
+	"/mes/":        true,
 }
 
 func main() {
-
-	helper := Helper{
-		Levels: &db.AccessLevels,
-	}
-
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -70,37 +69,7 @@ func main() {
 
 	e.POST("/signout", logout)
 
-	e.GET("/me", func(c echo.Context) error {
-
-		data_old.Fill()
-
-		claims := getClaims(c)
-		uid := claims.UID
-
-		ctx := struct {
-			Data   Data
-			Helper Helper
-		}{
-			Data:   data,
-			Helper: helper,
-		}
-
-		fmt.Println(ctx)
-
-		ctx0 := struct {
-			Raw    RawData0
-			Mapped MappedData0
-			Helper Helper0
-			UID    int
-		}{
-			Raw:    data_old.Raw,
-			Mapped: data_old.Mapped,
-			Helper: data_old.Helper,
-			UID:    uid,
-		}
-
-		return c.Render(200, "me", ctx0)
-	})
+	e.GET("/me", endpoints.me)
 
 	e.POST("/me/conf-:id", endpoints.Me_ConfirmTask)
 	e.POST("/me/exp-:id", endpoints.Me_ExpandTask)
@@ -110,6 +79,8 @@ func main() {
 	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
 
 	e.GET("/edit-workers", func(c echo.Context) error { return c.Render(200, "edit-workers", data) })
+
+	e.GET("/mes/*", endpoints.me_s)
 
 	e.POST("/edit-workers/edit-:id", endpoints.editWorkers)
 

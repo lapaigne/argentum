@@ -8,7 +8,7 @@ import (
 )
 
 func accTime(now time.Time) time.Time {
-	return now.Add(time.Minute * 1)
+	return now.Add(time.Minute * 15)
 }
 
 func refTime(now time.Time) time.Time {
