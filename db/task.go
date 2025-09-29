@@ -32,8 +32,8 @@ func AddTask(t Task) error {
 	return err
 }
 
-// m is completed_date
-//
+// m is mark_date
+
 // c is completed_date
 func UpdateTask(id int, m sql.NullTime, c sql.NullTime) (bool, error) {
 

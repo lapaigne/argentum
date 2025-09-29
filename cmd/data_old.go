@@ -15,10 +15,10 @@ const (
 type Data_old struct {
 	Raw    RawData0
 	Mapped MappedData0
-	Helper Helper
+	Helper Helper0
 }
 
-type Helper struct {
+type Helper0 struct {
 	Today   string
 	Cat_1   sql.NullInt32
 	Cat_2   sql.NullInt32
@@ -40,21 +40,6 @@ type MappedData0 struct {
 	Addresses     map[int]string
 	Categories    map[int]string
 	Tasks         map[int]*db.Task
-}
-
-func Format(t time.Time) string {
-
-	d := t.Format(DateFormat)
-	return d
-}
-
-func NFormat(t sql.NullTime) string {
-
-	if !t.Valid {
-		return "-"
-	}
-	d := t.Time.Format(DateFormat)
-	return d
 }
 
 func (d *Data_old) ResetHelper() {

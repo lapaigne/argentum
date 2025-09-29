@@ -28,6 +28,9 @@ func getClaims(c echo.Context) *jwtClaims {
 	}
 
 	claims, ok := t.Claims.(*jwtClaims)
+	if !ok {
+		return nil
+	}
 	return claims
 }
 

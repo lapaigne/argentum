@@ -19,10 +19,13 @@ var data Data
 var public = map[string]bool{
 	"/signin":      true,
 	"/submit-auth": true,
-	"/":            true,
 }
 
 func main() {
+
+	helper := Helper{
+		Levels: &db.AccessLevels,
+	}
 
 	e := echo.New()
 	e.Use(middleware.Logger())
@@ -71,14 +74,23 @@ func main() {
 
 		data_old.Fill()
 
-		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*jwtClaims)
+		claims := getClaims(c)
 		uid := claims.UID
 
 		ctx := struct {
+			Data   Data
+			Helper Helper
+		}{
+			Data:   data,
+			Helper: helper,
+		}
+
+		fmt.Println(ctx)
+
+		ctx0 := struct {
 			Raw    RawData0
 			Mapped MappedData0
-			Helper Helper
+			Helper Helper0
 			UID    int
 		}{
 			Raw:    data_old.Raw,
@@ -87,19 +99,19 @@ func main() {
 			UID:    uid,
 		}
 
-		return c.Render(200, "me", ctx)
+		return c.Render(200, "me", ctx0)
 	})
 
 	e.POST("/me/conf-:id", endpoints.Me_ConfirmTask)
 	e.POST("/me/exp-:id", endpoints.Me_ExpandTask)
 
-	e.GET("/menu", endpoints.Menu)
+	e.GET("/menu", endpoints.menu)
 
 	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
 
 	e.GET("/edit-workers", func(c echo.Context) error { return c.Render(200, "edit-workers", data) })
 
-	e.POST("/edit-workers/edit-:id", endpoints.EditWorkers)
+	e.POST("/edit-workers/edit-:id", endpoints.editWorkers)
 
 	e.POST("/edit-workers/upd", func(c echo.Context) error {
 		f := c.FormValue("f_name")

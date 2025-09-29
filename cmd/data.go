@@ -2,6 +2,8 @@ package main
 
 import (
 	"argentum/db"
+	"database/sql"
+	"time"
 )
 
 type Data struct {
@@ -16,6 +18,34 @@ type Data struct {
 	MCat    int
 	MAddr   int
 	MUser   int
+}
+
+func Format(t time.Time) string {
+	d := t.Format(DateFormat)
+
+	return d
+}
+
+func NFormat(t sql.NullTime) string {
+	if !t.Valid {
+		return "-"
+	}
+	d := t.Time.Format(DateFormat)
+
+	return d
+}
+
+type Helper struct {
+	Today   string
+	Format  func(time.Time) string
+	NFormat func(sql.NullTime) string
+	Levels  *map[string]int
+}
+
+type AForm struct {
+	Cat_1 sql.NullInt32
+	Cat_2 sql.NullInt32
+	Addr  int
 }
 
 type UserWorker struct {
@@ -33,88 +63,4 @@ type RawData struct {
 	Cats    []db.Category
 	Addrs   []db.Address
 	Users   []db.User
-}
-
-func (d *Data) Fetch() error {
-
-	workers, err := db.GetWorkers()
-	if err != nil {
-		return err
-	}
-
-	users, err := db.GetUsers()
-	if err != nil {
-		return err
-	}
-
-	um := make(map[int]db.User)
-	for _, v := range users {
-		um[v.Worker] = v
-	}
-
-	d.Workers = nil
-	d.Workers = make(map[int]db.Worker)
-
-	for _, v := range workers {
-		d.Workers[v.Id] = v
-	}
-	if len(workers) == 0 {
-		d.MWorker = 0
-	} else {
-		d.MWorker = workers[len(workers)-1].Id
-	}
-
-	d.UWs = nil
-	d.UWs = make(map[int]UserWorker)
-
-	for _, v := range workers {
-		d.UWs[v.Id] = UserWorker{Id: v.Id, W: v, U: um[v.Id]}
-	}
-
-	tasks, err := db.GetAllTasks()
-	if err != nil {
-		return err
-	}
-	d.Tasks = nil
-	d.Tasks = make(map[int]db.Task)
-	for _, v := range tasks {
-		d.Tasks[v.Id] = v
-	}
-	if len(tasks) == 0 {
-		d.MTask = 0
-	} else {
-		d.MTask = tasks[len(tasks)-1].Id
-	}
-
-	cats, err := db.GetCategories()
-	if err != nil {
-		return err
-	}
-	d.Cats = nil
-	d.Cats = make(map[int]db.Category)
-	for _, v := range cats {
-		d.Cats[v.Id] = v
-	}
-	if len(cats) == 0 {
-		d.MCat = 0
-	} else {
-		d.MCat = cats[len(cats)-1].Id
-	}
-
-	addrs, err := db.GetAddresses()
-	if err != nil {
-		return err
-	}
-	d.Addrs = nil
-	d.Addrs = make(map[int]db.Address)
-	for _, v := range addrs {
-		d.Addrs[v.Id] = v
-	}
-	if len(addrs) == 0 {
-		d.MAddr = 0
-	} else {
-		d.MAddr = addrs[len(addrs)-1].Id
-	}
-
-	return nil
 }

@@ -103,7 +103,6 @@ func login(c echo.Context) error {
 		fmt.Println("default err")
 		return echo.ErrUnauthorized
 	}
-
 }
 
 func logout(c echo.Context) error {
