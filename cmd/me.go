@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -17,15 +18,15 @@ func (e Endpoints) me_(c echo.Context) error {
 	claims := getClaims(c)
 	uid := claims.UID
 
-	ctx := struct {
-		Data   Data
-		Helper Helper
-	}{
-		Data:   data,
-		Helper: helper,
-	}
+	// ctx := struct {
+	// 	Data   Data
+	// 	Helper Helper
+	// }{
+	// 	Data:   data,
+	// 	Helper: helper,
+	// }
 
-	fmt.Println(ctx)
+	// fmt.Println(ctx)
 
 	ctx0 := struct {
 		Raw    RawData0
@@ -52,26 +53,28 @@ func (e Endpoints) me_conf(c echo.Context) error {
 		return echo.ErrUnauthorized
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
 		return err
 	}
 
-	now := time.Now().Round(time.Hour * 24)
+	now := time.Now().Truncate(time.Hour * 24)
 	ok, err := db.UpdateTask(id, sql.NullTime{Time: now, Valid: true}, sql.NullTime{Valid: false})
 
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 		return err
 	}
 
 	if ok {
 		if err := FetchTasks(); err != nil {
 			fmt.Println(err)
+			return err
 		}
 
 		if err := data_old.Fill(); err != nil {
 			fmt.Println(err)
+			return err
 		}
 	}
 
@@ -89,7 +92,7 @@ func (e Endpoints) me_exp(c echo.Context) error {
 		return echo.ErrUnauthorized
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
 		return err
 	}
@@ -115,22 +118,23 @@ func (e Endpoints) me_exp(c echo.Context) error {
 
 func (e Endpoints) me_POST(c echo.Context) error {
 	url := c.Request().URL.Path
-	switch url {
-	case "/me/conf-:id":
+
+	if id, ok := strings.CutPrefix(url, "/me/conf-"); ok {
+		c.Set("id", id)
 		return e.me_conf(c)
-	case "/me/exp-:id":
+	}
+
+	if id, ok := strings.CutPrefix(url, "/me/exp-"); ok {
+		c.Set("id", id)
 		return e.me_exp(c)
+	}
+
+	switch url {
 	default:
 		return echo.ErrNotFound
 	}
 }
 
 func (e Endpoints) me_GET(c echo.Context) error {
-	url := c.Request().URL.Path
-	switch url {
-	case "/me/":
-		return e.me_(c)
-	default:
-		return echo.ErrNotFound
-	}
+	return e.me_(c)
 }
