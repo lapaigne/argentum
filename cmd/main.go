@@ -22,7 +22,6 @@ var helper = Helper{
 var public = map[string]bool{
 	"/signin":      true,
 	"/submit-auth": true,
-	"/mes/":        true,
 }
 
 func main() {
@@ -69,39 +68,17 @@ func main() {
 
 	e.POST("/signout", logout)
 
-	e.GET("/me", endpoints.me)
+	e.GET("/me/*", endpoints.me_GET)
+	e.POST("/me/*", endpoints.me_POST)
 
-	e.POST("/me/conf-:id", endpoints.Me_ConfirmTask)
-	e.POST("/me/exp-:id", endpoints.Me_ExpandTask)
+	e.GET("/workers/", endpoints.workes_GET)
+	e.POST("/workers/*", endpoints.workers_POST)
 
 	e.GET("/menu", endpoints.menu)
 
 	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
 
-	e.GET("/edit-workers", func(c echo.Context) error { return c.Render(200, "edit-workers", data) })
-
-	e.GET("/mes/*", endpoints.me_s)
-
-	e.POST("/edit-workers/edit-:id", endpoints.editWorkers)
-
-	e.POST("/edit-workers/upd", func(c echo.Context) error {
-		f := c.FormValue("f_name")
-		i := c.FormValue("i_name")
-		o := c.FormValue("o_name")
-
-		d := UserWorker{
-			W: db.Worker{
-				F_name: f,
-				I_name: i,
-				O_name: o,
-			},
-			U: db.User{},
-		}
-
-		return c.Render(200, "ew-row", d)
-	})
-
-	e.POST("/edit-workers/add-panel", func(c echo.Context) error {
+	e.POST("/workers/add-panel", func(c echo.Context) error {
 
 		if err := isAdminErr(c); err != nil {
 			return err

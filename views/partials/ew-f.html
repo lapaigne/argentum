@@ -6,17 +6,17 @@
 
 
 {{ define "ew-add" }}
-<form hx-post="/edit-workers/add" id="ew-add-f">
+<form hx-post="/workers/add" id="ew-add-f">
     <div>
         <input type="text" name="f_name">
         <input type="text" name="i_name">
         <input type="text" name="o_name">
-        <input type="text" name="login" hx-post="/edit-workers/add/tel">
+        <input type="text" name="login" hx-post="/workers/add/tel">
         <div id="ew-add-tel-err">
 
         </div>
         <input type="text" name="pas">
-        <button hx-post="/edit-workers/add/gen">GENERATE PASSWORD</button>
+        <button hx-post="/workers/add/gen">GENERATE PASSWORD</button>
     </div>
     <select>
     </select>
@@ -27,7 +27,7 @@
 
 
 {{ define "ew-upd" }}
-<form hx-post="/edit-workers/upd" id="ew-upd-f" hx-target="#{{ .Target }}">
+<form hx-post="/workers/upd" id="ew-upd-f" hx-target="#{{ .Target }}">
     <div>
         <input type="text" name="f_name" value="{{ .W.F_name }}">
         <input type="text" name="i_name" value="{{ .W.I_name }}">
