@@ -18,19 +18,21 @@ func (e Endpoints) workers_POST(c echo.Context) error {
 
 	if id, ok := strings.CutPrefix(url, "/workers/edit-"); ok {
 		c.Set("id", id)
-		return e.workersEdit(c)
+		return e.workers_edit(c)
 	}
 
 	switch url {
+	case "/workers/add-panel":
+		return e.workers_add(c)
 	case "/workers/upd":
-		return e.workersUpd(c)
+		return e.workers_upd(c)
 	default:
 		fmt.Println(url)
 		return echo.ErrNotFound
 	}
 }
 
-func (e Endpoints) workersUpd(c echo.Context) error {
+func (e Endpoints) workers_upd(c echo.Context) error {
 	f := c.FormValue("f_name")
 	i := c.FormValue("i_name")
 	o := c.FormValue("o_name")
@@ -46,7 +48,7 @@ func (e Endpoints) workersUpd(c echo.Context) error {
 	return c.Render(200, "ew-row", d)
 }
 
-func (e Endpoints) workersEdit(c echo.Context) error {
+func (e Endpoints) workers_edit(c echo.Context) error {
 
 	acc := getClaims(c).Level
 	if acc != db.AccessLevels["admin"] && acc != db.AccessLevels["dispatcher"] {
@@ -70,4 +72,11 @@ func (e Endpoints) workersEdit(c echo.Context) error {
 	}
 
 	return c.Render(200, "ew-upd", d)
+}
+
+func (e Endpoints) workers_add(c echo.Context) error {
+	if err := isAdminErr(c); err != nil {
+		return err
+	}
+	return c.Render(200, "ew-add", nil)
 }

@@ -78,16 +78,8 @@ func main() {
 	e.POST("/newtask/*", endpoints.newtask_POST)
 
 	e.GET("/menu/", endpoints.menu)
+
 	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
-
-	e.POST("/workers/add-panel", func(c echo.Context) error {
-
-		if err := isAdminErr(c); err != nil {
-			return err
-		}
-
-		return c.Render(200, "ew-add", nil)
-	})
 
 	endpoints.Setup(e)
 
