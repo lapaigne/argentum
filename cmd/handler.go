@@ -11,12 +11,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func authTel(c echo.Context) error {
+func (e Endpoints) authTel(c echo.Context) error {
 	tel := c.FormValue("tel")
 	return c.Render(200, "tel-err", tel)
 }
 
-func taskFormHandler(c echo.Context) error {
+func (e Endpoints) taskFormHandler(c echo.Context) error {
 
 	data_old.ResetHelper()
 
@@ -96,7 +96,7 @@ func taskFormHandler(c echo.Context) error {
 	return c.Render(200, "tflist", data_old)
 }
 
-func Cat1Handler(c echo.Context) error {
+func (e Endpoints) cat1Handler(c echo.Context) error {
 
 	raw := c.FormValue("cat_1")
 	val, err := strconv.Atoi(raw)
@@ -110,7 +110,7 @@ func Cat1Handler(c echo.Context) error {
 	return c.Render(200, "tf-cat-1-res", data_old)
 }
 
-func Cat2Handler(c echo.Context) error {
+func (e Endpoints) cat2Handler(c echo.Context) error {
 
 	raw := c.FormValue("cat_2")
 	val, err := strconv.Atoi(raw)
@@ -123,7 +123,7 @@ func Cat2Handler(c echo.Context) error {
 	return c.Render(200, "tf-cat-3", data_old)
 }
 
-func AddrHandler(c echo.Context) error {
+func (e Endpoints) addrHandler(c echo.Context) error {
 	raw := c.FormValue("address")
 	val, err := strconv.Atoi(raw)
 
@@ -135,10 +135,10 @@ func AddrHandler(c echo.Context) error {
 	return c.Render(200, "addr-table", data_old)
 }
 
-func ActHandler(c echo.Context) error {
+func (e Endpoints) actHandler(c echo.Context) error {
 	return c.Render(200, "tf-act", data_old)
 }
 
-func UntilHandler(c echo.Context) error {
+func (e Endpoints) untilHandler(c echo.Context) error {
 	return c.Render(200, "tf-until", data_old)
 }

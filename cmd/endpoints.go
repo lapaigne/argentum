@@ -1,9 +1,7 @@
 package main
 
 import (
-	"argentum/db"
 	"net/http"
-	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -20,20 +18,6 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 
 	e.POST("/submit-auth", login)
 
-	e.GET("/new-task", func(c echo.Context) error {
-		data_old.Helper.Today = time.Now().Format(time.DateOnly)
-		return c.Render(200, "tfpage", data_old)
-	})
-
-	// e.POST("/submit-task", endpoints.AddTask)
-
-	e.POST("/submit-task", taskFormHandler)
-	e.POST("/submit-task/act", ActHandler)
-	e.POST("/submit-task/addr", AddrHandler)
-	e.POST("/submit-task/until", UntilHandler)
-	e.POST("/submit-task/cat-1", Cat1Handler)
-	e.POST("/submit-task/cat-2", Cat2Handler)
-
 	e.GET("/task-list", func(c echo.Context) error {
 		FetchTasks()
 		return c.Render(200, "task-list", data_old)
@@ -43,7 +27,7 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 		return c.Render(200, "auth", data_old)
 	})
 
-	e.POST("/submit-auth/tel", authTel)
+	e.POST("/submit-auth/tel", p.authTel)
 
 	return nil
 }
