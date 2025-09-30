@@ -74,8 +74,8 @@ func main() {
 	e.GET("/workers/", endpoints.workes_GET)
 	e.POST("/workers/*", endpoints.workers_POST)
 
-	e.GET("/menu", endpoints.menu)
 
+	e.GET("/menu/", endpoints.menu)
 	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
 
 	e.POST("/workers/add-panel", func(c echo.Context) error {

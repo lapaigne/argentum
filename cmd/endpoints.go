@@ -16,7 +16,7 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 
 	e.GET("/signin", func(c echo.Context) error { return c.Render(200, "signin", nil) })
 	e.POST("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "/") })
-	e.GET("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "/menu") })
+	e.GET("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "/menu/") })
 
 	e.POST("/submit-auth", login)
 
@@ -46,20 +46,6 @@ func (p Endpoints) Setup(e *echo.Echo) error {
 	e.POST("/submit-auth/tel", authTel)
 
 	return nil
-}
-
-func (e Endpoints) menu(c echo.Context) error {
-	acc := getClaims(c).Level
-	switch acc {
-	case db.AccessLevels["worker"]:
-		return c.Render(200, "wmenu", nil)
-	case db.AccessLevels["dispatcher"]:
-		return c.Render(200, "dmenu", nil)
-	case db.AccessLevels["admin"]:
-		return c.Render(200, "amenu", nil)
-	default:
-		return echo.ErrUnauthorized
-	}
 }
 
 func (e Endpoints) AddTask(c echo.Context) error {

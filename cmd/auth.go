@@ -98,7 +98,7 @@ func login(c echo.Context) error {
 
 	switch accClaims.Level {
 	case 10, 50, 100:
-		return c.Redirect(http.StatusSeeOther, "/menu")
+		return c.Redirect(http.StatusSeeOther, "/menu/")
 	default:
 		fmt.Println("default err")
 		return echo.ErrUnauthorized
