@@ -27,7 +27,7 @@
 
 
 {{ define "ew-upd" }}
-<form hx-post="/workers/upd" id="ew-upd-f" hx-target="#{{ .Target }}">
+<form hx-post="/workers/upd" id="ew-upd-f" hx-target="#ew-{{ .Id }}">
     <div>
         <input type="text" name="f_name" value="{{ .W.F_name }}">
         <input type="text" name="i_name" value="{{ .W.I_name }}">
@@ -39,5 +39,6 @@
     <select>
     </select>
     <button type="submit">UPD</button>
+    <button hx-post="/workers/del" hx-target="#ew-{{ .Id }}">DEL</button>
 </form>
 {{ end }}

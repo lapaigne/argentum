@@ -62,13 +62,13 @@ func (e Endpoints) workers_edit(c echo.Context) error {
 
 	uw := data.UWs[id]
 	d := struct {
-		W      db.Worker
-		U      db.User
-		Target string
+		W  db.Worker
+		U  db.User
+		Id int
 	}{
-		W:      uw.W,
-		U:      uw.U,
-		Target: fmt.Sprintf("ew-%d", id),
+		W:  uw.W,
+		U:  uw.U,
+		Id: id,
 	}
 
 	return c.Render(200, "ew-upd", d)
