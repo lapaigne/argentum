@@ -1,17 +1,5 @@
 /* tables.css */
 
-/* Base table styling */
-.table-filters table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ccc;
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    background-color: #fff;
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
 #ew-table table {
     width: 100%;
     border-collapse: collapse;
@@ -21,17 +9,6 @@
     background-color: #fff;
     margin-bottom: 1.5rem;
     color: #333;
-}
-
-/* Header cells */
-.table-filters thead th {
-    background-color: #f3f6fa;
-    color: #1a3e72;
-    font-weight: 600;
-    /*padding: 0.75rem 1rem;*/
-    text-align: center;
-    border: 1px solid #ccc;
-    user-select: none;
 }
 
 #ew-table thead th {
@@ -44,15 +21,6 @@
     user-select: none;
 }
 
-    /* Body cells */
-.table-filters tbody td {
-    padding: 0.75rem 1rem;
-    border: 1px solid #ccc;
-    vertical-align: middle;
-    text-align: center;
-    word-break: break-word;
-}
-
 #ew-table tbody td {
     padding: 0.75rem 1rem;
     border: 1px solid #ccc;
@@ -61,37 +29,24 @@
     word-break: break-word;
 }
 
-
 /* Optional column widths (adjust as needed) */
-.table-filters,
 #ew-table .col.cat {
     min-width: 120px;
 }
 
-.table-filters,
 #ew-table .col.desc {
     min-width: 250px;
     text-align: left;
 }
 
-.table-filters,
 #ew-table .col.addr {
     min-width: 150px;
 }
 
-.table-filters,
 #ew-table .col.until,
-.table-filters,
 #ew-table .col.mark_date,
-.table-filters,
 #ew-table .col.mark {
     min-width: 100px;
-}
-
-/* Row hover effect */
-.table-filters tbody tr:hover {
-    background-color: #e9f0ff;
-    cursor: pointer;
 }
 
 #ew-table tbody tr:hover {
@@ -99,27 +54,9 @@
     cursor: pointer;
 }
 
-/* Disabled button style in table */
-.table-filters input[type="button"][disabled] {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
 #ew-table input[type="button"][disabled] {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-/* Buttons inside table */
-.table-filters td input[type="button"] {
-    padding: 6px 12px;
-    font-size: 14px;
-    border: 1px solid #1a3e72;
-    background-color: #e1e8f7;
-    color: #1a3e72;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 #ew-table td input[type="button"] {
@@ -133,29 +70,21 @@
     transition: background-color 0.3s ease;
 }
 
-.table-filters td input[type="button"]:hover {
-    background-color: #c3d2f6;
-}
-
 #ew-table td input[type="button"]:hover {
     background-color: #c3d2f6;
 }
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
-    .table-filters,
     #ew-table table {
         font-size: 14px;
     }
 
-    .table-filters,
     #ew-table .col.desc {
         min-width: auto;
     }
 }
 
-
-.table-filters,
 #ew-table th {
     cursor: pointer;
     position: relative;

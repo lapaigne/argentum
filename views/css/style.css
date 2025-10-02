@@ -37,8 +37,13 @@ header {
 }
 
 .menu {
-    padding: 10px;
+    margin: 0 auto;
+    width: 50%;
     text-align: center;
+}
+
+.menu-buttons {
+    display: grid;
 }
 
 img {
@@ -96,10 +101,6 @@ img {
         text-align: center;
     }
 
-    .menu-buttons {
-        display: grid;
-    }
-
     img {
         max-width: 25%;
         max-height: 25%;
@@ -121,10 +122,6 @@ img {
 @media (min-width: 1024px) {
     body {
 
-    }
-
-    #content {
-        width: 60%;
     }
 
     header {

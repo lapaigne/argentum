@@ -1,6 +1,6 @@
 {{ define "task-form" }}
 
-<div>
+<div class="task-form">
     <form hx-post="/submit-task" id="task-form" hx-target="#content" hx-swap="innerHTML" hx-push-url="false">
         <div>
             <div class="form-start">
@@ -38,8 +38,7 @@
 
                 <div>
                     <label>Описание задачи</label>
-<!--                    <input type="text" id="description" name="desc">-->
-                    <textarea style="resize: none" id="description" name="desc"></textarea>
+                    <textarea class="form-textarea" id="description" name="desc"></textarea>
                 </div>
             </div>
 

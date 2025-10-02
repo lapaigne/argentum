@@ -15,40 +15,23 @@
     <h2>Задачи на объекте: {{ index $addrs $helper.Addr }}</h2>
 
     <div>
-
         <table class="table-filters">
-            <thead>
-                <tr>
-                    <th>К1</th>
-                    <th>К2</th>
-                    <th>К3</th>
-                    <th>Постановка</th>
-                    <th>Создано</th>
-                    <th>Срок</th>
-                    <th>Отмечено</th>
-                    <th>Выполнено</th>
-                    <th>Исполнитель</th>
-                </tr>
-            </thead>
-
-            {{ range $tasks }}
-            {{ if eq .Addr_obj $helper.Addr }}
             <tbody>
+                {{ range $tasks }}
+                {{ if eq .Addr_obj $helper.Addr }}
                 <tr>
-                    <td>{{ index $cats .Cat_1 }}</td>
-                    <td>{{ index $cats .Cat_2 }}</td>
-                    <td>{{ index $cats .Cat_3 }}</td>
-                    <td>{{ .Desc }}</td>
-                    <td>{{ call $helper.Format .Created_date }}</td>
-                    <td>{{ call $helper.NFormat .Until_date }}</td>
-                    <td>{{ call $helper.NFormat .Mark_date }}</td>
-                    <td>{{ call $helper.NFormat .Completed_date }}</td>
-                    <td>{{ index $workers .Worker }}</td>
+                    <td data-label="Категории">
+                        <span>{{ index $cats .Cat_1 }}&nbsp</span>
+                        <span>{{ index $cats .Cat_2 }}&nbsp</span>
+                        <span>{{ index $cats .Cat_3 }}</span>
+                    </td>
+                    <td data-label="Постановка">{{ .Desc }}</td>
+                    <td data-label="Срок">{{ call $helper.NFormat .Until_date }}</td>
+                    <td data-label="Исполнитель">{{ index $workers .Worker }}</td>
                 </tr>
+                {{ end }}
+                {{ end }}
             </tbody>
-
-            {{ end }}
-            {{ end }}
         </table>
     </div>
 </div>

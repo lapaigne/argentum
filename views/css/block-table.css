@@ -1,33 +1,40 @@
 /* tables.css */
 
-#block-table thead tr {
+#block-table thead tr,
+.table-filters thead tr
+{
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-#block-table thead th {
+#block-table thead th,
+.table-filters thead th
+{
     flex: 1;
     min-width: 150px;
     white-space: nowrap;
     text-align: center;
 }
 
-#block-table tbody {
+#block-table tbody,
+.table-filters tbody
+{
     margin-bottom: 10px;
     border-collapse: collapse;
     border: 1px solid #ccc;
-    /*border-radius: 10px;*/
     padding: 10px
 }
 
-#block-table tbody tr {
+#block-table tbody tr,
+.table-filters tbody tr
+{
     width: 100%;
     display: grid;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto auto auto;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
@@ -47,23 +54,46 @@
     grid-row-end: 4;
 }
 
-#block-table tbody td {
-    text-align: center;
-    /*border-bottom: none;*/
-    /*white-space: wrap;*/
-    border: 1px solid #ccc;
-
-    /*min-width: 150px;*/
+.table-filters tbody td:nth-child(1) {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
 }
 
-#block-table tbody td::before {
+.table-filters tbody td:nth-child(2) {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.table-filters tbody td:nth-child(3) {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#block-table tbody td,
+.table-filters tbody td
+{
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+#block-table tbody td::before,
+.table-filters tbody td::before {
     content: attr(data-label);
     margin-right: 10px;
     font-weight: bold;
     display: block;
 }
 
-#block-table span {
+#block-table span,
+.table-filters span
+{
     display: grid;
 }
 
@@ -88,6 +118,11 @@
 
     #block-table tbody tr {
         grid-template-columns: 50px 250px auto;
+        grid-template-rows: auto auto auto;
+    }
+
+    .table-filters tbody tr {
+        grid-template-columns: 150px 250px auto;
         grid-template-rows: auto auto auto;
     }
 
@@ -128,6 +163,11 @@
 
     #block-table tbody tr {
         grid-template-columns: 50px 250px auto;
+        grid-template-rows: auto auto auto;
+    }
+
+    .table-filters tbody tr {
+        grid-template-columns: 150px 250px auto;
         grid-template-rows: auto auto auto;
     }
 
