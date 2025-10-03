@@ -31,12 +31,12 @@ func main() {
 
 	e.HTTPErrorHandler = ErrorHandler
 
-	templates, err := NewTemplates("views")
+	templates, err := NewTemplates("assets")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	e.Static("/css", "views/css")
+	e.Static("/assets", "assets")
 
 	e.Renderer = templates
 
@@ -60,7 +60,7 @@ func main() {
 		},
 		Skipper: func(c echo.Context) bool {
 			path := c.Request().URL.Path
-			return public[path] || strings.HasPrefix(path, "/css/")
+			return public[path] || strings.HasPrefix(path, "/assets/")
 		},
 	}
 

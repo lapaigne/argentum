@@ -18,7 +18,11 @@
         <input type="text" name="pas">
         <button hx-post="/workers/add/gen">GENERATE PASSWORD</button>
     </div>
-    <select>
+    <select id="ew-lvl-sel" hx-post="/workers/sel">
+        <option selected disabled value="0">Не выбрано!</option>
+        <option value="10">Работник</option>
+        <option value="50">Диспетчер</option>
+        <option value="100">Администратор</option>
     </select>
     <button type="submit">ADD</button>
 </form>
@@ -33,12 +37,14 @@
         <input type="text" name="i_name" value="{{ .W.I_name }}">
         <input type="text" name="o_name" value="{{ .W.O_name }}">
     </div>
-    <p>
-        {{ .U.Level }}
-    </p>
-    <select>
+    <select id="ew-lvl-sel" hx-post="/workers/sel">
+        <option selected value="0">Не выбрано!</option>
+        <option value="10">Работник</option>
+        <option value="50">Диспетчер</option>
+        <option value="100">Администратор</option>
     </select>
     <button type="submit">UPD</button>
+    <!-- temp target, reconfirm del -->
     <button hx-post="/workers/del" hx-target="#ew-{{ .Id }}">DEL</button>
 </form>
 {{ end }}
