@@ -24,3 +24,7 @@ func Today() time.Time {
 func SQLInt(n int, b bool) sql.NullInt32 {
 	return sql.NullInt32{Int32: int32(n), Valid: b}
 }
+
+func SQLTime(t time.Time, b bool) sql.NullTime {
+	return sql.NullTime{Time: t, Valid: b}
+}
