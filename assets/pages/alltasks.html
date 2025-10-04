@@ -1,5 +1,4 @@
-{{ define "sort-table" }}
-
+{{ define "content" }}
 {{ $cats := .Data.Cats }}
 {{ $workers := .Data.Workers }}
 {{ $addrs := .Data.Addrs }}
@@ -10,7 +9,6 @@
 <div id="sort-table" class="table content">
     <div id="sort-table-filters">
         <p>фильтры</p>
-
     </div>
 
     <table class="datatable">
@@ -45,5 +43,8 @@
         {{ end }}
     </table>
 </div>
+{{ end }}
 
+{{ define "alltasks" }}
+{{ template "base" . }}
 {{ end }}

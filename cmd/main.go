@@ -13,10 +13,13 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+
 var data_old Data_old
 var data Data
 var helper = Helper{
-	Levels: &db.AccessLevels,
+	Levels:  &db.AccessLevels,
+	NFormat: NFormat,
+	Format:  Format,
 }
 
 var public = map[string]bool{
@@ -67,7 +70,6 @@ func main() {
 	e.Use(jwtMiddleware(config))
 
 	e.POST("/signout", logout)
-
 	e.GET("/me/*", endpoints.me_GET)
 	e.POST("/me/*", endpoints.me_POST)
 
@@ -79,7 +81,7 @@ func main() {
 
 	e.GET("/menu/", endpoints.menu)
 
-	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
+	e.GET("/alltasks/", endpoints.alltasks)
 
 	endpoints.Setup(e)
 

@@ -1,8 +1,8 @@
 {{ define "content" }}
 <div>
     <button hx-get="/new-task" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Добавить задачу</button>
-    <button hx-get="/task-list" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
-    <button hx-get="/d/tflist" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
+    <button hx-get="/alltasks/" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
+    <button hx-get="/me/" hx-swap="innerHTML" hx-target="#content" hx-push-url="true">Просмотреть задачи</button>
 </div>
 {{ end }}
 
