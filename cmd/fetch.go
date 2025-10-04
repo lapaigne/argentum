@@ -19,18 +19,6 @@ func (d *Data) Fetch() error {
 		um[v.Worker] = v
 	}
 
-	d.Workers = nil
-	d.Workers = make(map[int]db.Worker)
-
-	for _, v := range workers {
-		d.Workers[v.Id] = v
-	}
-	if len(workers) == 0 {
-		d.MWorker = 0
-	} else {
-		d.MWorker = workers[len(workers)-1].Id
-	}
-
 	d.UWs = nil
 	d.UWs = make(map[int]UserWorker)
 
@@ -84,5 +72,4 @@ func (d *Data) Fetch() error {
 	}
 
 	return nil
-
 }
