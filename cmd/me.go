@@ -18,29 +18,17 @@ func (e Endpoints) me_(c echo.Context) error {
 	claims := getClaims(c)
 	uid := claims.UID
 
-	// ctx := struct {
-	// 	Data   Data
-	// 	Helper Helper
-	// }{
-	// 	Data:   data,
-	// 	Helper: helper,
-	// }
-
-	// fmt.Println(ctx)
-
-	ctx0 := struct {
-		Raw    RawData0
-		Mapped MappedData0
-		Helper Helper0
+	ctx := struct {
+		Data   Data
+		Helper Helper
 		UID    int
 	}{
-		Raw:    data_old.Raw,
-		Mapped: data_old.Mapped,
-		Helper: data_old.Helper,
+		Data:   data,
+		Helper: helper,
 		UID:    uid,
 	}
 
-	return c.Render(200, "me", ctx0)
+	return c.Render(200, "me", ctx)
 }
 
 func (e Endpoints) me_conf(c echo.Context) error {
@@ -100,17 +88,13 @@ func (e Endpoints) me_exp(c echo.Context) error {
 	FetchTasks()
 
 	ctx := struct {
-		UID    int
-		Task   *db.Task
-		Cats   map[int]string
-		Addrs  map[int]string
-		Helper Helper0
+		Data   *Data
+		Helper *Helper
+		Id     int
 	}{
-		UID:    id,
-		Task:   data_old.Mapped.Tasks[id],
-		Cats:   data_old.Mapped.Categories,
-		Addrs:  data_old.Mapped.Addresses,
-		Helper: data_old.Helper,
+		Data:   &data,
+		Helper: &helper,
+		Id:     id,
 	}
 
 	return c.Render(200, "mt-exp", ctx)
