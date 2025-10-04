@@ -1,13 +1,10 @@
 {{ define "content" }}
 {{ $workers := .UWs }}
-{{ $count := .MWorker }}
 
 
 <div>
     <div id="">
-        <button hx-post="/edit-workers/add-panel" hx-target="#ew-panel" hx-swap="innerHTML">ADD</button>
-        <button>DEL</button>
-        <button>APPLY</button>
+        <button hx-post="/workers/add-panel" hx-target="#ew-panel" hx-swap="innerHTML">ADD</button>
     </div>
 
     <div>
@@ -18,7 +15,7 @@
             </thead>
             <tbody>
                 {{ range $workers }}
-                <tr id="ew-{{ .Id }}" hx-post="/edit-workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
+                <tr id="ew-{{ .Id }}" hx-post="/workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
                     hx-trigger="click">
                     {{ template "ew-row" . }}
                 </tr>
@@ -38,6 +35,6 @@
 
 
 
-{{ define "edit-workers" }}
+{{ define "workers" }}
 {{ template "base" . }}
 {{ end }}

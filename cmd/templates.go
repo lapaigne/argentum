@@ -22,6 +22,7 @@ func (t *Templates) Render(w io.Writer, name string, data any, c echo.Context) e
 	if c.Request().Header.Get("HX-Target") == "content" {
 		return v.ExecuteTemplate(w, "content", data)
 	}
+
 	if c.Request().Header.Get("HX-Request") == "true" {
 		return v.ExecuteTemplate(w, name, data)
 	}

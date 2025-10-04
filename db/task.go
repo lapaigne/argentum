@@ -8,9 +8,9 @@ import (
 
 type Task struct {
 	Id             int
-	Cat_1          int
-	Cat_2          int
-	Cat_3          int
+	Cat1           int
+	Cat2           int
+	Cat3           int
 	Desc           string
 	Addr_obj       int
 	Created_date   time.Time
@@ -28,34 +28,34 @@ func AddTask(t Task) error {
 	(cat_1, cat_2, cat_3, "desc", addr_obj, created_date, until_date, comment, worker)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
 	`
-	_, err := db.Exec(query, t.Cat_1, t.Cat_2, t.Cat_3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker)
+	_, err := db.Exec(query, t.Cat1, t.Cat2, t.Cat3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker)
 	return err
 }
 
-// m is completed_date
+// m is mark_date
 //
 // c is completed_date
-func UpdateTask(id int, m sql.NullTime, c sql.NullTime) (bool, error) {
+func UpdateTask(id int, m sql.NullTime, c sql.NullTime) error {
 
 	query := `SELECT "mark_date", "completed_date" FROM public.tasks WHERE id = $1`
 	var md, cd sql.NullTime
 
 	if err := db.QueryRow(query, id).Scan(&md, &cd); err != nil {
-		return false, err
+		return err
 	}
 
 	if cd.Valid && c.Valid || md.Valid && m.Valid {
-		return false, fmt.Errorf(`non-null task status for task %d`, id)
+		return fmt.Errorf(`non-null task status for task %d`, id)
 	}
 
 	query = `UPDATE public.tasks SET "mark_date" = $1, "completed_date" = $2 WHERE id = $3`
 
 	_, err := db.Exec(query, m, c, id)
 	if err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }
 
 func GetAllTasks() ([]Task, error) {
@@ -72,9 +72,9 @@ func GetAllTasks() ([]Task, error) {
 		var t Task
 		if err := rows.Scan(
 			&t.Id,
-			&t.Cat_1,
-			&t.Cat_2,
-			&t.Cat_3,
+			&t.Cat1,
+			&t.Cat2,
+			&t.Cat3,
 			&t.Desc,
 			&t.Addr_obj,
 			&t.Created_date,

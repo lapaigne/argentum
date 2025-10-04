@@ -13,140 +13,75 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-var data_old Data_old
+var endpoints Endpoints
+
 var data Data
+var helper = Helper{
+	Levels:  &db.AccessLevels,
+	NFormat: NFormat,
+	Format:  Format,
+}
 
 var public = map[string]bool{
 	"/signin":      true,
 	"/submit-auth": true,
-	"/":            true,
 }
 
 func main() {
-
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
 	e.HTTPErrorHandler = ErrorHandler
 
-	templates, err := NewTemplates("views")
+	templates, err := NewTemplates("assets")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	e.Static("/css", "views/css")
+	e.Static("/assets", "assets")
 
 	e.Renderer = templates
 
 	db.OpenConn()
 	defer db.CloseConn()
 
-	FetchRare()
-	FetchTasks()
-
 	if err := data.Fetch(); err != nil {
 		fmt.Println(err)
 	}
 
-	data_old.Init()
-	data_old.Fill()
-
 	config := echojwt.Config{
+		SigningKey: []byte(accSecret),
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
 			return new(jwtClaims)
 		},
-		SigningKey: []byte("secret"),
 		Skipper: func(c echo.Context) bool {
 			path := c.Request().URL.Path
-			return public[path] || strings.HasPrefix(path, "/css/")
+			return public[path] || strings.HasPrefix(path, "/assets/")
 		},
 	}
 
-	e.Use(
-		JWTCooked,
-		AutoRefreshJWT,
-		echojwt.WithConfig(config),
-	)
+	e.Use(jwtMiddleware(config))
 
-	e.POST("/signout", Logout)
+	e.GET("/me/*", endpoints.me_GET)
+	e.POST("/me/*", endpoints.me_POST)
 
-	// e.GET("/css/:fn", func(c echo.Context) error {
-	// 	fn := c.Param("fn")
-	// 	f, err := .ReadFile("views/css/" + fn)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		return echo.ErrNotFound
-	// 	}
-	// 	return c.Blob(200, "text/css", f)
-	// })
+	e.GET("/workers/", endpoints.workes_GET)
+	e.POST("/workers/*", endpoints.workers_POST)
 
-	e.GET("/me", func(c echo.Context) error {
+	e.GET("/newtask/", endpoints.newtask_GET)
+	e.POST("/newtask/*", endpoints.newtask_POST)
 
-		data_old.Fill()
+	e.GET("/", endpoints.slash_GET)
+	e.POST("/", endpoints.slash_POST)
 
-		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*jwtClaims)
-		uid := claims.UID
+	e.GET("/menu/", endpoints.menu)
+	e.GET("/alltasks/", endpoints.alltasks)
+	e.GET("/signin", endpoints.signin)
 
-		ctx := struct {
-			Raw    RawData0
-			Mapped MappedData0
-			Helper Helper
-			UID    int
-		}{
-			Raw:    data_old.Raw,
-			Mapped: data_old.Mapped,
-			Helper: data_old.Helper,
-			UID:    uid,
-		}
-
-		return c.Render(200, "me", ctx)
-	})
-
-	e.POST("/me/conf-:id", endpoints.Me_ConfirmTask)
-	e.POST("/me/exp-:id", endpoints.Me_ExpandTask)
-
-	e.GET("/menu", endpoints.Menu)
-
-	e.GET("/tflist", func(c echo.Context) error { return c.Render(200, "tflist", data_old) })
-
-	e.GET("/edit-workers", func(c echo.Context) error { return c.Render(200, "edit-workers", data) })
-
-	e.POST("/edit-workers/edit-:id", endpoints.EditWorkers)
-
-	e.POST("/edit-workers/upd", func(c echo.Context) error {
-		f := c.FormValue("f_name")
-		i := c.FormValue("i_name")
-		o := c.FormValue("o_name")
-
-		d := UserWorker{
-			W: db.Worker{
-				F_name: f,
-				I_name: i,
-				O_name: o,
-			},
-		}
-
-		return c.Render(200, "ew-row", d)
-	})
-
-	// TODO:
-	// switch all wildcards inside similar functions
-	// e.POST("/edit-workers/*", func(c echo.Context) error {
-	// 	return c.NoContent(204)
-	// })
-
-	e.POST("/edit-workers/add-panel", func(c echo.Context) error {
-
-		if err := isAdminErr(c); err != nil {
-			return err
-		}
-
-		return c.Render(200, "ew-add", nil)
-	})
-
-	endpoints.Setup(e)
+	e.POST("/signout", endpoints.logout)
+	e.POST("/submit-auth", endpoints.login)
+	e.POST("/submit-auth/tel", endpoints.authTel)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
 }

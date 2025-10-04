@@ -1,39 +1,6 @@
 package main
 
-import (
-	"argentum/db"
-)
-
-type Data struct {
-	Workers map[int]db.Worker
-	Tasks   map[int]db.Task
-	Cats    map[int]db.Category
-	Addrs   map[int]db.Address
-	UWs     map[int]UserWorker
-
-	MWorker int
-	MTask   int
-	MCat    int
-	MAddr   int
-	MUser   int
-}
-
-type UserWorker struct {
-	Id  int
-	W   db.Worker
-	U   db.User
-	DW  bool // if true, update worker
-	DU  bool // if true, update user
-	New bool // if true, add new user and new worker
-}
-
-type RawData struct {
-	Workers []db.Worker
-	Tasks   []db.Task
-	Cats    []db.Category
-	Addrs   []db.Address
-	Users   []db.User
-}
+import "argentum/db"
 
 func (d *Data) Fetch() error {
 
@@ -50,18 +17,6 @@ func (d *Data) Fetch() error {
 	um := make(map[int]db.User)
 	for _, v := range users {
 		um[v.Worker] = v
-	}
-
-	d.Workers = nil
-	d.Workers = make(map[int]db.Worker)
-
-	for _, v := range workers {
-		d.Workers[v.Id] = v
-	}
-	if len(workers) == 0 {
-		d.MWorker = 0
-	} else {
-		d.MWorker = workers[len(workers)-1].Id
 	}
 
 	d.UWs = nil

@@ -1,0 +1,49 @@
+{{ define "addrtable" }}
+{{ $cats:= .Data.Cats }}
+{{ $workers := .Data.UWs }}
+{{ $addrs:= .Data.Addrs }}
+{{ $a := .Addr }}
+{{ $helper := .Helper }}
+{{ $tasks := .Data.Tasks }}
+<div class="task-wrapper force-rep" id="table">
+    <div id="table-filters">
+        filters
+    </div>
+
+    <h2>Задачи на объекте: {{ (index $addrs $a).Address }}</h2>
+
+    <div>
+
+        <table class="datatable">
+            <thead>
+                <th>К1</th>
+                <th>К2</th>
+                <th>К3</th>
+                <th>Постановка</th>
+                <th class="tab-date">Создано</th>
+                <th class="tab-date">Срок</th>
+                <th class="tab-date">Отмечено</th>
+                <th class="tab-date">Выполнено</th>
+                <th>Исполнитель</th>
+            </thead>
+
+            {{ range $tasks }}
+            {{ if eq .Addr_obj $a }}
+            <tr>
+                <td>{{ (index $cats .Cat1).Name }}</td>
+                <td>{{ (index $cats .Cat2).Name }}</td>
+                <td>{{ (index $cats .Cat3).Name }}</td>
+                <td>{{ .Desc }}</td>
+                <td>{{ call $helper.Format .Created_date }}</td>
+                <td>{{ call $helper.NFormat .Until_date }}</td>
+                <td>{{ call $helper.NFormat .Mark_date }}</td>
+                <td>{{ call $helper.NFormat .Completed_date }}</td>
+                <td>{{ $w := (index $workers .Worker).W }} {{$w.F_name}} {{$w.I_name}} {{$w.O_name}}</td>
+            </tr>
+            {{ end }}
+            {{ end }}
+        </table>
+    </div>
+</div>
+
+{{ end }}

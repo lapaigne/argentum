@@ -3,29 +3,16 @@ package main
 import (
 	"argentum/db"
 	"database/sql"
-	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
-const (
-	refsecret = "ref-secret"
-)
-
-type jwtClaims struct {
-	UID   int `json:"uid"`
-	Level int `json:"level"`
-	jwt.RegisteredClaims
-}
-
 func isAdminErr(c echo.Context) error {
 
-	acc := GetClaims(c).Level
+	acc := getClaims(c).Level
 	if acc != db.AccessLevels["admin"] {
 		return echo.ErrUnauthorized
 	}
@@ -35,7 +22,7 @@ func isAdminErr(c echo.Context) error {
 
 func checkLevel(c echo.Context, min int) error {
 
-	acc := GetClaims(c).Level
+	acc := getClaims(c).Level
 
 	if acc < min {
 		return echo.ErrUnauthorized
@@ -52,15 +39,7 @@ func checkLevel(c echo.Context, min int) error {
 	return nil
 }
 
-func authTime() time.Time {
-	return time.Now().Add(time.Minute * 15)
-}
-
-func refTime() time.Time {
-	return time.Now().Add(time.Hour * 24)
-}
-
-func Register(c echo.Context) error {
+func (e Endpoints) register(c echo.Context) error {
 
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
@@ -84,232 +63,58 @@ func Register(c echo.Context) error {
 	return nil
 }
 
-func Login(c echo.Context) error {
+func (e Endpoints) login(c echo.Context) error {
 
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
-	pwd := []byte(pass)
 
 	u, err := db.GetUser(tel)
-
-	if err != nil {
-		fmt.Println("get user err")
+	if err != nil || bcrypt.CompareHashAndPassword([]byte(u.Hash), []byte(pass)) != nil {
 		return echo.ErrUnauthorized
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(u.Hash), pwd); err != nil {
-		fmt.Println("compare hash err")
+	now := time.Now()
+
+	aTime := accTime(now)
+	rTime := refTime(now)
+
+	accSigned, accClaims, err := signToken(u.Worker, u.Level, aTime, accSecret)
+	if err != nil {
 		return echo.ErrUnauthorized
 	}
 
-	claims := &jwtClaims{
-		u.Worker,
-		u.Level,
-		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(authTime()),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	t, err := token.SignedString([]byte("secret"))
+	refSigned, _, err := signToken(u.Worker, u.Level, rTime, refSecret)
 	if err != nil {
-		return err
+		return echo.ErrUnauthorized
 	}
 
-	cookie := &http.Cookie{
-		Name:     "token",
-		Value:    t,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   false,
-		SameSite: http.SameSiteLaxMode,
-		Expires:  authTime(),
+	setCookie(c, "token", accSigned, aTime)
+	setCookie(c, "ref", refSigned, rTime)
+
+	if err := db.UpdateToken(refSigned, u.Worker); err != nil {
+		return echo.ErrUnauthorized
 	}
 
-	c.SetCookie(cookie)
-
-	refClaims := &jwtClaims{
-		u.Worker,
-		u.Level,
-		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(refTime()),
-		},
-	}
-
-	refToken := jwt.NewWithClaims(jwt.SigningMethodHS256, refClaims)
-
-	s, err := refToken.SignedString([]byte(refsecret))
-	if err != nil {
-		return err
-	}
-
-	if err := db.UpdateToken(s, u.Worker); err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	refCookie := &http.Cookie{
-		Name:     "ref",
-		Value:    s,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   false,
-		SameSite: http.SameSiteLaxMode,
-		Expires:  refTime(),
-	}
-
-	c.SetCookie(refCookie)
-
-	switch claims.Level {
+	switch accClaims.Level {
 	case 10, 50, 100:
-		return c.Redirect(http.StatusSeeOther, "/menu")
+		return c.Redirect(http.StatusSeeOther, "/menu/")
 	default:
-		fmt.Println("default err")
 		return echo.ErrUnauthorized
 	}
-
 }
 
-func Logout(c echo.Context) error {
+func (e Endpoints) logout(c echo.Context) error {
 
-	cookie := &http.Cookie{
-		Name:     "token",
-		Value:    "",
-		Path:     "/",
-		Expires:  time.Unix(0, 0),
-		MaxAge:   -1,
-		HttpOnly: true,
-		Secure:   false,
-		SameSite: http.SameSiteLaxMode,
-	}
+	clearCookie(c, "token")
+	clearCookie(c, "ref")
 
-	refCookie := &http.Cookie{
-		Name:     "ref",
-		Value:    "",
-		Path:     "/",
-		Expires:  time.Unix(0, 0),
-		MaxAge:   -1,
-		HttpOnly: true,
-		Secure:   false,
-		SameSite: http.SameSiteLaxMode,
-	}
-
-	c.SetCookie(cookie)
-	c.SetCookie(refCookie)
-
-	return c.Redirect(http.StatusSeeOther, "/")
+	return c.Redirect(http.StatusSeeOther, "/signin")
+}
+func (e Endpoints) signin(c echo.Context) error {
+	return c.Render(200, "signin", nil)
 }
 
-func AuthTel(c echo.Context) error {
+func (e Endpoints) authTel(c echo.Context) error {
 	tel := c.FormValue("tel")
 	return c.Render(200, "tel-err", tel)
-}
-
-func JWTCooked(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-
-		cookie, err := c.Cookie("token")
-		if err == nil {
-			c.Request().Header.Set("Authorization", "Bearer "+cookie.Value)
-		}
-		return next(c)
-	}
-}
-
-func JWTRoles(minLevel int) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-
-			user := c.Get("user").(*jwt.Token)
-			claims := user.Claims.(*jwtClaims)
-			if claims.Level >= minLevel {
-				return next(c)
-			}
-
-			return echo.ErrForbidden
-		}
-	}
-}
-
-func GetClaims(c echo.Context) *jwtClaims {
-
-	user := c.Get("user").(*jwt.Token)
-	return user.Claims.(*jwtClaims)
-}
-
-func AutoRefreshJWT(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-
-		path := c.Request().URL.Path
-		if public[path] {
-			return next(c)
-		}
-
-		if strings.HasPrefix(path, "/css/") {
-			return next(c)
-		}
-
-		cookie, err := c.Cookie("token")
-		if err == nil {
-			acc := cookie.Value
-			_, err := jwt.ParseWithClaims(acc, &jwtClaims{}, func(t *jwt.Token) (any, error) {
-				return []byte("secret"), nil
-			})
-
-			if err == nil {
-				return next(c)
-			}
-		}
-
-		fmt.Println(err)
-
-		refCookie, err := c.Cookie("ref")
-		if err != nil {
-			fmt.Println("no ref cookie")
-			fmt.Println(err)
-			return echo.ErrUnauthorized
-		}
-
-		refToken, err := jwt.ParseWithClaims(refCookie.Value, &jwtClaims{}, func(t *jwt.Token) (any, error) {
-			return []byte(refsecret), nil
-		})
-
-		if err != nil || !refToken.Valid {
-			return echo.ErrUnauthorized
-		}
-
-		claims, ok := refToken.Claims.(*jwtClaims)
-		if !ok {
-			return echo.ErrUnauthorized
-		}
-
-		newClaims := &jwtClaims{
-			UID:   claims.UID,
-			Level: claims.Level,
-			RegisteredClaims: jwt.RegisteredClaims{
-				ExpiresAt: jwt.NewNumericDate(authTime()),
-			},
-		}
-
-		newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, newClaims)
-		s, err := newToken.SignedString([]byte("secret"))
-		if err != nil {
-			return echo.ErrUnauthorized
-		}
-
-		c.SetCookie(&http.Cookie{
-			Name:     "token",
-			Value:    s,
-			Path:     "/",
-			HttpOnly: true,
-			Secure:   false,
-			SameSite: http.SameSiteLaxMode,
-			Expires:  newClaims.ExpiresAt.Time,
-		})
-
-		c.Request().Header.Set("Authorization", "Bearer "+s)
-
-		return next(c)
-	}
 }

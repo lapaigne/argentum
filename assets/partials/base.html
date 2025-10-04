@@ -1,0 +1,158 @@
+{{ define "base" }}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/text.css">
+    <link rel="stylesheet" href="/css/input.css">
+    <link rel="stylesheet" href="/css/table.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css">
+
+    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+</head>
+
+<body>
+    {{ template "header" . }}
+
+    <div id="content">
+        {{ block "content" . }} {{ end }}
+    </div>
+
+    <script>
+        document.body.addEventListener('htmx:responseError', function (e) {
+            if (e.detail.xhr.status == 401) {
+                window.location.href = "/signin";
+            }
+        });
+
+        function dataTableInit() {
+            $('#content .datatable').each(function () {
+                if ($.fn.DataTable.isDataTable(this)) {
+                    $(this).DataTable().clear().destroy()
+                }
+
+                    $(this).DataTable({
+                        pageLength: 25,
+                        lengthMenu: [25, 50, -1],
+                        info: false,
+                        autoWidth: false,
+                        language: {
+                            search: "Найти:",
+                            lengthMenu: "Количество строк на странице _MENU_ ",
+                            lengthLabels: {
+                                "-1": "Все"
+                            },
+                            infoEmpty: "Отображение: Данные не найдены",
+                            zeroRecords: "Поиск: Данные не найдены",
+                            processing: "Обработка...",
+                            paginate: {
+                                first: "Начало",
+                                previous: "Назад",
+                                next: "Дальше",
+                                last: "Конец"
+                            },
+                        }
+                    })
+                $(this).DataTable({
+                    pageLength: 25,
+                    lengthMenu: [25, 50, -1],
+                    info: false,
+                    language: {
+                        search: "Найти:",
+                        lengthMenu: "Количество строк на странице _MENU_ ",
+                        lengthLabels: {
+                            "-1": "Все"
+                        },
+                        infoEmpty: "Отображение: Данные не найдены",
+                        zeroRecords: "Поиск: Данные не найдены",
+                        processing: "Обработка...",
+                        paginate: {
+                            first: "Начало",
+                            previous: "Назад",
+                            next: "Дальше",
+                            last: "Конец"
+                        },
+                    },
+
+                    columnDefs: $(this).find("th.tab-date").map((i, th) => ({
+                        targets: $(th).index(),
+                        type: 'date',
+                        render: function (data, type) {
+                            if (type === "display") {
+                                if (!data) {
+                                    return "-"
+                                }
+                                return moment(data).format("DD.MM.YYYY")
+                            }
+                            return data
+                        }
+                    })).get(),
+
+                })
+            })
+        }
+
+        $(document).ready(function () {
+            dataTableInit()
+        })
+
+        htmx.on('htmx:afterSwap', function (e) {
+            if (e.target.classList.contains("force-rep")) {
+                dataTableInit()
+                return
+            }
+
+            const sw = (sel) => (e.target.closest && e.target.closest(sel))
+            const te = sw(".datatable")
+
+            if (te) {
+                const table = $(te).DataTable()
+                const row = $(e.target).closest('tr')
+
+                if (row.length) {
+                    const rid = row.attr('id')
+                    const dt = table.row('#' + rid)
+                    if (dt.any()) {
+                        dt.data(
+                            row.children().map((_, td) => $(td).html()).get()
+                        ).draw(false)
+                    } else {
+                        table.row.add(
+                            row.children().map((_, td) => $(td).html()).get()
+                        ).draw(false)
+                    }
+                }
+                return
+            }
+
+            if (e.target.id == "content" || sw(".datatable")) {
+                dataTableInit()
+            }
+
+        })
+
+        // "safely" adds/removes a class in datatable
+        htmx.on("htmx:beforeRequest", function (e) {
+            const row = e.target.closest("tr")
+            if (!row) return
+
+            const table = $(".datatable").DataTable()
+            $(table.rows().nodes()).removeClass("selrow")
+            $(row).addClass("selrow")
+        })
+    </script>
+</body>
+
+</html>
+
+{{ end }}

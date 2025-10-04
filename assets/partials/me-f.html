@@ -1,0 +1,71 @@
+{{ define "me-f" }}
+
+{{ $helper := .Helper }}
+{{ $addrs := .Data.Addrs }}
+{{ $cats := .Data.Cats }}
+{{ $tasks := .Data.Tasks }}
+{{ $uid := .UID }}
+
+<div class="task-wrapper">
+    <div id="mytasks" class="left">
+
+        <table class="datatable">
+            <thead>
+                <th class="cat col">Категория</th>
+                <th class="desc col">Описание</th>
+                <th class="addr col">Адрес</th>
+                <th class="until col tab-date">Срок</th>
+                <th class="mark_date col tab-date">Отметка</th>
+            </thead>
+            {{ range $i, $v := $tasks }}
+            {{ if eq $v.Worker $uid }}
+            <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
+                hx-trigger="click">
+                <td>{{ (index $cats $v.Cat1).Name }} <br> {{ (index $cats $v.Cat2).Name }} <br> {{ (index $cats
+                    $v.Cat3).Name }}</td>
+                <td class="desc">{{ $v.Desc }}</td>
+                <td>{{ (index $addrs $v.Addr_obj).Address }}</td>
+                <td>{{ call $helper.NFormat $v.Until_date }}</td>
+                <td>{{ call $helper.NFormat $v.Mark_date }}</td>
+            </tr>
+            {{ end }}
+            {{ end }}
+        </table>
+    </div>
+
+    <div id="mt-exp" class="right">
+    </div>
+</div>
+{{ end }}
+
+
+
+{{ define "mt-exp" }}
+
+{{ $helper := .Helper }}
+{{ $addrs := .Data.Addrs }}
+{{ $cats := .Data.Cats }}
+{{ $t := index .Data.Tasks .Id }}
+
+{{ $md := call $helper.NFormat $t.Mark_date }}
+
+<div id="mt-left">
+    <p>{{ (index $cats $t.Cat1).Name }} <br> {{ (index $cats $t.Cat2).Name }} <br> {{ (index $cats
+        $t.Cat3).Name }}</p>
+    <p>{{ (index $addrs $t.Addr_obj).Address }}</p>
+    <p>{{ call $helper.NFormat $t.Until_date }}</p>
+    <p>{{ $md }}</p>
+</div>
+
+<div id="mt-right">
+    <p>{{ $t.Desc }}</p>
+    <p>{{ $t.Comment }}</p>
+</div>
+
+<div>
+    {{ if eq $md "" }}
+    <button id="conf" hx-post="/me/conf-{{ .Id }}" hx-swap="innerHTML" hx-target="#content">Подтвердить</button>
+    {{ end }}
+</div>
+
+{{ end }}

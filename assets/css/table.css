@@ -49,6 +49,11 @@
     min-width: 100px;
 }
 
+tr.selrow {
+    font-style: italic;
+}
+
+/* Row hover effect */
 #ew-table tbody tr:hover {
     background-color: #e9f0ff;
     cursor: pointer;
