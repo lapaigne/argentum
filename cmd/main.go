@@ -15,7 +15,6 @@ import (
 
 var endpoints Endpoints
 
-var data_old Data_old
 var data Data
 var helper = Helper{
 	Levels:  &db.AccessLevels,
@@ -47,15 +46,9 @@ func main() {
 	db.OpenConn()
 	defer db.CloseConn()
 
-	FetchRare()
-	FetchTasks()
-
 	if err := data.Fetch(); err != nil {
 		fmt.Println(err)
 	}
-
-	data_old.Init()
-	data_old.Fill()
 
 	config := echojwt.Config{
 		SigningKey: []byte(accSecret),
