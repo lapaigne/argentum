@@ -37,12 +37,9 @@
 
         function dataTableInit() {
             $('#content .datatable').each(function () {
-                // console.log('DataTables init:', this.id, 'Rows:', $(this).find('tbody tr').length)
                 if ($.fn.DataTable.isDataTable(this)) {
                     $(this).DataTable().clear().destroy()
                 }
-
-                console.log($(this).find("th.tab-date").map((i, th) => ({targets: $(th).index(), type: 'date'})).get())
 
                 $(this).DataTable({
                     pageLength: 25,
@@ -112,7 +109,6 @@
             }
 
             if (e.target.id == "content" || sw(".datatable")) {
-                // console.log(e.target)
                 dataTableInit()
             }
 

@@ -20,18 +20,6 @@ type Data struct {
 	MUser   int
 }
 
-func Format(t time.Time) string {
-	return t.Format(time.DateOnly)
-}
-
-func NFormat(t sql.NullTime) string {
-	if !t.Valid {
-		return ""
-	}
-
-	return t.Time.Format(time.DateOnly)
-}
-
 type Helper struct {
 	Today   string
 	Format  func(time.Time) string
@@ -60,4 +48,16 @@ type RawData struct {
 	Cats    []db.Category
 	Addrs   []db.Address
 	Users   []db.User
+}
+
+func Format(t time.Time) string {
+	return t.Format(time.DateOnly)
+}
+
+func NFormat(t sql.NullTime) string {
+	if !t.Valid {
+		return ""
+	}
+
+	return t.Time.Format(time.DateOnly)
 }

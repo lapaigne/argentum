@@ -3,7 +3,6 @@ package main
 import (
 	"argentum/db"
 	"database/sql"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -81,26 +80,25 @@ func login(c echo.Context) error {
 
 	accSigned, accClaims, err := signToken(u.Worker, u.Level, aTime, accSecret)
 	if err != nil {
-		return err
+		return echo.ErrUnauthorized
 	}
 
 	refSigned, _, err := signToken(u.Worker, u.Level, rTime, refSecret)
 	if err != nil {
-		return err
+		return echo.ErrUnauthorized
 	}
 
 	setCookie(c, "token", accSigned, aTime)
 	setCookie(c, "ref", refSigned, rTime)
 
 	if err := db.UpdateToken(refSigned, u.Worker); err != nil {
-		return err
+		return echo.ErrUnauthorized
 	}
 
 	switch accClaims.Level {
 	case 10, 50, 100:
 		return c.Redirect(http.StatusSeeOther, "/menu/")
 	default:
-		fmt.Println("default err")
 		return echo.ErrUnauthorized
 	}
 }
