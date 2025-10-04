@@ -187,7 +187,7 @@ func (e Endpoints) newtask_addr(c echo.Context) error {
 		Addr:   val,
 	}
 
-	return c.Render(200, "addr-table", ctx)
+	return c.Render(200, "addrtable", ctx)
 }
 
 func (e Endpoints) newtask_act(c echo.Context) error {
