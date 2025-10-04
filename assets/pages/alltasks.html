@@ -7,40 +7,33 @@
 {{ $tasks := .Data.Tasks }}
 
 <div id="alltasks-wrap" class="table content">
-    <div id="alltasks-filters">
-        <p>фильтры</p>
-    </div>
-
-    <table class="datatable">
+    <table id="block-table" class="datatable">
         <thead>
-            <th>К1</th>
-            <th>К2</th>
-            <th>К3</th>
+        <tr>
+            <th>Статус</th>
+            <th>Категории</th>
             <th>Постановка</th>
             <th>Объект</th>
-            <th class="tab-date">Создано</th>
-            <th class="tab-date">Срок</th>
-            <th class="tab-date">Отмечено</th>
-            <th class="tab-date">Выполнено</th>
             <th>Исполнитель</th>
-            <th>Комментарий</th>
+        </tr>
         </thead>
-
+        <tbody>
         {{ range $tasks }}
         <tr>
-            <td>{{ (index $cats .Cat1).Name }}</td>
-            <td>{{ (index $cats .Cat2).Name }}</td>
-            <td>{{ (index $cats .Cat3).Name }}</td>
-            <td>{{ .Desc }}</td>
-            <td>{{ (index $addrs .Addr_obj).Address }}</td>
-            <td>{{ call $helper.Format .Created_date }}</td>
-            <td>{{ call $helper.NFormat .Until_date }}</td>
-            <td>{{ call $helper.NFormat .Mark_date }}</td>
-            <td>{{ call $helper.NFormat .Completed_date }}</td>
-            <td>{{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}</td>
-            <td>{{ .Comment }}</td>
+            <td data-label="">
+                {{ call $helper.NFormat .Completed_date }}
+            </td>
+            <td data-label="Категории">
+                <span>{{ (index $cats .Cat1).Name }}&nbsp</span>
+                <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
+                <span>{{ (index $cats .Cat3).Name }}</span>
+            </td>
+            <td data-label="Объект">{{ (index $addrs .Addr_obj).Address }}</td>
+            <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}</td>
+            <td data-label="Постановка">{{ .Desc }}</td>
         </tr>
         {{ end }}
+        </tbody>
     </table>
 </div>
 {{ end }}

@@ -7,10 +7,13 @@
     <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/text.css">
-    <link rel="stylesheet" href="/css/input.css">
-    <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/text.css">
+    <link rel="stylesheet" href="/assets/css/input.css">
+    <link rel="stylesheet" href="/assets/css/table.css">
+    <link rel="stylesheet" href="/assets/css/me.css">
+    <link rel="stylesheet" href="/assets/css/task-form.css">
+    <link rel="stylesheet" href="/assets/css/block-table.css">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css">
@@ -61,42 +64,21 @@
                                 next: "Дальше",
                                 last: "Конец"
                             },
-                        }
-                    })
-                $(this).DataTable({
-                    pageLength: 25,
-                    lengthMenu: [25, 50, -1],
-                    info: false,
-                    language: {
-                        search: "Найти:",
-                        lengthMenu: "Количество строк на странице _MENU_ ",
-                        lengthLabels: {
-                            "-1": "Все"
                         },
-                        infoEmpty: "Отображение: Данные не найдены",
-                        zeroRecords: "Поиск: Данные не найдены",
-                        processing: "Обработка...",
-                        paginate: {
-                            first: "Начало",
-                            previous: "Назад",
-                            next: "Дальше",
-                            last: "Конец"
-                        },
-                    },
 
-                    columnDefs: $(this).find("th.tab-date").map((i, th) => ({
-                        targets: $(th).index(),
-                        type: 'date',
-                        render: function (data, type) {
-                            if (type === "display") {
-                                if (!data) {
-                                    return "-"
+                        columnDefs: $(this).find("th.tab-date").map((i, th) => ({
+                            targets: $(th).index(),
+                            type: 'date',
+                            render: function (data, type) {
+                                if (type === "display") {
+                                    if (!data) {
+                                        return "-"
+                                    }
+                                    return moment(data).format("DD.MM.YYYY")
                                 }
-                                return moment(data).format("DD.MM.YYYY")
+                                return data
                             }
-                            return data
-                        }
-                    })).get(),
+                        })).get(),
 
                 })
             })
