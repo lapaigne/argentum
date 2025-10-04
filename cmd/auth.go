@@ -39,7 +39,7 @@ func checkLevel(c echo.Context, min int) error {
 	return nil
 }
 
-func register(c echo.Context) error {
+func (e Endpoints) register(c echo.Context) error {
 
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
@@ -63,7 +63,7 @@ func register(c echo.Context) error {
 	return nil
 }
 
-func login(c echo.Context) error {
+func (e Endpoints) login(c echo.Context) error {
 
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
@@ -103,10 +103,18 @@ func login(c echo.Context) error {
 	}
 }
 
-func logout(c echo.Context) error {
+func (e Endpoints) logout(c echo.Context) error {
 
 	clearCookie(c, "token")
 	clearCookie(c, "ref")
 
-	return c.Redirect(http.StatusSeeOther, "/")
+	return c.Redirect(http.StatusSeeOther, "/signin")
+}
+func (e Endpoints) signin(c echo.Context) error {
+	return c.Render(200, "signin", nil)
+}
+
+func (e Endpoints) authTel(c echo.Context) error {
+	tel := c.FormValue("tel")
+	return c.Render(200, "tel-err", tel)
 }

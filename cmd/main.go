@@ -13,6 +13,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+var endpoints Endpoints
 
 var data_old Data_old
 var data Data
@@ -69,7 +70,6 @@ func main() {
 
 	e.Use(jwtMiddleware(config))
 
-	e.POST("/signout", logout)
 	e.GET("/me/*", endpoints.me_GET)
 	e.POST("/me/*", endpoints.me_POST)
 
@@ -79,11 +79,16 @@ func main() {
 	e.GET("/newtask/", endpoints.newtask_GET)
 	e.POST("/newtask/*", endpoints.newtask_POST)
 
+	e.GET("/", endpoints.slash_GET)
+	e.POST("/", endpoints.slash_POST)
+
 	e.GET("/menu/", endpoints.menu)
-
 	e.GET("/alltasks/", endpoints.alltasks)
+	e.GET("/signin", endpoints.signin)
 
-	endpoints.Setup(e)
+	e.POST("/signout", endpoints.logout)
+	e.POST("/submit-auth", endpoints.login)
+	e.POST("/submit-auth/tel", endpoints.authTel)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
 }
