@@ -12,8 +12,24 @@ import (
 )
 
 func (e Endpoints) newtask_GET(c echo.Context) error {
-	data_old.Helper.Today = time.Now().Format(time.DateOnly)
-	return c.Render(200, "newtask", data_old)
+
+	ctx := struct {
+		Data   *Data
+		Helper *Helper
+		Today  string
+		Cat1   sql.NullInt32
+		Cat2   sql.NullInt32
+		Addr   int
+	}{
+		Data:   &data,
+		Helper: &helper,
+		Today:  Today().Format(time.DateOnly),
+		Cat1:   SQLInt(-1, false),
+		Cat2:   SQLInt(-1, false),
+		Addr:   -1,
+	}
+
+	return c.Render(200, "newtask", ctx)
 }
 
 func (e Endpoints) newtask_POST(c echo.Context) error {
@@ -40,12 +56,6 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 
 func (e Endpoints) newtask_(c echo.Context) error {
 
-	if err := data.Fetch(); err != nil {
-		fmt.Println(err)
-		return err
-	}
-	data_old.ResetHelper()
-
 	var err error
 	var t db.Task
 
@@ -64,29 +74,23 @@ func (e Endpoints) newtask_(c echo.Context) error {
 
 	t.Created_date = date
 
-	c1, err := strconv.Atoi(c.FormValue("cat_1"))
+	c1, err := strconv.Atoi(c.FormValue("cat1"))
 	if err != nil {
-		fmt.Println("cat 1")
 		return err
 	}
+	t.Cat1 = c1
 
-	t.Cat_1 = c1
-
-	c2, err := strconv.Atoi(c.FormValue("cat_2"))
+	c2, err := strconv.Atoi(c.FormValue("cat2"))
 	if err != nil {
-		fmt.Println("cat 2")
 		return err
 	}
+	t.Cat2 = c2
 
-	t.Cat_2 = c2
-
-	c3, err := strconv.Atoi(c.FormValue("cat_3"))
+	c3, err := strconv.Atoi(c.FormValue("cat3"))
 	if err != nil {
-		fmt.Println("cat 3")
 		return err
 	}
-
-	t.Cat_3 = c3
+	t.Cat3 = c3
 
 	t.Desc = c.FormValue("desc")
 
@@ -94,7 +98,6 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-
 	t.Addr_obj = addr
 
 	t.Comment = c.FormValue("comment")
@@ -103,68 +106,94 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-
 	t.Worker = w
 
 	err = db.AddTask(t)
-
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 
-	FetchTasks()
+	ctx := struct {
+		Data   *Data
+		Helper *Helper
+	}{
+		Data:   &data,
+		Helper: &helper,
+	}
 
-	data_old.Helper.Cat_1 = sql.NullInt32{Int32: int32(0), Valid: false}
-	data_old.Helper.Cat_2 = sql.NullInt32{Int32: int32(0), Valid: false}
-	data_old.Helper.Addr = -1
+	if err := data.Fetch(); err != nil {
+		return err
+	}
 
-	return c.Render(200, "alltasks", data_old)
+	return c.Render(200, "alltasks", ctx)
 }
 
 func (e Endpoints) newtask_cat1(c echo.Context) error {
 
-	raw := c.FormValue("cat_1")
-	val, err := strconv.Atoi(raw)
-
+	val, err := strconv.Atoi(c.FormValue("cat1"))
 	if err != nil {
 		return err
 	}
 
-	data_old.Helper.Cat_1 = sql.NullInt32{Int32: int32(val), Valid: true}
-	data_old.Helper.Cat_2 = sql.NullInt32{Int32: int32(-1), Valid: true}
-	return c.Render(200, "tf-cat-1-res", data_old)
+	ctx := struct {
+		Data  *Data
+		Today string
+		Cat1  sql.NullInt32
+		Cat2  sql.NullInt32
+	}{
+		Data:  &data,
+		Today: Today().Format(time.DateOnly),
+		Cat1:  SQLInt(val, true),
+		Cat2:  SQLInt(-1, true),
+	}
+
+	return c.Render(200, "tf-cat-1-res", ctx)
 }
 
 func (e Endpoints) newtask_cat2(c echo.Context) error {
 
-	raw := c.FormValue("cat_2")
-	val, err := strconv.Atoi(raw)
-
+	val, err := strconv.Atoi(c.FormValue("cat2"))
 	if err != nil {
 		return err
 	}
 
-	data_old.Helper.Cat_2 = sql.NullInt32{Int32: int32(val), Valid: true}
-	return c.Render(200, "tf-cat-3", data_old)
+	ctx := struct {
+		Data  *Data
+		Today string
+		Cat2  sql.NullInt32
+	}{
+		Data:  &data,
+		Today: Today().Format(time.DateOnly),
+		Cat2:  SQLInt(val, true),
+	}
+
+	return c.Render(200, "tf-cat-3", ctx)
 }
 
 func (e Endpoints) newtask_addr(c echo.Context) error {
-	raw := c.FormValue("address")
-	val, err := strconv.Atoi(raw)
 
+	val, err := strconv.Atoi(c.FormValue("address"))
 	if err != nil {
 		return err
 	}
 
-	data_old.Helper.Addr = val
-	return c.Render(200, "addr-table", data_old)
+	ctx := struct {
+		Data   *Data
+		Helper *Helper
+		Addr   int
+	}{
+		Data:   &data,
+		Helper: &helper,
+		Addr:   val,
+	}
+
+	return c.Render(200, "addr-table", ctx)
 }
 
 func (e Endpoints) newtask_act(c echo.Context) error {
-	return c.Render(200, "tf-act", data_old)
+	return c.Render(200, "tf-act", nil)
 }
 
 func (e Endpoints) newtask_until(c echo.Context) error {
-	return c.Render(200, "tf-until", data_old)
+	return c.Render(200, "tf-until", nil)
 }
