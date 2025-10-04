@@ -2,9 +2,6 @@ package main
 
 import (
 	"argentum/db"
-	"database/sql"
-	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -13,18 +10,19 @@ import (
 )
 
 func (e Endpoints) me_(c echo.Context) error {
-	data_old.Fill()
+	uid := getClaims(c).UID
 
-	claims := getClaims(c)
-	uid := claims.UID
+	if err := data.Fetch(); err != nil {
+		return err
+	}
 
 	ctx := struct {
-		Data   Data
-		Helper Helper
+		Data   *Data
+		Helper *Helper
 		UID    int
 	}{
-		Data:   data,
-		Helper: helper,
+		Data:   &data,
+		Helper: &helper,
 		UID:    uid,
 	}
 
@@ -32,60 +30,36 @@ func (e Endpoints) me_(c echo.Context) error {
 }
 
 func (e Endpoints) me_conf(c echo.Context) error {
-	acc := getClaims(c).Level
-	switch acc {
-	case db.AccessLevels["worker"]:
-	case db.AccessLevels["dispatcher"]:
-	case db.AccessLevels["admin"]:
-	default:
-		return echo.ErrUnauthorized
-	}
-
 	id, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
 		return err
 	}
 
-	now := time.Now().Truncate(time.Hour * 24)
-	ok, err := db.UpdateTask(id, sql.NullTime{Time: now, Valid: true}, sql.NullTime{Valid: false})
-
-	if err != nil {
-		fmt.Println(err)
+	now := Today()
+	if err := db.UpdateTask(id, SQLTime(now, true), SQLTime(time.Time{}, false)); err != nil {
 		return err
 	}
 
-	if ok {
-		if err := FetchTasks(); err != nil {
-			fmt.Println(err)
-			return err
-		}
-
-		if err := data_old.Fill(); err != nil {
-			fmt.Println(err)
-			return err
-		}
+	// temp solution, target table or row instead
+	uid := getClaims(c).UID
+	ctx := struct {
+		Data   *Data
+		Helper *Helper
+		UID    int
+	}{
+		Data:   &data,
+		Helper: &helper,
+		UID:    uid,
 	}
 
-	// return c.Render(200, "me", nil)
-	return c.NoContent(http.StatusNoContent)
+	return c.Render(200, "me", ctx)
 }
 
 func (e Endpoints) me_exp(c echo.Context) error {
-	acc := getClaims(c).Level
-	switch acc {
-	case db.AccessLevels["worker"]:
-	case db.AccessLevels["dispatcher"]:
-	case db.AccessLevels["admin"]:
-	default:
-		return echo.ErrUnauthorized
-	}
-
 	id, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
 		return err
 	}
-
-	FetchTasks()
 
 	ctx := struct {
 		Data   *Data
