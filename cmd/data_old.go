@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-const (
-	// DD.MM.YYYY
-	DateFormat = "02.01.2006"
-)
-
 type Data_old struct {
 	Raw    RawData0
 	Mapped MappedData0

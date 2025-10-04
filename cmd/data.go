@@ -21,18 +21,15 @@ type Data struct {
 }
 
 func Format(t time.Time) string {
-	d := t.Format(DateFormat)
-
-	return d
+	return t.Format(time.DateOnly)
 }
 
 func NFormat(t sql.NullTime) string {
 	if !t.Valid {
-		return "-"
+		return ""
 	}
-	d := t.Time.Format(DateFormat)
 
-	return d
+	return t.Time.Format(time.DateOnly)
 }
 
 type Helper struct {
