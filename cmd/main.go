@@ -41,6 +41,7 @@ func main() {
 	}
 
 	e.Static("/assets", "assets")
+	e.File("/favicon.ico", "assets/img/favicon.ico")
 
 	e.Renderer = templates
 
