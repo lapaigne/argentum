@@ -114,15 +114,7 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	}
 	data.Tasks[id] = t
 
-	ctx := struct {
-		Data   *Data
-		Helper *Helper
-	}{
-		Data:   &data,
-		Helper: &helper,
-	}
-
-	return c.Render(200, "alltasks", ctx)
+	return c.Redirect(303, "/alltasks/")
 }
 
 func (e Endpoints) newtask_cat1(c echo.Context) error {
