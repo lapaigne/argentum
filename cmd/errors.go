@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 func ErrorHandler(err error, c echo.Context) {
-	code := http.StatusInternalServerError
+	code := 500
 	msg := "internal server error"
 
 	if herr, ok := err.(*echo.HTTPError); ok {
@@ -27,9 +26,9 @@ func ErrorHandler(err error, c echo.Context) {
 		}
 
 		if c.Request().Header.Get("HX-Request") == "true" {
-			c.NoContent(http.StatusUnauthorized)
+			c.NoContent(401)
 		} else {
-			c.Redirect(http.StatusSeeOther, "/signin")
+			c.Redirect(303, "/signin")
 		}
 		return
 	}
