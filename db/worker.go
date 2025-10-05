@@ -27,19 +27,18 @@ func (w Worker) Compare(o Worker) (bool, error) {
 }
 
 func AddWorker(f, i, o string) (int, error) {
-	stmt, err := db.Prepare(`INSERT INTO public.workers ("f_name", "i_name", "o_name") VALUES ($1, $2, $3)`)
+	stmt, err := db.Prepare(`INSERT INTO public.workers ("f_name", "i_name", "o_name") VALUES ($1, $2, $3) RETURNING id`)
 	if err != nil {
 		return -1, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(f, i, o)
-	if err != nil {
+	var id *int
+	if err := stmt.QueryRow(f, i, o).Scan(&id); err != nil {
 		return -1, err
 	}
 
-	id, err := res.LastInsertId()
-	return int(id), err
+	return int(*id), err
 }
 
 // unused

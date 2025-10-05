@@ -55,19 +55,18 @@ func GetUser(login string) (User, error) {
 }
 
 func AddUser(u User) (int, error) {
-	stmt, err := db.Prepare(`INSERT INTO public.users ("worker", "login", "hash", "level") VALUES ($1, $2, $3, $4)`)
+	stmt, err := db.Prepare(`INSERT INTO public.users ("worker", "login", "hash", "level") VALUES ($1, $2, $3, $4) RETURNING id`)
 	if err != nil {
 		return -1, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(u.Worker, u.Login, u.Hash, u.Level)
-	if err != nil {
+	var id *int
+	if err := stmt.QueryRow(u.Worker, u.Login, u.Hash, u.Level).Scan(&id); err != nil {
 		return -1, err
 	}
 
-	id, err := res.LastInsertId()
-	return int(id), err
+	return int(*id), err
 }
 
 func GetUsers(ctx context.Context) ([]User, error) {

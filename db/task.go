@@ -23,19 +23,18 @@ type Task struct {
 }
 
 func AddTask(t Task) (int, error) {
-	stmt, err := db.Prepare(`INSERT INTO public.tasks ("cat_1", "cat_2", "cat_3", "desc", "addr_obj", "created_date", "until_date", "comment", "worker") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9); `)
+	stmt, err := db.Prepare(`INSERT INTO public.tasks ("cat_1", "cat_2", "cat_3", "desc", "addr_obj", "created_date", "until_date", "comment", "worker") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`)
 	if err != nil {
 		return -1, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(t.Cat1, t.Cat2, t.Cat3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker)
-	if err != nil {
+	var id *int
+	if err := stmt.QueryRow(t.Cat1, t.Cat2, t.Cat3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker).Scan(&id); err != nil {
 		return -1, err
 	}
 
-	id, err := res.LastInsertId()
-	return int(id), err
+	return int(*id), err
 }
 
 // m is mark_date

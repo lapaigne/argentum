@@ -11,19 +11,18 @@ type Address struct {
 
 // adds address objects to list in the db
 func AddAddress(address string) (int, error) {
-	stmt, err := db.Prepare(`INSERT INTO public.addr_objs ("address") VALUES $1;`)
+	stmt, err := db.Prepare(`INSERT INTO public.addr_objs ("address") VALUES $1 RETURNING id`)
 	if err != nil {
 		return -1, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(address)
-	if err != nil {
+	var id *int
+	if err := stmt.QueryRow(address).Scan(&id); err != nil {
 		return -1, err
 	}
 
-	id, err := res.LastInsertId()
-	return int(id), nil
+	return int(*id), nil
 }
 
 func GetAddresses(ctx context.Context) ([]Address, error) {

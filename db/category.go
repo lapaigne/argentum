@@ -20,20 +20,18 @@ func AddCategory(parent, level int, name string) (int, error) {
 		return -1, errors.New(s)
 	}
 
-	stmt, err := db.Prepare(`INSERT INTO public.categories ("parent_id", "name", "level") VALUES ($1, $2, $3);`)
+	stmt, err := db.Prepare(`INSERT INTO public.categories ("parent_id", "name", "level") VALUES ($1, $2, $3) RETURNING id`)
 	if err != nil {
 		return -1, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(parent, name, level)
-	if err != nil {
+	var id *int
+	if err := stmt.QueryRow(parent, name, level).Scan(&id); err != nil {
 		return -1, err
 	}
 
-	id, err := res.LastInsertId()
-
-	return int(id), err
+	return int(*id), err
 }
 
 func GetCategories(ctx context.Context) ([]Category, error) {
