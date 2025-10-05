@@ -12,10 +12,6 @@ import (
 func (e Endpoints) me_(c echo.Context) error {
 	uid := getClaims(c).UID
 
-	if err := data.Fetch(); err != nil {
-		return err
-	}
-
 	ctx := struct {
 		Data   *Data
 		Helper *Helper
