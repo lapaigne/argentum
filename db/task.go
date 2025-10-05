@@ -22,14 +22,14 @@ type Task struct {
 	Worker         int
 }
 
-func AddTask(t Task, ctx context.Context) (int, error) {
+func AddTask(t Task) (int, error) {
 	stmt, err := db.Prepare(`INSERT INTO public.tasks ("cat_1", "cat_2", "cat_3", "desc", "addr_obj", "created_date", "until_date", "comment", "worker") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9); `)
 	if err != nil {
 		return -1, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.ExecContext(ctx, t.Cat1, t.Cat2, t.Cat3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker)
+	res, err := stmt.Exec(t.Cat1, t.Cat2, t.Cat3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker)
 	if err != nil {
 		return -1, err
 	}

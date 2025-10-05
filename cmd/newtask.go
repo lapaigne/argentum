@@ -108,10 +108,11 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	}
 	t.Worker = w
 
-	err = db.AddTask(t)
+	id, err := db.AddTask(t)
 	if err != nil {
 		return err
 	}
+	data.Tasks[id] = t
 
 	ctx := struct {
 		Data   *Data
@@ -119,10 +120,6 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	}{
 		Data:   &data,
 		Helper: &helper,
-	}
-
-	if err := data.Fetch(); err != nil {
-		return err
 	}
 
 	return c.Render(200, "alltasks", ctx)
