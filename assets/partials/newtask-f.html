@@ -1,87 +1,98 @@
 {{ define "newtask-f" }}
 
-<div class="left">
+<div class="newtask-form">
     <form hx-post="/newtask/" id="task-form" hx-target="#content" hx-swap="innerHTML" hx-push-url="true"
         autocomplete="off">
         <div>
-            <div id="comb-cat-wrap">
-                <label>Категории задачи</label>
-                <div id="cat1">
-                    <select required name="cat1" hx-post="/newtask/cat-1" hx-target="#cat2" hx-trigger="change changed"
-                        hx-history="false" id="s1" hx-push-url="false" autocomplete="off">
-                        {{ template "tf-cat-1" . }}
-                    </select>
-                </div>
-                <div id="cat2">
-                    <select required name="cat2" hx-post="/newtask/cat-2" hx-swap="innerHTML" hx-target="#s3"
-                        hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false" autocomplete="off">
-                        {{ template "tf-cat-2" . }}
-                    </select>
-                </div>
-                <div id="cat3">
-                    <select required name="cat3" id="s3" autocomplete="off">
-                        {{ template "tf-cat-3" . }}
-                    </select>
-                </div>
-            </div>
-            <div>
-                <label>Адрес</label>
-                <select required name="address" id="addr" hx-post="/newtask/addr" hx-trigger="change changed"
-                    hx-target="#table" hx-swap="outerHTML" hx-history="false" hx-push-url="false" autocomplete="off">
-                    <option disabled selected>Не выбран!</option>
-                    {{ range $i, $v := .Data.Addrs}}
-                    <option value="{{ $i }}">{{ $i }} - {{ $v }}</option>
-                    {{ end }}
-                </select>
-            </div>
-            <div>
-                <label>Описание задачи</label>
-                <input type="text" id="description" name="desc">
-            </div>
-            <div>
-                <label>Дата создания</label>
-                <input type="date" id="created" name="created" value="{{ .Today }}" hx-post="/newtask/created">
-            </div>
-            <div id="until-div">
-                <div>
-                    <label>Срок выполнения</label>
-                    <input type="date" id="do-until" name="do-until" hx-post="/newtask/until" hx-target="#until-test"
-                        hx-swap="innerHTML">
-                </div>
-                <div id="until-test">
+            <div class="form-start">
+                <div id="comb-cat-wrap">
+                    <label>Категории задачи</label>
+                    <div id="cat1">
+                        <select required name="cat1" hx-post="/newtask/cat-1" hx-target="#cat2" hx-trigger="change changed"
+                            hx-history="false" id="s1" hx-push-url="false" autocomplete="off">
+                            {{ template "tf-cat-1" . }}
+                        </select>
+                    </div>
+                    <div id="cat2">
+                        <select required name="cat2" hx-post="/newtask/cat-2" hx-swap="innerHTML" hx-target="#s3"
+                            hx-trigger="change changed" hx-history="false" id="s2" hx-push-url="false" autocomplete="off">
+                            {{ template "tf-cat-2" . }}
+                        </select>
+                    </div>
+                    <div id="cat3">
+                        <select required name="cat3" id="s3" autocomplete="off">
+                            {{ template "tf-cat-3" . }}
+                        </select>
+                    </div>
                 </div>
                 <div>
-                    <label>Без определенного срока</label>
-                    <input type="checkbox" id="until-checkbox">
+                    <label>Адрес</label>
+                    <select required name="address" id="addr" hx-post="/newtask/addr" hx-trigger="change changed"
+                        hx-target="#table" hx-swap="outerHTML" hx-history="false" hx-push-url="false" autocomplete="off">
+                        <option disabled selected>Не выбран!</option>
+                        {{ range $i, $v := .Data.Addrs}}
+                        <option value="{{ $i }}">{{ $i }} - {{ $v }}</option>
+                        {{ end }}
+                    </select>
+                </div>
+                <div>
+                    <label>Описание задачи</label>
+                    <textarea class="form-textarea" id="description" name="desc"></textarea>
                 </div>
             </div>
-            <div id="act-div">
-                <label>Исполнители</label>
-                <select id="actor-selector" required hx-post="/newtask/act" name="act" hx-swap="afterend"
-                    hx-target="#act-div" autocomplete="off">
-                    <option selected disabled>Не выбран!</option>
-                    {{ range $i, $v := .Data.UWs }}
-                    <option value="{{ $i }}">{{ $v.W }}</option>
-                    {{ end }}
-                </select>
+            <div class="form-executor">
+                <div id="act-div">
+                    <label>Исполнители</label>
+                    <select id="actor-selector" required hx-post="/newtask/act" name="act" hx-swap="afterend"
+                            hx-target="#act-div" autocomplete="off">
+                        <option selected disabled>Не выбран!</option>
+                        {{ range $i, $v := .Data.UWs }}
+                        <option value="{{ $i }}">{{ $v.W }}</option>
+                        {{ end }}
+                    </select>
+                </div>
+                <div>
+                    <label>Комментарий</label>
+                    <input type="text" id="comment" name="comment">
+                </div>
             </div>
-            <div>
-                <label>Комментарий</label>
-                <input type="text" id="comment" name="comment">
+            <div class="form-date">
+                <div>
+                    <label>Дата создания</label>
+                    <input type="date" id="created" name="created" value="{{ .Today }}" hx-post="/newtask/created">
+                </div>
+                <div id="until-div">
+                    <div>
+                        <label>Срок выполнения</label>
+                        <input type="date" id="do-until" name="do-until" hx-post="/newtask/until" hx-target="#until-test"
+                               hx-swap="innerHTML">
+                    </div>
+                    <div id="until-test">
+                    </div>
+                    <div>
+                        <label>Без определенного срока</label>
+                        <input type="checkbox" id="until-checkbox">
+                    </div>
+                </div>
             </div>
-            <button type="submit">Добавить задачу</button>
+            <div style="text-align: center">
+                <button type="submit">Добавить задачу</button>
+            </div>
         </div>
     </form>
 </div>
+
 {{ end }}
 
 {{ define "tf-cat-1" }}
+
 <option selected disabled value="-1">Не выбрано!</option>
 {{ range .Data.Cats }}
 {{ if eq .Level 1}}
 <option value="{{ .Id }}">{{ .Name }}</option>
 {{ end }}
 {{ end }}
+
 {{ end }}
 
 
@@ -93,6 +104,7 @@
 <option value="{{ .Id }}">{{ .Name }}</option>
 {{ end }}
 {{ end }}
+
 {{ end }}
 
 
@@ -104,6 +116,7 @@
 <option value="{{ .Id }}">{{ .Name }}</option>
 {{ end }}
 {{ end }}
+
 {{ end }}
 
 

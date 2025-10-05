@@ -4,6 +4,10 @@
     height: 100%;
     padding: 1rem;
     box-sizing: border-box;
+    /*width: 100%;*/
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 /* Left panel takes most space */
@@ -73,7 +77,7 @@
 /* Responsive: stack vertically on small screens */
 @media (max-width: 768px) {
     .task-wrapper {
-        flex-direction: column;
+        display: inline;
     }
 
     .left,

@@ -9,16 +9,19 @@ input[type="number"],
 select,
 textarea {
     font-family: inherit;
-    /* inherit from body */
-    font-size: 1rem;
+    font-size: 16px;
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-color: #fff;
     color: #222;
     width: 100%;
+    min-height: 44px;
     box-sizing: border-box;
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 input[type="tel"]:focus,
@@ -56,13 +59,13 @@ input[type="reset"] {
     font-weight: 500;
     padding: 0.5rem 1rem;
     border: 1px solid #0056b3;
-    /* less bright blue */
     border-radius: 4px;
     background-color: white;
     color: #0056b3;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
     user-select: none;
+    margin: 5px;
 }
 
 button:hover,
