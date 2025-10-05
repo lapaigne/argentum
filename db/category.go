@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -13,27 +14,36 @@ type Category struct {
 	Level  int
 }
 
-func AddCategory(parent, level int, name string) error {
-
+func AddCategory(parent, level int, name string) (int, error) {
 	if level > 3 {
 		s := fmt.Sprintf("Invalid category level of %d, when adding category <%s>", level, name)
-		return errors.New(s)
+		return -1, errors.New(s)
 	}
 
-	query := fmt.Sprintf("INSERT INTO public.categories (parent_id, name, level) VALUES (%d, %s, %d);", parent, name, level)
-	_, err := db.Exec(query)
+	stmt, err := db.Prepare(`INSERT INTO public.categories ("parent_id", "name", "level") VALUES ($1, $2, $3);`)
 	if err != nil {
-		return err
+		return -1, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(parent, name, level)
+	if err != nil {
+		return -1, err
 	}
 
-	return nil
+	id, err := res.LastInsertId()
 
+	return int(id), err
 }
 
-func GetCategories() ([]Category, error) {
+func GetCategories(ctx context.Context) ([]Category, error) {
+	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.categories`)
+	if err != nil {
+		return []Category{}, err
+	}
+	defer stmt.Close()
 
-	query := "SELECT * FROM public.categories"
-	rows, err := db.Query(query)
+	rows, err := stmt.QueryContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -48,9 +58,5 @@ func GetCategories() ([]Category, error) {
 		res = append(res, cat)
 	}
 
-	if err = rows.Err(); err != nil {
-		return res, err
-	}
-
-	return res, nil
+	return res, rows.Err()
 }
