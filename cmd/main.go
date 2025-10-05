@@ -21,6 +21,7 @@ var helper = Helper{
 	Levels:  &db.AccessLevels,
 	NFormat: NFormat,
 	Format:  Format,
+	Status:  Status,
 }
 
 var public = map[string]bool{

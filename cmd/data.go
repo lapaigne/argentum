@@ -15,13 +15,13 @@ type Data struct {
 	MTask int
 	MCat  int
 	MAddr int
-	MUser int
 }
 
 type Helper struct {
 	Today   string
 	Format  func(time.Time) string
 	NFormat func(sql.NullTime) string
+	Status  func(sql.NullTime) string
 	Levels  *map[string]int
 }
 

@@ -9,6 +9,14 @@ func Format(t time.Time) string {
 	return t.Format(time.DateOnly)
 }
 
+func Status(t sql.NullTime) string {
+	if !t.Valid {
+		return "✘"
+	}
+
+	return "✔"
+}
+
 func NFormat(t sql.NullTime) string {
 	if !t.Valid {
 		return ""

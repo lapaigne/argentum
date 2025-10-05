@@ -18,21 +18,22 @@
             </tr>
         </thead>
         <tbody>
-        {{ range $tasks }}
-        <tr>
-            <td data-label="">
-                {{ call $helper.NFormat .Completed_date }}
-            </td>
-            <td data-label="Категории">
-                <span>{{ (index $cats .Cat1).Name }}&nbsp</span>
-                <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
-                <span>{{ (index $cats .Cat3).Name }}</span>
-            </td>
-            <td data-label="Объект">{{ (index $addrs .Addr_obj).Address }}</td>
-            <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}</td>
-            <td data-label="Постановка">{{ .Desc }}</td>
-        </tr>
-        {{ end }}
+            {{ range $tasks }}
+            <tr>
+                <td data-label="">
+                    {{ call $helper.Status .Mark_date }}
+                </td>
+                <td data-label="Категории">
+                    <span>{{ (index $cats .Cat1).Name }}&nbsp</span>
+                    <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
+                    <span>{{ (index $cats .Cat3).Name }}</span>
+                </td>
+                <td data-label="Объект">{{ (index $addrs .Addr_obj).Address }}</td>
+                <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{
+                    $w.O_name }}</td>
+                <td data-label="Постановка">{{ .Desc }}</td>
+            </tr>
+            {{ end }}
         </tbody>
     </table>
 </div>
