@@ -108,24 +108,13 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	}
 	t.Worker = w
 
-	err = db.AddTask(t)
+	id, err := db.AddTask(t)
 	if err != nil {
 		return err
 	}
+	data.Tasks[id] = t
 
-	ctx := struct {
-		Data   *Data
-		Helper *Helper
-	}{
-		Data:   &data,
-		Helper: &helper,
-	}
-
-	if err := data.Fetch(); err != nil {
-		return err
-	}
-
-	return c.Render(200, "alltasks", ctx)
+	return c.Redirect(303, "/alltasks/")
 }
 
 func (e Endpoints) newtask_cat1(c echo.Context) error {

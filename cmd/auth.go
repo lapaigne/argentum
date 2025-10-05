@@ -3,7 +3,6 @@ package main
 import (
 	"argentum/db"
 	"database/sql"
-	"net/http"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -97,7 +96,7 @@ func (e Endpoints) login(c echo.Context) error {
 
 	switch accClaims.Level {
 	case 10, 50, 100:
-		return c.Redirect(http.StatusSeeOther, "/menu/")
+		return c.Redirect(303, "/menu/")
 	default:
 		return echo.ErrUnauthorized
 	}
@@ -108,7 +107,7 @@ func (e Endpoints) logout(c echo.Context) error {
 	clearCookie(c, "token")
 	clearCookie(c, "ref")
 
-	return c.Redirect(http.StatusSeeOther, "/signin")
+	return c.Redirect(303, "/signin")
 }
 func (e Endpoints) signin(c echo.Context) error {
 	return c.Render(200, "signin", nil)

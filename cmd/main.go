@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -40,15 +41,13 @@ func main() {
 	}
 
 	e.Static("/assets", "assets")
+	e.File("/favicon.ico", "assets/img/favicon.ico")
 
 	e.Renderer = templates
 
 	db.OpenConn()
 	defer db.CloseConn()
-
-	if err := data.Fetch(); err != nil {
-		fmt.Println(err)
-	}
+	autoFetch(&data, time.Second*5, time.Second*4)
 
 	config := echojwt.Config{
 		SigningKey: []byte(accSecret),

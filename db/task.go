@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"time"
@@ -21,26 +22,34 @@ type Task struct {
 	Worker         int
 }
 
-func AddTask(t Task) error {
+func AddTask(t Task) (int, error) {
+	stmt, err := db.Prepare(`INSERT INTO public.tasks ("cat_1", "cat_2", "cat_3", "desc", "addr_obj", "created_date", "until_date", "comment", "worker") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`)
+	if err != nil {
+		return -1, err
+	}
+	defer stmt.Close()
 
-	query := `
-	INSERT INTO public.tasks 
-	(cat_1, cat_2, cat_3, "desc", addr_obj, created_date, until_date, comment, worker)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
-	`
-	_, err := db.Exec(query, t.Cat1, t.Cat2, t.Cat3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker)
-	return err
+	var id *int
+	if err := stmt.QueryRow(t.Cat1, t.Cat2, t.Cat3, t.Desc, t.Addr_obj, t.Created_date, t.Until_date, t.Comment, t.Worker).Scan(&id); err != nil {
+		return -1, err
+	}
+
+	return int(*id), err
 }
 
 // m is mark_date
 //
 // c is completed_date
 func UpdateTask(id int, m sql.NullTime, c sql.NullTime) error {
+	selStmt, err := db.Prepare(`SELECT "mark_date", "completed_date" FROM public.tasks WHERE id = $1`)
+	if err != nil {
+		return err
+	}
+	defer selStmt.Close()
 
-	query := `SELECT "mark_date", "completed_date" FROM public.tasks WHERE id = $1`
 	var md, cd sql.NullTime
 
-	if err := db.QueryRow(query, id).Scan(&md, &cd); err != nil {
+	if err := selStmt.QueryRow(id).Scan(&md, &cd); err != nil {
 		return err
 	}
 
@@ -48,26 +57,30 @@ func UpdateTask(id int, m sql.NullTime, c sql.NullTime) error {
 		return fmt.Errorf(`non-null task status for task %d`, id)
 	}
 
-	query = `UPDATE public.tasks SET "mark_date" = $1, "completed_date" = $2 WHERE id = $3`
-
-	_, err := db.Exec(query, m, c, id)
+	updStmt, err := db.Prepare(`UPDATE public.tasks SET "mark_date" = $1, "completed_date" = $2 WHERE id = $3`)
 	if err != nil {
 		return err
 	}
+	defer updStmt.Close()
 
-	return nil
+	_, err = updStmt.Exec(m, c, id)
+	return err
 }
 
-func GetAllTasks() ([]Task, error) {
+func GetTasks(ctx context.Context) ([]Task, error) {
+	res := []Task{}
+	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.tasks;`)
+	if err != nil {
+		return res, err
+	}
+	defer stmt.Close()
 
-	query := "SELECT * FROM public.tasks;"
-	rows, err := db.Query(query)
+	rows, err := stmt.QueryContext(ctx)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	res := []Task{}
 	for rows.Next() {
 		var t Task
 		if err := rows.Scan(
@@ -97,8 +110,8 @@ func GetAllTasks() ([]Task, error) {
 	return res, nil
 }
 
+// unused
 func TasksByWorker(w int) ([]Task, error) {
-
 	res := []Task{}
 	query := "SELECT (id) FROM public.tasks WHERE 'actor' = $1"
 	rows, err := db.Query(query, w)

@@ -1,8 +1,8 @@
 package db
 
 import (
+	"context"
 	"database/sql"
-	"fmt"
 )
 
 type User struct {
@@ -21,48 +21,62 @@ var AccessLevels = map[string]int{
 }
 
 func UpdateToken(refresh string, id int) error {
+	stmt, err := db.Prepare(`UPDATE public.users SET "refresh" = $1 WHERE "id" = $2`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
 
-	query := "UPDATE public.users SET refresh = $1 WHERE id = $2"
-	_, err := db.Exec(query, refresh, id)
+	_, err = stmt.Exec(refresh, id)
 	return err
 }
 
 func ValidateToken(refresh string, id int) error {
-
-	query := "SELECT 1 FROM public.users WHERE refresh = $1 AND id = $2"
-	var a int
-	err := db.QueryRow(query, refresh, id).Scan(&a)
-	return err
-}
-
-func GetUser(login string) (User, error) {
-
-	var u User
-	query := "SELECT * FROM public.users WHERE login = $1"
-	err := db.QueryRow(query, login).Scan(&u.Id, &u.Worker, &u.Login, &u.Hash, &u.Level, &u.Token)
-	if err != nil {
-		fmt.Println(err)
-		return User{}, err
-	}
-
-	return u, nil
-}
-
-func AddUser(u User) error {
-
-	query := "INSERT INTO public.users (worker, login, hash, level) VALUES ($1, $2, $3, $4)"
-
-	_, err := db.Exec(query, u.Worker, u.Login, u.Hash, u.Level)
+	stmt, err := db.Prepare(`SELECT 1 FROM public.users WHERE "refresh" = $1 AND "id" = $2`)
 	if err != nil {
 		return err
 	}
+	defer stmt.Close()
 
-	return nil
+	var a int
+	return stmt.QueryRow(refresh, id).Scan(a)
 }
 
-func GetUsers() ([]User, error) {
+func GetUser(login string) (User, error) {
+	stmt, err := db.Prepare(`SELECT * FROM public.users WHERE "login" = $1`)
+	if err != nil {
+		return User{}, err
+	}
+	defer stmt.Close()
 
-	rows, err := db.Query("SELECT id, worker, login, level FROM public.users")
+	var u User
+	err = stmt.QueryRow(login).Scan(&u.Id, &u.Worker, &u.Login, &u.Hash, &u.Level, &u.Token)
+	return u, nil
+}
+
+func AddUser(u User) (int, error) {
+	stmt, err := db.Prepare(`INSERT INTO public.users ("worker", "login", "hash", "level") VALUES ($1, $2, $3, $4) RETURNING id`)
+	if err != nil {
+		return -1, err
+	}
+	defer stmt.Close()
+
+	var id *int
+	if err := stmt.QueryRow(u.Worker, u.Login, u.Hash, u.Level).Scan(&id); err != nil {
+		return -1, err
+	}
+
+	return int(*id), err
+}
+
+func GetUsers(ctx context.Context) ([]User, error) {
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "worker", "login", "level" FROM public.users`)
+	if err != nil {
+		return []User{}, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.QueryContext(ctx)
 	if err != nil {
 		return nil, err
 	}

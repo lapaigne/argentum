@@ -1,7 +1,7 @@
 package db
 
 import (
-	"fmt"
+	"context"
 )
 
 type Address struct {
@@ -10,21 +10,29 @@ type Address struct {
 }
 
 // adds address objects to list in the db
-func AddAddress(address string) error {
-
-	query := fmt.Sprintf("INSERT INTO public.addr_objs (address) VALUES %s;", address)
-	_, err := db.Exec(query)
+func AddAddress(address string) (int, error) {
+	stmt, err := db.Prepare(`INSERT INTO public.addr_objs ("address") VALUES $1 RETURNING id`)
 	if err != nil {
-		return err
+		return -1, err
+	}
+	defer stmt.Close()
+
+	var id *int
+	if err := stmt.QueryRow(address).Scan(&id); err != nil {
+		return -1, err
 	}
 
-	return nil
+	return int(*id), nil
 }
 
-func GetAddresses() ([]Address, error) {
+func GetAddresses(ctx context.Context) ([]Address, error) {
+	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.addr_objs`)
+	if err != nil {
+		return []Address{}, err
+	}
+	defer stmt.Close()
 
-	query := "SELECT * FROM public.addr_objs"
-	rows, err := db.Query(query)
+	rows, err := stmt.QueryContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -39,9 +47,5 @@ func GetAddresses() ([]Address, error) {
 		res = append(res, address)
 	}
 
-	if err = rows.Err(); err != nil {
-		return res, err
-	}
-
-	return res, nil
+	return res, rows.Err()
 }

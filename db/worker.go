@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -11,8 +12,8 @@ type Worker struct {
 	O_name string
 }
 
+// unused
 func (w Worker) Compare(o Worker) (bool, error) {
-
 	fio := w.F_name == o.F_name && w.I_name == o.I_name && w.O_name == o.O_name
 	ids := w.Id == o.Id
 	if fio {
@@ -25,32 +26,45 @@ func (w Worker) Compare(o Worker) (bool, error) {
 	return false, nil
 }
 
-func AddWorker(f, i, o string) error {
-
-	query := fmt.Sprintf("INSERT INTO public.workers (f_name, i_name, o_name) VALUES ('%s', '%s', '%s');", f, i, o)
-	_, err := db.Exec(query)
+func AddWorker(f, i, o string) (int, error) {
+	stmt, err := db.Prepare(`INSERT INTO public.workers ("f_name", "i_name", "o_name") VALUES ($1, $2, $3) RETURNING id`)
 	if err != nil {
-		return err
+		return -1, err
+	}
+	defer stmt.Close()
+
+	var id *int
+	if err := stmt.QueryRow(f, i, o).Scan(&id); err != nil {
+		return -1, err
 	}
 
-	return nil
+	return int(*id), err
 }
 
+// unused
 func GetWorker(id int) (Worker, error) {
+	stmt, err := db.Prepare(`SELECT "id", "f_name", "i_name", "o_name" FROM public.workers WHERE "id" = $1`)
+	if err != nil {
+		return Worker{}, err
+	}
+	defer stmt.Close()
 
 	var worker Worker
-	err := db.QueryRow("SELECT id, f_name, i_name, o_name FROM public.workers WHERE id = $1", id).
-		Scan(&worker.Id, &worker.F_name, &worker.I_name, &worker.O_name)
-	if err != nil {
+	if err = stmt.QueryRow(id).Scan(&worker.Id, &worker.F_name, &worker.I_name, &worker.O_name); err != nil {
 		return Worker{}, err
 	}
 
 	return worker, nil
 }
 
-func GetWorkers() ([]Worker, error) {
+func GetWorkers(ctx context.Context) ([]Worker, error) {
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "f_name", "i_name", "o_name" FROM public.workers`)
+	if err != nil {
+		return []Worker{}, err
+	}
+	defer stmt.Close()
 
-	rows, err := db.Query("SELECT id, f_name, i_name, o_name FROM public.workers")
+	rows, err := stmt.QueryContext(ctx)
 	if err != nil {
 		return nil, err
 	}
