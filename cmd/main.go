@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -48,7 +49,14 @@ func main() {
 
 	db.OpenConn()
 	defer db.CloseConn()
-	autoFetch(&data, time.Second*5, time.Second*4)
+
+	// init data
+	data.fetchUWs(context.Background())
+	data.fetchTasks(context.Background())
+	data.fetchCats(context.Background())
+	data.fetchAddrs(context.Background())
+
+	autoFetch(&data, time.Second*30, time.Second*5)
 
 	config := echojwt.Config{
 		SigningKey: []byte(accSecret),
