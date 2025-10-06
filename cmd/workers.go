@@ -75,6 +75,7 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 		},
 	}
 
+	data.UWs[wid].SoftReplace(d)
 
 	// slow for now, perhaps would be updated to use channels
 	dw, du := Diffs(*uw, d)

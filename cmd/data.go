@@ -30,3 +30,10 @@ type UserWorker struct {
 	W  db.Worker
 	U  db.User
 }
+
+func (dest *UserWorker) SoftReplace(upd UserWorker) {
+	dest.W.F_name = upd.W.F_name
+	dest.W.I_name = upd.W.I_name
+	dest.W.O_name = upd.W.O_name
+	dest.U.Level = upd.U.Level
+}
