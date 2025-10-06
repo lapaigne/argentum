@@ -31,20 +31,20 @@
 
 
 {{ define "ew-upd" }}
-<form hx-post="/workers/upd" id="ew-upd-f" hx-target="#ew-{{ .Id }}">
+{{ $opts := .Opts }}
+<form hx-post="/workers/upd-{{ .Id }}" id="ew-upd-f" hx-target="#ew-{{ .Id }}">
     <div>
         <input type="text" name="f_name" value="{{ .W.F_name }}">
         <input type="text" name="i_name" value="{{ .W.I_name }}">
         <input type="text" name="o_name" value="{{ .W.O_name }}">
     </div>
-    <select id="ew-lvl-sel" hx-post="/workers/sel">
-        <option selected value="0">Не выбрано!</option>
-        <option value="10">Работник</option>
-        <option value="50">Диспетчер</option>
-        <option value="100">Администратор</option>
+    <select id="ew-lvl-sel" name="ew-lvl-sel">
+        {{ range $opts }}
+        <option value="{{ .Level }}" {{ if .Sel}} selected {{ end }}>{{ .Name }}</option>
+        {{ end }}
     </select>
     <button type="submit">UPD</button>
     <!-- temp target, reconfirm del -->
-    <button hx-post="/workers/del" hx-target="#ew-{{ .Id }}">DEL</button>
+    <button hx-post="/workers/del-{{ .Id }}" hx-target="#ew-{{ .Id }}">DEL</button>
 </form>
 {{ end }}

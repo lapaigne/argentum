@@ -26,10 +26,7 @@ type Helper struct {
 }
 
 type UserWorker struct {
-	Id  int
-	W   db.Worker
-	U   db.User
-	DW  bool // if true, update worker
-	DU  bool // if true, update user
-	New bool // if true, add new user and new worker
+	Id int
+	W  db.Worker
+	U  db.User
 }

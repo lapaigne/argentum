@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 )
 
 type Worker struct {
@@ -12,18 +11,14 @@ type Worker struct {
 	O_name string
 }
 
-// unused
-func (w Worker) Compare(o Worker) (bool, error) {
-	fio := w.F_name == o.F_name && w.I_name == o.I_name && w.O_name == o.O_name
-	ids := w.Id == o.Id
-	if fio {
-		if !ids {
-			return false, fmt.Errorf("Duplicate worker %s %s %s", w.F_name, w.I_name, w.O_name)
-		}
-		return true, nil
+func UpdateWorker(id int, w Worker) error {
+	stmt, err := db.Prepare(`UPDATE public.workers SET "f_name" = $1, "i_name" = $2, "o_name" = $3 WHERE "id" = $4`)
+	if err != nil {
+		return err
 	}
-
-	return false, nil
+	defer stmt.Close()
+	_, err = stmt.Exec(w.F_name, w.I_name, w.O_name, id)
+	return err
 }
 
 func AddWorker(f, i, o string) (int, error) {

@@ -36,3 +36,9 @@ func SQLInt(n int, b bool) sql.NullInt32 {
 func SQLTime(t time.Time, b bool) sql.NullTime {
 	return sql.NullTime{Time: t, Valid: b}
 }
+
+func Diffs(old, upd UserWorker) (dw, du bool) {
+	dw = !(old.W.F_name == upd.W.F_name && old.W.I_name == upd.W.I_name && old.W.O_name == upd.W.O_name)
+	du = old.U.Level != upd.U.Level
+	return dw, du
+}
