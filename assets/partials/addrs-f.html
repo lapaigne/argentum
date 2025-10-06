@@ -1,0 +1,25 @@
+{{ define "addrs-row" }}
+<td>{{ .Address }}</td>
+{{ end }}
+
+
+{{ define "addrs-add" }}
+<form hx-post="/addrs/add" id="addrs-add-f">
+    <div>
+        <input type="text" name="addr">
+    </div>
+    <button type="submit">ADD</button>
+</form>
+{{ end }}
+
+
+{{ define "addrs-upd" }}
+<form hx-post="/addrs/upd" id="addrs-upd-f">
+    <div>
+        <input type="text" name="addr">
+    </div>
+    <button type="submit">UPD</button>
+    <!-- temp target, reconfirm del -->
+    <button hx-post="/addrs/del" hx-target="#addrs-{{ .Id }}">DEL</button>
+</form>
+{{ end }}

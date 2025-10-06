@@ -83,6 +83,8 @@ func main() {
 	e.GET("/", endpoints.slash_GET)
 	e.POST("/", endpoints.slash_POST)
 
+	e.GET("/addrs/", endpoints.addrs_GET)
+
 	e.GET("/menu/", endpoints.menu)
 	e.GET("/alltasks/", endpoints.alltasks)
 	e.GET("/signin", endpoints.signin)
