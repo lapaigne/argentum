@@ -74,10 +74,10 @@ func (d *Data) fetchUWs(ctx context.Context) error {
 		um[u.Worker] = u
 	}
 
-	temp := make(map[int]UserWorker)
+	temp := make(map[int]*UserWorker)
 
 	for _, w := range workers {
-		temp[w.Id] = UserWorker{Id: w.Id, W: w, U: um[w.Id]}
+		temp[w.Id] = &UserWorker{Id: w.Id, W: w, U: um[w.Id]}
 	}
 
 	if len(temp) != 0 {
@@ -93,10 +93,10 @@ func (d *Data) fetchTasks(ctx context.Context) error {
 		return err
 	}
 
-	temp := make(map[int]db.Task)
+	temp := make(map[int]*db.Task)
 
 	for _, v := range tasks {
-		temp[v.Id] = v
+		temp[v.Id] = &v
 	}
 
 	if len(tasks) == 0 {
@@ -115,10 +115,10 @@ func (d *Data) fetchCats(ctx context.Context) error {
 		return err
 	}
 
-	temp := make(map[int]db.Category)
+	temp := make(map[int]*db.Category)
 
 	for _, v := range cats {
-		temp[v.Id] = v
+		temp[v.Id] = &v
 	}
 
 	if len(cats) == 0 {
@@ -137,10 +137,10 @@ func (d *Data) fetchAddrs(ctx context.Context) error {
 		return err
 	}
 
-	temp := make(map[int]db.Address)
+	temp := make(map[int]*db.Address)
 
 	for _, v := range addrs {
-		temp[v.Id] = v
+		temp[v.Id] = &v
 	}
 
 	if len(addrs) == 0 {

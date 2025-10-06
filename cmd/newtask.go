@@ -110,7 +110,7 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	data.Tasks[id] = t
+	data.Tasks[id] = &t
 
 	return c.Redirect(303, "/alltasks/")
 }

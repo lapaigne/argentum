@@ -7,10 +7,10 @@ import (
 )
 
 type Data struct {
-	Tasks map[int]db.Task
-	Cats  map[int]db.Category
-	Addrs map[int]db.Address
-	UWs   map[int]UserWorker
+	Tasks map[int]*db.Task
+	Cats  map[int]*db.Category
+	Addrs map[int]*db.Address
+	UWs   map[int]*UserWorker
 
 	MTask int
 	MCat  int

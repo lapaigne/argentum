@@ -52,12 +52,13 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 	o := c.FormValue("o_name")
 	l := c.FormValue("ew-lvl-sel")
 
-	id, err := strconv.Atoi(c.Get("id").(string))
+	wid, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
 		return err
 	}
 
-	uw := data.UWs[id]
+	uw := data.UWs[wid]
+	uid := uw.U.Id
 
 	level, err := strconv.Atoi(l)
 	if err != nil {
@@ -74,15 +75,16 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 		},
 	}
 
+
 	// slow for now, perhaps would be updated to use channels
-	dw, du := Diffs(uw, d)
+	dw, du := Diffs(*uw, d)
 	if dw {
-		if err = db.UpdateWorker(id, d.W); err != nil {
+		if err = db.UpdateWorker(wid, d.W); err != nil {
 			fmt.Println(err)
 		}
 	}
 	if du {
-		if err = db.UpdateUserLevel(uw.U.Id, d.U.Level); err != nil {
+		if err = db.UpdateUserLevel(uid, d.U.Level); err != nil {
 			fmt.Println(err)
 		}
 	}
