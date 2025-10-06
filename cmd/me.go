@@ -12,7 +12,7 @@ import (
 func (e Endpoints) me_(c echo.Context) error {
 	uid := getClaims(c).UID
 
-	ctx := struct {
+	d := struct {
 		Data   *Data
 		Helper *Helper
 		UID    int
@@ -22,7 +22,7 @@ func (e Endpoints) me_(c echo.Context) error {
 		UID:    uid,
 	}
 
-	return c.Render(200, "me", ctx)
+	return c.Render(200, "me", d)
 }
 
 func (e Endpoints) me_conf(c echo.Context) error {
@@ -38,7 +38,7 @@ func (e Endpoints) me_conf(c echo.Context) error {
 
 	// temp solution, target table or row instead
 	uid := getClaims(c).UID
-	ctx := struct {
+	d := struct {
 		Data   *Data
 		Helper *Helper
 		UID    int
@@ -48,7 +48,7 @@ func (e Endpoints) me_conf(c echo.Context) error {
 		UID:    uid,
 	}
 
-	return c.Render(200, "me", ctx)
+	return c.Render(200, "me", d)
 }
 
 func (e Endpoints) me_exp(c echo.Context) error {
@@ -57,7 +57,7 @@ func (e Endpoints) me_exp(c echo.Context) error {
 		return err
 	}
 
-	ctx := struct {
+	d := struct {
 		Data   *Data
 		Helper *Helper
 		Id     int
@@ -67,7 +67,7 @@ func (e Endpoints) me_exp(c echo.Context) error {
 		Id:     id,
 	}
 
-	return c.Render(200, "mt-exp", ctx)
+	return c.Render(200, "mt-exp", d)
 }
 
 func (e Endpoints) me_POST(c echo.Context) error {
