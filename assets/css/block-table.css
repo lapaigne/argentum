@@ -1,7 +1,8 @@
-/* tables.css */
+/* block-tables.css */
 
 #block-table thead tr,
-#table-filters thead tr
+#table-filters thead tr,
+#mytask-table thead tr
 {
     display: flex;
     flex-wrap: wrap;
@@ -9,7 +10,8 @@
 }
 
 #block-table thead th,
-#table-filters thead th
+#table-filters thead th,
+#mytask-table thead th
 {
     flex: 1;
     min-width: 150px;
@@ -18,7 +20,8 @@
 }
 
 #block-table tbody,
-#table-filters tbody
+#table-filters tbody,
+#mytask-table tbody
 {
     margin-bottom: 10px;
     border-collapse: collapse;
@@ -27,7 +30,8 @@
 }
 
 #block-table tbody tr,
-#table-filters tbody tr
+#table-filters tbody tr,
+#mytask-table tbody tr
 {
     width: 100%;
     display: grid;
@@ -48,43 +52,62 @@
 }
 
 #block-table tbody td:nth-child(5) {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 3;
-    grid-row-end: 4;
+    grid-column: 1 / 4;
+    grid-row: 3 / 4;
 }
 
+/*------*/
+
 #table-filters tbody td:nth-child(1) {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3
 }
 
 #table-filters tbody td:nth-child(2) {
-    grid-column-start: 2;
-    grid-column-end: 4;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-column: 2 / 4;
+    grid-row: 2 / 3
 }
 
 #table-filters tbody td:nth-child(3) {
-    grid-column-start: 2;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+}
+
+/*------*/
+
+#mytask-table tbody td:nth-child(1) {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+#mytask-table tbody td:nth-child(2) {
+    grid-column: 2 / 4;
+    grid-row: 2 / 3;
+}
+
+#mytask-table tbody td:nth-child(3) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+#mytask-table tbody td:nth-child(5) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
 }
 
 #block-table tbody td,
-#table-filters tbody td
+#table-filters tbody td,
+#mytask-table tbody td
 {
     padding: 5px;
     text-align: center;
     border: 1px solid #ccc;
+    max-width: 800px;
 }
 
 #block-table tbody td::before,
-#table-filters tbody td::before {
+#table-filters tbody td::before,
+#mytask-table tbody td::before {
     content: attr(data-label);
     margin-right: 10px;
     font-weight: bold;
