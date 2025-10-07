@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -18,7 +19,6 @@ var endpoints Endpoints
 
 var data Data
 var helper = Helper{
-	Levels:  &db.AccessLevels,
 	NFormat: NFormat,
 	Format:  Format,
 	Status:  Status,
@@ -48,7 +48,14 @@ func main() {
 
 	db.OpenConn()
 	defer db.CloseConn()
-	autoFetch(&data, time.Second*5, time.Second*4)
+
+	// init data
+	data.fetchUWs(context.Background())
+	data.fetchTasks(context.Background())
+	data.fetchCats(context.Background())
+	data.fetchAddrs(context.Background())
+
+	autoFetch(&data, time.Second*30, time.Second*5)
 
 	config := echojwt.Config{
 		SigningKey: []byte(accSecret),
@@ -72,11 +79,19 @@ func main() {
 	e.GET("/newtask/", endpoints.newtask_GET)
 	e.POST("/newtask/*", endpoints.newtask_POST)
 
+	e.GET("/cats/", endpoints.cats_GET)
+	e.POST("/cats/*", endpoints.cats_POST)
+
+	e.GET("/addrs/", endpoints.addrs_GET)
+	e.POST("/addrs/*", endpoints.addrs_POST)
+
 	e.GET("/", endpoints.slash_GET)
 	e.POST("/", endpoints.slash_POST)
 
 	e.GET("/menu/", endpoints.menu)
+
 	e.GET("/alltasks/", endpoints.alltasks)
+
 	e.GET("/signin", endpoints.signin)
 
 	e.POST("/signout", endpoints.logout)

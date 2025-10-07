@@ -64,21 +64,36 @@ func (d *Data) fetchUWs(ctx context.Context) error {
 		return err
 	}
 
+	if len(workers) == 0 {
+		d.MWorker = 0
+	} else {
+		d.MWorker = workers[len(workers)-1].Id
+	}
+
 	users, err := db.GetUsers(ctx)
 	if err != nil {
 		return err
 	}
 
-	um := make(map[int]db.User)
-	for _, v := range users {
-		um[v.Worker] = v
+	if len(users) == 0 {
+		d.MUser = 0
+	} else {
+		d.MUser = users[len(users)-1].Id
 	}
 
-	d.UWs = nil
-	d.UWs = make(map[int]UserWorker)
+	um := make(map[int]db.User)
+	for _, u := range users {
+		um[u.Worker] = u
+	}
 
-	for _, v := range workers {
-		d.UWs[v.Id] = UserWorker{Id: v.Id, W: v, U: um[v.Id]}
+	temp := make(map[int]*UserWorker)
+
+	for _, w := range workers {
+		temp[w.Id] = &UserWorker{Id: w.Id, W: w, U: um[w.Id]}
+	}
+
+	if len(temp) != 0 {
+		d.UWs = temp
 	}
 
 	return nil
@@ -90,16 +105,16 @@ func (d *Data) fetchTasks(ctx context.Context) error {
 		return err
 	}
 
-	d.Tasks = nil
-	d.Tasks = make(map[int]db.Task)
+	temp := make(map[int]*db.Task)
 
 	for _, v := range tasks {
-		d.Tasks[v.Id] = v
+		temp[v.Id] = &v
 	}
 
 	if len(tasks) == 0 {
 		d.MTask = 0
 	} else {
+		d.Tasks = temp
 		d.MTask = tasks[len(tasks)-1].Id
 	}
 
@@ -112,16 +127,16 @@ func (d *Data) fetchCats(ctx context.Context) error {
 		return err
 	}
 
-	d.Cats = nil
-	d.Cats = make(map[int]db.Category)
+	temp := make(map[int]*db.Category)
 
 	for _, v := range cats {
-		d.Cats[v.Id] = v
+		temp[v.Id] = &v
 	}
 
 	if len(cats) == 0 {
 		d.MCat = 0
 	} else {
+		d.Cats = temp
 		d.MCat = cats[len(cats)-1].Id
 	}
 
@@ -134,16 +149,16 @@ func (d *Data) fetchAddrs(ctx context.Context) error {
 		return err
 	}
 
-	d.Addrs = nil
-	d.Addrs = make(map[int]db.Address)
+	temp := make(map[int]db.Address)
 
 	for _, v := range addrs {
-		d.Addrs[v.Id] = v
+		temp[v.Id] = v
 	}
 
 	if len(addrs) == 0 {
 		d.MAddr = 0
 	} else {
+		d.Addrs = temp
 		d.MAddr = addrs[len(addrs)-1].Id
 	}
 

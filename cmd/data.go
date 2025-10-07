@@ -7,14 +7,16 @@ import (
 )
 
 type Data struct {
-	Tasks map[int]db.Task
-	Cats  map[int]db.Category
+	Tasks map[int]*db.Task
+	Cats  map[int]*db.Category
 	Addrs map[int]db.Address
-	UWs   map[int]UserWorker
+	UWs   map[int]*UserWorker
 
-	MTask int
-	MCat  int
-	MAddr int
+	MTask   int
+	MCat    int
+	MAddr   int
+	MUser   int
+	MWorker int
 }
 
 type Helper struct {
@@ -22,14 +24,21 @@ type Helper struct {
 	Format  func(time.Time) string
 	NFormat func(sql.NullTime) string
 	Status  func(sql.NullTime) string
-	Levels  *map[string]int
 }
 
 type UserWorker struct {
-	Id  int
-	W   db.Worker
-	U   db.User
-	DW  bool // if true, update worker
-	DU  bool // if true, update user
-	New bool // if true, add new user and new worker
+	Id int
+	W  db.Worker
+	U  db.User
+}
+
+func (dest *UserWorker) SoftReplace(upd UserWorker) {
+	dest.W.F_name = upd.W.F_name
+	dest.W.I_name = upd.W.I_name
+	dest.W.O_name = upd.W.O_name
+	dest.U.Level = upd.U.Level
+}
+
+func (uw *UserWorker) SoftDelete() {
+	uw.U.Level = ACC_NONE
 }

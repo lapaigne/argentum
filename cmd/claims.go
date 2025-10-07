@@ -35,7 +35,6 @@ func getClaims(c echo.Context) *jwtClaims {
 }
 
 func signToken(uid, level int, t time.Time, secret string) (string, *jwtClaims, error) {
-
 	claims := &jwtClaims{
 		UID:   uid,
 		Level: level,

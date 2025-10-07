@@ -9,10 +9,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	ACC_ADMIN      = 100
+	ACC_DISPATCHER = 50
+	ACC_WORKER     = 10
+	ACC_NONE       = 0
+)
+
 func isAdminErr(c echo.Context) error {
 
 	acc := getClaims(c).Level
-	if acc != db.AccessLevels["admin"] {
+	if acc != ACC_ADMIN {
 		return echo.ErrUnauthorized
 	}
 
@@ -28,9 +35,7 @@ func checkLevel(c echo.Context, min int) error {
 	}
 
 	switch acc {
-	case db.AccessLevels["worker"]:
-	case db.AccessLevels["dispatcher"]:
-	case db.AccessLevels["admin"]:
+	case ACC_ADMIN, ACC_DISPATCHER, ACC_WORKER:
 	default:
 		return echo.ErrUnauthorized
 	}
@@ -39,7 +44,6 @@ func checkLevel(c echo.Context, min int) error {
 }
 
 func (e Endpoints) register(c echo.Context) error {
-
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
 	pwd := []byte(pass)
@@ -57,7 +61,9 @@ func (e Endpoints) register(c echo.Context) error {
 		Token:  sql.NullString{},
 	}
 
-	db.AddUser(u)
+	if _, err := db.AddUser(u); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -116,4 +122,8 @@ func (e Endpoints) signin(c echo.Context) error {
 func (e Endpoints) authTel(c echo.Context) error {
 	tel := c.FormValue("tel")
 	return c.Render(200, "tel-err", tel)
+}
+
+func hash(pass string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 }

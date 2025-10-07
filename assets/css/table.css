@@ -1,6 +1,6 @@
 /* tables.css */
 
-#ew-table table {
+#workers-table table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #ccc;
@@ -11,7 +11,7 @@
     color: #333;
 }
 
-#ew-table thead th {
+#workers-table thead th {
     background-color: #f3f6fa;
     color: #1a3e72;
     font-weight: 600;
@@ -21,7 +21,7 @@
     user-select: none;
 }
 
-#ew-table tbody td {
+#workers-table tbody td {
     padding: 0.75rem 1rem;
     border: 1px solid #ccc;
     vertical-align: middle;
@@ -30,22 +30,22 @@
 }
 
 /* Optional column widths (adjust as needed) */
-#ew-table .col.cat {
+#workers-table .col.cat {
     min-width: 120px;
 }
 
-#ew-table .col.desc {
+#workers-table .col.desc {
     min-width: 250px;
     text-align: left;
 }
 
-#ew-table .col.addr {
+#workers-table .col.addr {
     min-width: 150px;
 }
 
-#ew-table .col.until,
-#ew-table .col.mark_date,
-#ew-table .col.mark {
+#workers-table .col.until,
+#workers-table .col.mark_date,
+#workers-table .col.mark {
     min-width: 100px;
 }
 
@@ -54,17 +54,17 @@ tr.selrow {
 }
 
 /* Row hover effect */
-#ew-table tbody tr:hover {
+#workers-table tbody tr:hover {
     background-color: #e9f0ff;
     cursor: pointer;
 }
 
-#ew-table input[type="button"][disabled] {
+#workers-table input[type="button"][disabled] {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-#ew-table td input[type="button"] {
+#workers-table td input[type="button"] {
     padding: 6px 12px;
     font-size: 14px;
     border: 1px solid #1a3e72;
@@ -75,22 +75,22 @@ tr.selrow {
     transition: background-color 0.3s ease;
 }
 
-#ew-table td input[type="button"]:hover {
+#workers-table td input[type="button"]:hover {
     background-color: #c3d2f6;
 }
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
-    #ew-table table {
+    #workers-table table {
         font-size: 14px;
     }
 
-    #ew-table .col.desc {
+    #workers-table .col.desc {
         min-width: auto;
     }
 }
 
-#ew-table th {
+#workers-table th {
     cursor: pointer;
     position: relative;
 }

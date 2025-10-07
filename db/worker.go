@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 )
 
 type Worker struct {
@@ -12,21 +11,17 @@ type Worker struct {
 	O_name string
 }
 
-// unused
-func (w Worker) Compare(o Worker) (bool, error) {
-	fio := w.F_name == o.F_name && w.I_name == o.I_name && w.O_name == o.O_name
-	ids := w.Id == o.Id
-	if fio {
-		if !ids {
-			return false, fmt.Errorf("Duplicate worker %s %s %s", w.F_name, w.I_name, w.O_name)
-		}
-		return true, nil
+func UpdateWorker(id int, w Worker) error {
+	stmt, err := db.Prepare(`UPDATE public.workers SET "f_name" = $1, "i_name" = $2, "o_name" = $3 WHERE "id" = $4`)
+	if err != nil {
+		return err
 	}
-
-	return false, nil
+	defer stmt.Close()
+	_, err = stmt.Exec(w.F_name, w.I_name, w.O_name, id)
+	return err
 }
 
-func AddWorker(f, i, o string) (int, error) {
+func AddWorker(w Worker) (int, error) {
 	stmt, err := db.Prepare(`INSERT INTO public.workers ("f_name", "i_name", "o_name") VALUES ($1, $2, $3) RETURNING id`)
 	if err != nil {
 		return -1, err
@@ -34,7 +29,7 @@ func AddWorker(f, i, o string) (int, error) {
 	defer stmt.Close()
 
 	var id *int
-	if err := stmt.QueryRow(f, i, o).Scan(&id); err != nil {
+	if err := stmt.QueryRow(w.F_name, w.I_name, w.O_name).Scan(&id); err != nil {
 		return -1, err
 	}
 
@@ -58,7 +53,7 @@ func GetWorker(id int) (Worker, error) {
 }
 
 func GetWorkers(ctx context.Context) ([]Worker, error) {
-	stmt, err := db.PrepareContext(ctx, `SELECT "id", "f_name", "i_name", "o_name" FROM public.workers`)
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "f_name", "i_name", "o_name" FROM public.workers ORDER BY id ASC`)
 	if err != nil {
 		return []Worker{}, err
 	}

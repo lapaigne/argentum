@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"fmt"
 )
 
 type User struct {
@@ -14,10 +15,18 @@ type User struct {
 	Token  sql.NullString
 }
 
-var AccessLevels = map[string]int{
-	"admin":      100,
-	"dispatcher": 50,
-	"worker":     10,
+func UpdateUserLevel(id, lvl int) error {
+	stmt, err := db.Prepare(`UPDATE public.users SET "level" = $1 WHERE "id" = $2`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	res, err := stmt.Exec(lvl, id)
+	rws, err := res.RowsAffected()
+	if rws == 0 {
+		return fmt.Errorf("no user with id %d", id)
+	}
+	return err
 }
 
 func UpdateToken(refresh string, id int) error {
@@ -70,7 +79,7 @@ func AddUser(u User) (int, error) {
 }
 
 func GetUsers(ctx context.Context) ([]User, error) {
-	stmt, err := db.PrepareContext(ctx, `SELECT "id", "worker", "login", "level" FROM public.users`)
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "worker", "login", "level" FROM public.users ORDER BY id ASC`)
 	if err != nil {
 		return []User{}, err
 	}

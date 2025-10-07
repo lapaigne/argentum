@@ -5,8 +5,9 @@
 {{ $a := .Addr }}
 {{ $helper := .Helper }}
 {{ $tasks := .Data.Tasks }}
+{{ $cur := (index $addrs $a).Address }}
 <div class="task-wrapper force-rep" id="table">
-    <h2>Задачи на объекте: {{ (index $addrs $a).Address }}</h2>
+    <h2>Задачи на объекте: {{ if $cur }} {{ $cur }} {{ else }} "Не выбран!" {{ end }}</h2>
     <div>
         <table id="table-filters" class="datatable">
             <thead>
@@ -28,7 +29,8 @@
                     </td>
                     <td data-label="Постановка">{{ .Desc }}</td>
                     <td data-label="Срок">{{ call $helper.NFormat .Until_date }}</td>
-                    <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{$w.F_name}} {{$w.I_name}} {{$w.O_name}}</td>
+                    <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{$w.F_name}} {{$w.I_name}}
+                        {{$w.O_name}}</td>
                 </tr>
                 {{ end }}
                 {{ end }}

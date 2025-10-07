@@ -51,7 +51,6 @@ func jwtMiddleware(config echojwt.Config) echo.MiddlewareFunc {
 			}
 
 			refTok, err := jwt.ParseWithClaims(refCookie.Value, &jwtClaims{}, func(t *jwt.Token) (any, error) {
-				fmt.Println(err)
 				return []byte(refSecret), nil
 			})
 

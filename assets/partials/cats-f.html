@@ -1,0 +1,28 @@
+{{ define "cats-row" }}
+<tr id="cats-{{ .Id }}" hx-post="/cats/edit-{{ .Id }}" hx-target="#cats-panel" hx-swap="innerHTML" hx-trigger="click">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+{{ end }}
+
+
+<!-- merge cats panels into one -->
+{{ define "cats-add" }}
+<form hx-post="/cats/add" id="cats-add-f">
+    <div>
+    </div>
+    <button type="submit">ADD</button>
+</form>
+{{ end }}
+
+
+{{ define "cats-upd" }}
+<form hx-post="/cats/upd" id="cats-upd-f">
+    <div>
+    </div>
+    <button type="submit">UPD</button>
+    <button hx-post="/cats/del" hx-target="#cats-{{ .Id }}">DEL</button>
+</form>
+{{ end }}

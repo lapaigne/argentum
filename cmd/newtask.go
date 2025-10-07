@@ -12,8 +12,7 @@ import (
 )
 
 func (e Endpoints) newtask_GET(c echo.Context) error {
-
-	ctx := struct {
+	d := struct {
 		Data   *Data
 		Helper *Helper
 		Today  string
@@ -29,7 +28,7 @@ func (e Endpoints) newtask_GET(c echo.Context) error {
 		Addr:   -1,
 	}
 
-	return c.Render(200, "newtask", ctx)
+	return c.Render(200, "newtask", d)
 }
 
 func (e Endpoints) newtask_POST(c echo.Context) error {
@@ -37,7 +36,7 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 
 	switch url {
 	case "/newtask/":
-		return e.newtask_(c)
+		return e.newtask_submit(c)
 	case "/newtask/act":
 		return e.newtask_act(c)
 	case "/newtask/addr":
@@ -54,8 +53,7 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 	}
 }
 
-func (e Endpoints) newtask_(c echo.Context) error {
-
+func (e Endpoints) newtask_submit(c echo.Context) error {
 	var err error
 	var t db.Task
 
@@ -112,19 +110,18 @@ func (e Endpoints) newtask_(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	data.Tasks[id] = t
+	data.Tasks[id] = &t
 
 	return c.Redirect(303, "/alltasks/")
 }
 
 func (e Endpoints) newtask_cat1(c echo.Context) error {
-
 	val, err := strconv.Atoi(c.FormValue("cat1"))
 	if err != nil {
 		return err
 	}
 
-	ctx := struct {
+	d := struct {
 		Data  *Data
 		Today string
 		Cat1  sql.NullInt32
@@ -136,17 +133,16 @@ func (e Endpoints) newtask_cat1(c echo.Context) error {
 		Cat2:  SQLInt(-1, true),
 	}
 
-	return c.Render(200, "tf-cat-1-res", ctx)
+	return c.Render(200, "tf-cat-1-res", d)
 }
 
 func (e Endpoints) newtask_cat2(c echo.Context) error {
-
 	val, err := strconv.Atoi(c.FormValue("cat2"))
 	if err != nil {
 		return err
 	}
 
-	ctx := struct {
+	d := struct {
 		Data  *Data
 		Today string
 		Cat2  sql.NullInt32
@@ -156,17 +152,16 @@ func (e Endpoints) newtask_cat2(c echo.Context) error {
 		Cat2:  SQLInt(val, true),
 	}
 
-	return c.Render(200, "tf-cat-3", ctx)
+	return c.Render(200, "tf-cat-3", d)
 }
 
 func (e Endpoints) newtask_addr(c echo.Context) error {
-
 	val, err := strconv.Atoi(c.FormValue("address"))
 	if err != nil {
 		return err
 	}
 
-	ctx := struct {
+	d := struct {
 		Data   *Data
 		Helper *Helper
 		Addr   int
@@ -176,7 +171,7 @@ func (e Endpoints) newtask_addr(c echo.Context) error {
 		Addr:   val,
 	}
 
-	return c.Render(200, "addrtable", ctx)
+	return c.Render(200, "addrtable", d)
 }
 
 func (e Endpoints) newtask_act(c echo.Context) error {

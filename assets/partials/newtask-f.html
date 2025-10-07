@@ -8,7 +8,7 @@
                 <div id="comb-cat-wrap">
                     <label>Категории задачи</label>
                     <div id="cat1">
-                        <select required name="cat1" hx-post="/newtask/cat-1" hx-target="#cat2"
+                        <select required name="cat1" hx-post="/newtask/cat-1" hx-swap="outerHTML" hx-target="#cat2"
                             hx-trigger="change changed" hx-history="false" id="s1" hx-push-url="false"
                             autocomplete="off">
                             {{ template "tf-cat-1" . }}
@@ -34,7 +34,7 @@
                         autocomplete="off">
                         <option disabled selected>Не выбран!</option>
                         {{ range $i, $v := .Data.Addrs}}
-                        <option value="{{ $i }}">{{ $i }} - {{ $v }}</option>
+                        <option value="{{ $v.Id }}">{{ $i }} - {{ $v.Address }}</option>
                         {{ end }}
                     </select>
                 </div>

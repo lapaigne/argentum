@@ -1,0 +1,30 @@
+{{ define "content" }}
+{{ $addrs := .Addrs }}
+<div>
+    <div id="">
+        <button hx-post="/addrs/add-panel" hx-target="#addrs-panel" hx-swap="innerHTML">ADD</button>
+    </div>
+
+    <div>
+        <table class="datatable" id="addrs-table">
+            <thead>
+                <th>Адрес</th>
+            </thead>
+            <tbody>
+                {{ range $addrs }}
+                {{ template "addrs-row" . }}
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3>Данные</h3>
+        <div id="addrs-panel"></div>
+    </div>
+</div>
+{{ end }}
+
+{{ define "addrs" }}
+{{ template "base" . }}
+{{ end }}
