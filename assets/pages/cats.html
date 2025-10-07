@@ -1,0 +1,33 @@
+{{ define "content" }}
+{{ $cats := .Cats }}
+<div>
+    <div id="">
+        <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML">ADD</button>
+    </div>
+
+    <div>
+        <table class="datatable" id="cats-table">
+            <thead>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </thead>
+            <tbody>
+                {{ range $cats }}
+                {{ template "cats-row" . }}
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3>Данные</h3>
+        <div id="cats-panel"></div>
+    </div>
+</div>
+{{ end }}
+
+{{ define "cats" }}
+{{ template "base" . }}
+{{ end }}
