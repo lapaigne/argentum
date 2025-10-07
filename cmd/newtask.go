@@ -36,7 +36,7 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 
 	switch url {
 	case "/newtask/":
-		return e.newtask_(c)
+		return e.newtask_submit(c)
 	case "/newtask/act":
 		return e.newtask_act(c)
 	case "/newtask/addr":
@@ -53,7 +53,7 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 	}
 }
 
-func (e Endpoints) newtask_(c echo.Context) error {
+func (e Endpoints) newtask_submit(c echo.Context) error {
 	var err error
 	var t db.Task
 

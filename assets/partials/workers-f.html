@@ -48,7 +48,6 @@
         {{ end }}
     </select>
     <button type="submit">UPD</button>
-    <!-- temp target, reconfirm del -->
     <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}">DEL</button>
 </form>
 {{ end }}
