@@ -26,13 +26,18 @@ func (e Endpoints) workers_POST(c echo.Context) error {
 		return e.workers_upd(c)
 	}
 
+	if id, ok := strings.CutPrefix(url, "/workers/del-"); ok {
+		c.Set("id", id)
+		return e.workers_del(c)
+	}
+
 	switch url {
 	case "/workers/add-panel":
 		return e.workers_addpanel(c)
 	case "/workers/add":
 		return e.workers_add(c)
-	case "/workers/del":
-		return e.workers_del(c)
+	case "/workers/gen":
+		return e.workers_gen(c)
 	default:
 		return echo.ErrNotFound
 	}
@@ -93,8 +98,35 @@ func (e Endpoints) workers_add(c echo.Context) error {
 	return c.Render(200, "workers-row", uw)
 }
 
+func (e Endpoints) workers_gen(c echo.Context) error {
+	pass, err := genPass(10)
+	if err != nil {
+		return err
+	}
+	res := fmt.Sprintf(`<input type="text" name="pass" id="workers-pass" value="%s">`, pass)
+	return c.HTML(200, res)
+}
+
 func (e Endpoints) workers_del(c echo.Context) error {
-	return nil
+	wid, err := strconv.Atoi(c.Get("id").(string))
+	if err != nil {
+		return err
+	}
+
+	uw, ok := data.UWs[wid]
+	if !ok {
+		return echo.ErrNotFound
+	}
+
+	uid := uw.U.Id
+
+	if err := db.UpdateUserLevel(uid, ACC_NONE); err != nil {
+		return err
+	}
+
+	uw.SoftDelete()
+
+	return c.Render(200, "workers-row", uw)
 }
 
 func (e Endpoints) workers_upd(c echo.Context) error {

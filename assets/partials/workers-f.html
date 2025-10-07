@@ -19,8 +19,8 @@
         <div id="workers-add-tel-err">
 
         </div>
-        <input type="text" name="pass">
-        <button hx-post="/workers/add/gen">GENERATE PASSWORD</button>
+        <input type="text" name="pass" id="workers-pass">
+        <button hx-post="/workers/gen" hx-target="#workers-pass" hx-swap="outerHTML">GENERATE PASSWORD</button>
     </div>
     <select name="workers-lvl-sel" hx-post="/workers/sel">
         <option selected disabled value="0">Не выбрано!</option>
@@ -49,6 +49,6 @@
     </select>
     <button type="submit">UPD</button>
     <!-- temp target, reconfirm del -->
-    <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-{{ .Id }}">DEL</button>
+    <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}">DEL</button>
 </form>
 {{ end }}
