@@ -67,8 +67,6 @@ func (d *Data) fetchUWs(ctx context.Context) error {
 	if len(workers) == 0 {
 		d.MWorker = 0
 	} else {
-		fmt.Println(d.MWorker)
-		fmt.Println(len(workers))
 		d.MWorker = workers[len(workers)-1].Id
 	}
 
