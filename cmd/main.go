@@ -79,13 +79,19 @@ func main() {
 	e.GET("/newtask/", endpoints.newtask_GET)
 	e.POST("/newtask/*", endpoints.newtask_POST)
 
+	e.GET("/cats/", endpoints.cats_GET)
+	e.POST("/cats/*", endpoints.cats_POST)
+
+	e.GET("/addrs/", endpoints.addrs_GET)
+	e.POST("/addrs/*", endpoints.addrs_POST)
+
 	e.GET("/", endpoints.slash_GET)
 	e.POST("/", endpoints.slash_POST)
 
-	e.GET("/addrs/", endpoints.addrs_GET)
-
 	e.GET("/menu/", endpoints.menu)
+
 	e.GET("/alltasks/", endpoints.alltasks)
+
 	e.GET("/signin", endpoints.signin)
 
 	e.POST("/signout", endpoints.logout)
