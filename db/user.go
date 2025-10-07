@@ -15,12 +15,6 @@ type User struct {
 	Token  sql.NullString
 }
 
-var AccessLevels = map[string]int{
-	"admin":      100,
-	"dispatcher": 50,
-	"worker":     10,
-}
-
 func UpdateUserLevel(id, lvl int) error {
 	stmt, err := db.Prepare(`UPDATE public.users SET "level" = $1 WHERE "id" = $2`)
 	if err != nil {

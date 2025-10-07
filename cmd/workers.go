@@ -149,7 +149,7 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 
 func (e Endpoints) workers_edit(c echo.Context) error {
 	acc := getClaims(c).Level
-	if acc != db.AccessLevels["admin"] && acc != db.AccessLevels["dispatcher"] {
+	if acc != ACC_ADMIN && acc != ACC_DISPATCHER {
 		return echo.ErrUnauthorized
 	}
 

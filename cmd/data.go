@@ -24,7 +24,6 @@ type Helper struct {
 	Format  func(time.Time) string
 	NFormat func(sql.NullTime) string
 	Status  func(sql.NullTime) string
-	Levels  *map[string]int
 }
 
 type UserWorker struct {
@@ -38,4 +37,8 @@ func (dest *UserWorker) SoftReplace(upd UserWorker) {
 	dest.W.I_name = upd.W.I_name
 	dest.W.O_name = upd.W.O_name
 	dest.U.Level = upd.U.Level
+}
+
+func (uw *UserWorker) SoftDelete() {
+	uw.U.Level = ACC_NONE
 }
