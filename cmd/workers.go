@@ -39,7 +39,58 @@ func (e Endpoints) workers_POST(c echo.Context) error {
 }
 
 func (e Endpoints) workers_add(c echo.Context) error {
-	return nil
+	f := c.FormValue("f_name")
+	i := c.FormValue("i_name")
+	o := c.FormValue("o_name")
+
+	login := c.FormValue("login")
+	pass := c.FormValue("pass")
+
+	lvl, err := strconv.Atoi(c.FormValue("workers-lvl-sel"))
+	if err != nil {
+		return err
+	}
+
+	data.MWorker++
+
+	w := db.Worker{
+		Id:     data.MWorker,
+		F_name: f,
+		I_name: i,
+		O_name: o,
+	}
+
+	hash, err := hash(pass)
+	if err != nil {
+		return err
+	}
+
+	data.MUser++
+
+	u := db.User{
+		Id:     data.MUser,
+		Worker: w.Id,
+		Login:  login,
+		Hash:   string(hash),
+		Level:  lvl,
+	}
+
+	if _, err := db.AddWorker(w); err != nil {
+		return err
+	}
+	if _, err := db.AddUser(u); err != nil {
+		return err
+	}
+
+	uw := UserWorker{
+		U:  u,
+		W:  w,
+		Id: w.Id,
+	}
+
+	data.UWs[w.Id] = &uw
+
+	return c.Render(200, "workers-row", uw)
 }
 
 func (e Endpoints) workers_del(c echo.Context) error {
@@ -50,7 +101,7 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 	f := c.FormValue("f_name")
 	i := c.FormValue("i_name")
 	o := c.FormValue("o_name")
-	l := c.FormValue("ew-lvl-sel")
+	l := c.FormValue("workers-lvl-sel")
 
 	wid, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
@@ -73,9 +124,8 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 		U: db.User{
 			Level: level,
 		},
+		Id: wid,
 	}
-
-	data.UWs[wid].SoftReplace(d)
 
 	// slow for now, perhaps would be updated to use channels
 	dw, du := Diffs(*uw, d)
@@ -90,7 +140,11 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 		}
 	}
 
-	return c.Render(200, "ew-row", d)
+	// TODO: warn if editing own account details
+
+	data.UWs[wid].SoftReplace(d)
+
+	return c.Render(200, "workers-row", d)
 }
 
 func (e Endpoints) workers_edit(c echo.Context) error {
@@ -111,17 +165,11 @@ func (e Endpoints) workers_edit(c echo.Context) error {
 	}
 
 	uw := data.UWs[id]
-
 	var opts []Opt
-
 	switch uw.U.Level {
-
 	case 0:
 		opts = []Opt{
 			{Level: 0, Name: "Отключенный аккаунт", Sel: true},
-			{Level: 10, Name: "Работник", Sel: false},
-			{Level: 50, Name: "Диспетчер", Sel: false},
-			{Level: 100, Name: "Админ", Sel: false},
 		}
 	case 10:
 		opts = []Opt{
@@ -155,12 +203,13 @@ func (e Endpoints) workers_edit(c echo.Context) error {
 		Opts: opts,
 	}
 
-	return c.Render(200, "ew-upd", d)
+	return c.Render(200, "workers-upd", d)
 }
 
 func (e Endpoints) workers_addpanel(c echo.Context) error {
 	if err := isAdminErr(c); err != nil {
 		return err
 	}
-	return c.Render(200, "ew-add", nil)
+
+	return c.Render(200, "workers-add", nil)
 }

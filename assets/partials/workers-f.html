@@ -1,24 +1,28 @@
-{{ define "ew-row" }}
-<td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
-<td>{{ .U.Level }}</td>
+{{ define "workers-row" }}
+<tr id="workers-row-{{ .Id }}" hx-post="/workers/edit-{{ .Id }}" hx-target="#workers-panel" hx-swap="innerHTML"
+    hx-trigger="click">
+    <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
+    <td>{{ .U.Level }}</td>
+</tr>
 {{ end }}
 
 
 
-{{ define "ew-add" }}
-<form hx-post="/workers/add" id="ew-add-f">
+{{ define "workers-add" }}
+<form hx-post="/workers/add" id="workers-add-f" hx-target="#workers-table-body" hx-swap="beforeend" hx-push-url="false"
+    hx-history="false">
     <div>
         <input type="text" name="f_name">
         <input type="text" name="i_name">
         <input type="text" name="o_name">
         <input type="text" name="login" hx-post="/workers/add/tel">
-        <div id="ew-add-tel-err">
+        <div id="workers-add-tel-err">
 
         </div>
-        <input type="text" name="pas">
+        <input type="text" name="pass">
         <button hx-post="/workers/add/gen">GENERATE PASSWORD</button>
     </div>
-    <select id="ew-lvl-sel" hx-post="/workers/sel">
+    <select name="workers-lvl-sel" hx-post="/workers/sel">
         <option selected disabled value="0">Не выбрано!</option>
         <option value="10">Работник</option>
         <option value="50">Диспетчер</option>
@@ -30,21 +34,21 @@
 
 
 
-{{ define "ew-upd" }}
+{{ define "workers-upd" }}
 {{ $opts := .Opts }}
-<form hx-post="/workers/upd-{{ .Id }}" id="ew-upd-f" hx-target="#ew-{{ .Id }}">
+<form hx-post="/workers/upd-{{ .Id }}" id="workers-upd-f" hx-target="#workers-row-{{ .Id }}" hx-swap="outerHTML">
     <div>
         <input type="text" name="f_name" value="{{ .W.F_name }}">
         <input type="text" name="i_name" value="{{ .W.I_name }}">
         <input type="text" name="o_name" value="{{ .W.O_name }}">
     </div>
-    <select id="ew-lvl-sel" name="ew-lvl-sel">
+    <select id="workers-lvl-sel" name="workers-lvl-sel">
         {{ range $opts }}
         <option value="{{ .Level }}" {{ if .Sel}} selected {{ end }}>{{ .Name }}</option>
         {{ end }}
     </select>
     <button type="submit">UPD</button>
     <!-- temp target, reconfirm del -->
-    <button hx-post="/workers/del-{{ .Id }}" hx-target="#ew-{{ .Id }}">DEL</button>
+    <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-{{ .Id }}">DEL</button>
 </form>
 {{ end }}

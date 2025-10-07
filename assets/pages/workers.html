@@ -2,21 +2,18 @@
 {{ $workers := .UWs }}
 <div>
     <div id="">
-        <button hx-post="/workers/add-panel" hx-target="#ew-panel" hx-swap="innerHTML">ADD</button>
+        <button hx-post="/workers/add-panel" hx-target="#workers-panel" hx-swap="innerHTML">ADD</button>
     </div>
 
     <div>
-        <table class="datatable" id="ew-table">
+        <table class="datatable" id="workers-table">
             <thead>
                 <th>FULLNAME</th>
                 <th>ROLE</th>
             </thead>
-            <tbody>
+            <tbody id="workers-table-body">
                 {{ range $workers }}
-                <tr id="ew-{{ .Id }}" hx-post="/workers/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
-                    hx-trigger="click">
-                    {{ template "ew-row" . }}
-                </tr>
+                {{ template "workers-row" . }}
                 {{ end }}
             </tbody>
         </table>
@@ -24,7 +21,7 @@
 
     <div>
         <h3>Данные</h3>
-        <div id="ew-panel">
+        <div id="workers-panel">
 
         </div>
     </div>
