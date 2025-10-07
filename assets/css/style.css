@@ -1,6 +1,5 @@
-/* style.css — GENERAL + LAYOUT — Modern & clean, ASP.NET-like vibe */
+/* style.css */
 
-/* Reset box sizing */
 *,
 *::before,
 *::after {
@@ -9,7 +8,6 @@
     padding: 0;
 }
 
-/* Base font and colors */
 html, body {
     height: 100%;
     width: 100%;
@@ -55,7 +53,6 @@ img {
     display: flex;
 }
 
-/* Main content fills remaining space */
 #content {
     height: 100%;
     flex-grow: 1;
@@ -69,7 +66,6 @@ img {
     margin: 0 auto;
 }
 
-/* Scrollbar styling (optional) */
 #content::-webkit-scrollbar {
     width: 8px;
 }
@@ -170,10 +166,8 @@ img {
 .signout-btn:hover {
     background: white;
     color: #0056b3;
-    /* same blue on hover */
 }
 
-/* Shared styles for header links/buttons */
 .header-link {
     font-family: inherit;
     font-size: 1rem;
@@ -187,13 +181,11 @@ img {
     transition: background-color 0.2s ease;
 }
 
-/* Optional: hover effect */
 .header-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
 }
 
-/* Optional: active focus style for accessibility */
 .header-link:focus {
     outline: 2px solid #ffffff;
     outline-offset: 2px;

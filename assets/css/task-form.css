@@ -3,6 +3,10 @@
     justify-content: space-between;
 }
 
+#until-div {
+    text-align: end;
+}
+
 .form-date div {
     padding-bottom: 5px;
 }
@@ -73,7 +77,7 @@
 @media (min-width: 1024px) {
     .split-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
     }
 
     .form-start {
