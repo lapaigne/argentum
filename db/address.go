@@ -26,7 +26,7 @@ func AddAddress(address string) (int, error) {
 }
 
 func GetAddresses(ctx context.Context) ([]Address, error) {
-	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.addr_objs`)
+	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.addr_objs ORDER BY id ASC`)
 	if err != nil {
 		return []Address{}, err
 	}

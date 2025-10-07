@@ -69,7 +69,7 @@ func UpdateTask(id int, m sql.NullTime, c sql.NullTime) error {
 
 func GetTasks(ctx context.Context) ([]Task, error) {
 	res := []Task{}
-	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.tasks;`)
+	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.tasks ORDER BY id ASC`)
 	if err != nil {
 		return res, err
 	}

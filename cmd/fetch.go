@@ -64,9 +64,23 @@ func (d *Data) fetchUWs(ctx context.Context) error {
 		return err
 	}
 
+	if len(workers) == 0 {
+		d.MWorker = 0
+	} else {
+		fmt.Println(d.MWorker)
+		fmt.Println(len(workers))
+		d.MWorker = workers[len(workers)-1].Id
+	}
+
 	users, err := db.GetUsers(ctx)
 	if err != nil {
 		return err
+	}
+
+	if len(users) == 0 {
+		d.MUser = 0
+	} else {
+		d.MUser = users[len(users)-1].Id
 	}
 
 	um := make(map[int]db.User)

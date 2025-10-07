@@ -12,9 +12,11 @@ type Data struct {
 	Addrs map[int]*db.Address
 	UWs   map[int]*UserWorker
 
-	MTask int
-	MCat  int
-	MAddr int
+	MTask   int
+	MCat    int
+	MAddr   int
+	MUser   int
+	MWorker int
 }
 
 type Helper struct {

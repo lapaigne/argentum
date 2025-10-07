@@ -85,7 +85,7 @@ func AddUser(u User) (int, error) {
 }
 
 func GetUsers(ctx context.Context) ([]User, error) {
-	stmt, err := db.PrepareContext(ctx, `SELECT "id", "worker", "login", "level" FROM public.users`)
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "worker", "login", "level" FROM public.users ORDER BY id ASC`)
 	if err != nil {
 		return []User{}, err
 	}

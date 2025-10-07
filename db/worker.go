@@ -21,7 +21,7 @@ func UpdateWorker(id int, w Worker) error {
 	return err
 }
 
-func AddWorker(f, i, o string) (int, error) {
+func AddWorker(w Worker) (int, error) {
 	stmt, err := db.Prepare(`INSERT INTO public.workers ("f_name", "i_name", "o_name") VALUES ($1, $2, $3) RETURNING id`)
 	if err != nil {
 		return -1, err
@@ -29,7 +29,7 @@ func AddWorker(f, i, o string) (int, error) {
 	defer stmt.Close()
 
 	var id *int
-	if err := stmt.QueryRow(f, i, o).Scan(&id); err != nil {
+	if err := stmt.QueryRow(w.F_name, w.I_name, w.O_name).Scan(&id); err != nil {
 		return -1, err
 	}
 
@@ -53,7 +53,7 @@ func GetWorker(id int) (Worker, error) {
 }
 
 func GetWorkers(ctx context.Context) ([]Worker, error) {
-	stmt, err := db.PrepareContext(ctx, `SELECT "id", "f_name", "i_name", "o_name" FROM public.workers`)
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "f_name", "i_name", "o_name" FROM public.workers ORDER BY id ASC`)
 	if err != nil {
 		return []Worker{}, err
 	}
