@@ -117,3 +117,7 @@ func (e Endpoints) authTel(c echo.Context) error {
 	tel := c.FormValue("tel")
 	return c.Render(200, "tel-err", tel)
 }
+
+func hash(pass string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
+}
