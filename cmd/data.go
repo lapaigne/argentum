@@ -9,7 +9,7 @@ import (
 type Data struct {
 	Tasks map[int]*db.Task
 	Cats  map[int]*db.Category
-	Addrs map[int]*db.Address
+	Addrs map[int]db.Address
 	UWs   map[int]*UserWorker
 
 	MTask   int

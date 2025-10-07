@@ -12,10 +12,7 @@
             </thead>
             <tbody>
                 {{ range $addrs }}
-                <tr id="addrs-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#ew-panel" hx-swap="innerHTML"
-                    hx-trigger="click">
-                    {{ template "addrs-row" . }}
-                </tr>
+                {{ template "addrs-row" . }}
                 {{ end }}
             </tbody>
         </table>
@@ -23,9 +20,7 @@
 
     <div>
         <h3>Данные</h3>
-        <div id="addrs-panel">
-
-        </div>
+        <div id="addrs-panel"></div>
     </div>
 </div>
 {{ end }}

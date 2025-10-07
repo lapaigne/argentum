@@ -1,5 +1,8 @@
 {{ define "addrs-row" }}
-<td>{{ .Address }}</td>
+<tr id="addrs-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#addrs-panel" hx-swap="innerHTML"
+    hx-trigger="click">
+    <td>{{ .Address }}</td>
+</tr>
 {{ end }}
 
 
@@ -19,7 +22,6 @@
         <input type="text" name="addr">
     </div>
     <button type="submit">UPD</button>
-    <!-- temp target, reconfirm del -->
     <button hx-post="/addrs/del" hx-target="#addrs-{{ .Id }}">DEL</button>
 </form>
 {{ end }}

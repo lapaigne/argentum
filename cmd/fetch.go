@@ -149,10 +149,10 @@ func (d *Data) fetchAddrs(ctx context.Context) error {
 		return err
 	}
 
-	temp := make(map[int]*db.Address)
+	temp := make(map[int]db.Address)
 
 	for _, v := range addrs {
-		temp[v.Id] = &v
+		temp[v.Id] = v
 	}
 
 	if len(addrs) == 0 {
