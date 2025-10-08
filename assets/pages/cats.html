@@ -7,12 +7,9 @@
     <div>
         <table class="datatable" id="cats-table">
             <thead>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th class="no-sort">Категория</th>
             </thead>
-            <tbody>
+            <tbody id="cats-table-body">
                 {{ range . }}
                 {{ template "cats-row" . }}
                 {{ end }}

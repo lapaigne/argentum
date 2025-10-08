@@ -1,6 +1,7 @@
 package main
 
 import (
+	"argentum/db"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -40,7 +41,13 @@ func (e Endpoints) cats_POST(c echo.Context) error {
 
 // click on btn, calls panel
 func (e Endpoints) cats_addpanel(c echo.Context) error {
-	return nil
+	parents := []db.Category{}
+	for _, v := range data.Cats {
+		if v.Level < 3 {
+			parents = append(parents, *v)
+		}
+	}
+	return c.Render(200, "cats-add", parents)
 }
 
 // click on row, calls panel
