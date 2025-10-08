@@ -1,13 +1,15 @@
 {{ define "addrs-row" }}
-<tr id="addrs-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#addrs-panel" hx-swap="innerHTML"
+<tr id="addrs-row-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#addrs-panel" hx-swap="innerHTML"
     hx-trigger="click">
     <td>{{ .Address }}</td>
+    <td>{{ if .Active }} ✔ {{ else }} ✘ {{ end }}</td>
 </tr>
 {{ end }}
 
 
 {{ define "addrs-add" }}
-<form hx-post="/addrs/add" id="addrs-add-f">
+<form hx-post="/addrs/add" id="addrs-add-f" hx-target="#addrs-table-body" hx-swap="beforeend" hx-push-url="false"
+    hx-history="false">
     <div>
         <input type="text" name="addr">
     </div>
@@ -17,11 +19,11 @@
 
 
 {{ define "addrs-upd" }}
-<form hx-post="/addrs/upd" id="addrs-upd-f">
+<form hx-post="/addrs/upd-{{ .Id }}" id="addrs-upd-f" hx-target="#addrs-row-{{ .Id }}" hx-swap="outerHTML">
     <div>
-        <input type="text" name="addr">
+        <input type="text" name="addr" value="{{ .Address }}">
     </div>
     <button type="submit">UPD</button>
-    <button hx-post="/addrs/del" hx-target="#addrs-{{ .Id }}">DEL</button>
+    <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }}">DEL</button>
 </form>
 {{ end }}

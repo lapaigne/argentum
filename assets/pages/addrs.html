@@ -9,8 +9,9 @@
         <table class="datatable" id="addrs-table">
             <thead>
                 <th>Адрес</th>
+                <th>Вкл</th>
             </thead>
-            <tbody>
+            <tbody id="addrs-table-body">
                 {{ range $addrs }}
                 {{ template "addrs-row" . }}
                 {{ end }}
