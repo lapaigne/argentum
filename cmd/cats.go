@@ -7,7 +7,7 @@ import (
 )
 
 func (e Endpoints) cats_GET(c echo.Context) error {
-	return c.Render(200, "cats", data)
+	return c.Render(200, "cats", data.Cats)
 }
 
 func (e Endpoints) cats_POST(c echo.Context) error {
@@ -62,4 +62,3 @@ func (e Endpoints) cats_add(c echo.Context) error {
 func (e Endpoints) cats_del(c echo.Context) error {
 	return nil
 }
-

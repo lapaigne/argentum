@@ -1,5 +1,4 @@
 {{ define "content" }}
-{{ $cats := .Cats }}
 <div>
     <div id="">
         <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML">ADD</button>
@@ -14,7 +13,7 @@
                 <th></th>
             </thead>
             <tbody>
-                {{ range $cats }}
+                {{ range . }}
                 {{ template "cats-row" . }}
                 {{ end }}
             </tbody>

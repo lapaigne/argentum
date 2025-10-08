@@ -9,7 +9,7 @@ import (
 )
 
 func (e Endpoints) addrs_GET(c echo.Context) error {
-	return c.Render(200, "addrs", data)
+	return c.Render(200, "addrs", data.Addrs)
 }
 
 func (e Endpoints) addrs_POST(c echo.Context) error {

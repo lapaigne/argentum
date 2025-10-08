@@ -10,7 +10,7 @@ import (
 )
 
 func (e Endpoints) workes_GET(c echo.Context) error {
-	return c.Render(200, "workers", data)
+	return c.Render(200, "workers", data.UWs)
 }
 
 func (e Endpoints) workers_POST(c echo.Context) error {
