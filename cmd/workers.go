@@ -120,7 +120,7 @@ func (e Endpoints) workers_del(c echo.Context) error {
 
 	uid := uw.U.Id
 
-	if err := db.UpdateUserLevel(uid, ACC_NONE); err != nil {
+	if err := db.DeleteUser(uid); err != nil {
 		return err
 	}
 
