@@ -1,13 +1,15 @@
 package main
 
 import (
+	"argentum/db"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
 )
 
 func (e Endpoints) addrs_GET(c echo.Context) error {
-	return c.Render(200, "addrs", data)
+	return c.Render(200, "addrs", data.Addrs)
 }
 
 func (e Endpoints) addrs_POST(c echo.Context) error {
@@ -38,27 +40,81 @@ func (e Endpoints) addrs_POST(c echo.Context) error {
 	}
 }
 
-// click on btn, calls panel
 func (e Endpoints) addrs_addpanel(c echo.Context) error {
-	return nil
+	return c.Render(200, "addrs-add", nil)
 }
 
-// click on row, calls panel
 func (e Endpoints) addrs_edit(c echo.Context) error {
-	return nil
+	acc := getClaims(c).Level
+	if acc != ACC_ADMIN && acc != ACC_DISPATCHER {
+		return echo.ErrUnauthorized
+	}
+
+	id, err := strconv.Atoi(c.Get("id").(string))
+	if err != nil {
+		return err
+	}
+
+	d := data.Addrs[id]
+
+	return c.Render(200, "addrs-upd", d)
 }
 
-// returns row (upd data)
 func (e Endpoints) addrs_upd(c echo.Context) error {
-	return nil
+	addr := c.FormValue("addr")
+
+	id, err := strconv.Atoi(c.Get("id").(string))
+	if err != nil {
+		return err
+	}
+
+	a := data.Addrs[id]
+	if addr != a.Address {
+		a.Address = addr
+		if err := db.UpdateAddress(id, *a); err != nil {
+			return err
+		}
+	}
+
+	return c.Render(200, "addrs-row", data.Addrs[id])
 }
 
-// returns row (new row)
 func (e Endpoints) addrs_add(c echo.Context) error {
-	return nil
+	addr := c.FormValue("addr")
+
+	data.MAddr++
+
+	a := db.Address{
+		Id:      data.MAddr,
+		Address: addr,
+		Active:  true,
+	}
+
+	if _, err := db.AddAddress(a); err != nil {
+		return err
+	}
+
+	data.Addrs[a.Id] = &a
+
+	return c.Render(200, "addrs-row", a)
 }
 
-// returns row (soft del)
 func (e Endpoints) addrs_del(c echo.Context) error {
-	return nil
+	id, err := strconv.Atoi(c.Get("id").(string))
+	if err != nil {
+		return err
+	}
+
+	a, ok := data.Addrs[id]
+	if !ok {
+		return echo.ErrNotFound
+	}
+
+	a.Active = false
+
+	if err := db.UpdateAddress(id, *a); err != nil {
+		return err
+	}
+
+	return c.Render(200, "addrs-row", a)
 }

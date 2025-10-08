@@ -10,7 +10,7 @@ import (
 )
 
 func (e Endpoints) workes_GET(c echo.Context) error {
-	return c.Render(200, "workers", data)
+	return c.Render(200, "workers", data.UWs)
 }
 
 func (e Endpoints) workers_POST(c echo.Context) error {
@@ -120,7 +120,7 @@ func (e Endpoints) workers_del(c echo.Context) error {
 
 	uid := uw.U.Id
 
-	if err := db.UpdateUserLevel(uid, ACC_NONE); err != nil {
+	if err := db.DeleteUser(uid); err != nil {
 		return err
 	}
 

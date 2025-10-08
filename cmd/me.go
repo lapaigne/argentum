@@ -32,7 +32,7 @@ func (e Endpoints) me_conf(c echo.Context) error {
 	}
 
 	now := Today()
-	if err := db.UpdateTask(id, SQLTime(now, true), SQLTime(time.Time{}, false)); err != nil {
+	if err := db.UpdateTaskStatus(id, SQLTime(now, true), SQLTime(time.Time{}, false)); err != nil {
 		return err
 	}
 

@@ -69,7 +69,6 @@ func (e Endpoints) register(c echo.Context) error {
 }
 
 func (e Endpoints) login(c echo.Context) error {
-
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
 
@@ -95,10 +94,6 @@ func (e Endpoints) login(c echo.Context) error {
 
 	setCookie(c, "token", accSigned, aTime)
 	setCookie(c, "ref", refSigned, rTime)
-
-	if err := db.UpdateToken(refSigned, u.Worker); err != nil {
-		return echo.ErrUnauthorized
-	}
 
 	switch accClaims.Level {
 	case 10, 50, 100:

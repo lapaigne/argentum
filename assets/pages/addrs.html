@@ -1,5 +1,4 @@
 {{ define "content" }}
-{{ $addrs := .Addrs }}
 <div>
     <div id="">
         <button hx-post="/addrs/add-panel" hx-target="#addrs-panel" hx-swap="innerHTML">ADD</button>
@@ -9,9 +8,10 @@
         <table class="datatable" id="addrs-table">
             <thead>
                 <th>Адрес</th>
+                <th>Вкл</th>
             </thead>
-            <tbody>
-                {{ range $addrs }}
+            <tbody id="addrs-table-body">
+                {{ range . }}
                 {{ template "addrs-row" . }}
                 {{ end }}
             </tbody>

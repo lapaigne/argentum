@@ -15,6 +15,20 @@ type User struct {
 	Token  sql.NullString
 }
 
+func DeleteUser(id int) error {
+	stmt, err := db.Prepare(`UPDATE public.users SET "login" = '', "hash" = '', "level" = 0 WHERE "id" = $1`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	res, err := stmt.Exec(id)
+	rws, err := res.RowsAffected()
+	if rws == 0 {
+		return fmt.Errorf("no user with id %d", id)
+	}
+	return err
+}
+
 func UpdateUserLevel(id, lvl int) error {
 	stmt, err := db.Prepare(`UPDATE public.users SET "level" = $1 WHERE "id" = $2`)
 	if err != nil {
@@ -29,37 +43,16 @@ func UpdateUserLevel(id, lvl int) error {
 	return err
 }
 
-func UpdateToken(refresh string, id int) error {
-	stmt, err := db.Prepare(`UPDATE public.users SET "refresh" = $1 WHERE "id" = $2`)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(refresh, id)
-	return err
-}
-
-func ValidateToken(refresh string, id int) error {
-	stmt, err := db.Prepare(`SELECT 1 FROM public.users WHERE "refresh" = $1 AND "id" = $2`)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
-	var a int
-	return stmt.QueryRow(refresh, id).Scan(a)
-}
-
 func GetUser(login string) (User, error) {
-	stmt, err := db.Prepare(`SELECT * FROM public.users WHERE "login" = $1`)
+	stmt, err := db.Prepare(`SELECT "id", "worker", "hash", "level" FROM public.users WHERE "login" = $1`)
 	if err != nil {
 		return User{}, err
 	}
 	defer stmt.Close()
 
 	var u User
-	err = stmt.QueryRow(login).Scan(&u.Id, &u.Worker, &u.Login, &u.Hash, &u.Level, &u.Token)
+	err = stmt.QueryRow(login).Scan(&u.Id, &u.Worker, &u.Hash, &u.Level)
+	u.Login = login
 	return u, nil
 }
 

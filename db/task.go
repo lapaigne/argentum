@@ -40,7 +40,7 @@ func AddTask(t Task) (int, error) {
 // m is mark_date
 //
 // c is completed_date
-func UpdateTask(id int, m sql.NullTime, c sql.NullTime) error {
+func UpdateTaskStatus(id int, m sql.NullTime, c sql.NullTime) error {
 	selStmt, err := db.Prepare(`SELECT "mark_date", "completed_date" FROM public.tasks WHERE id = $1`)
 	if err != nil {
 		return err

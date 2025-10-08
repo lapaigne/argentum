@@ -1,5 +1,4 @@
 {{ define "content" }}
-{{ $workers := .UWs }}
 <div>
     <div id="">
         <button hx-post="/workers/add-panel" hx-target="#workers-panel" hx-swap="innerHTML">ADD</button>
@@ -12,7 +11,7 @@
                 <th>ROLE</th>
             </thead>
             <tbody id="workers-table-body">
-                {{ range $workers }}
+                {{ range . }}
                 {{ template "workers-row" . }}
                 {{ end }}
             </tbody>

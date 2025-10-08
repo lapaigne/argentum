@@ -5,9 +5,9 @@
 {{ $a := .Addr }}
 {{ $helper := .Helper }}
 {{ $tasks := .Data.Tasks }}
-{{ $cur := (index $addrs $a).Address }}
+{{ $cur := (index $addrs $a) }}
 <div class="task-wrapper force-rep" id="table">
-    <h2>Задачи на объекте: {{ if $cur }} {{ $cur }} {{ else }} "Не выбран!" {{ end }}</h2>
+    <h2>Задачи на объекте: {{ if $cur }} {{ $cur.Address }} {{ else }} "Не выбран!" {{ end }}</h2>
     <div>
         <table id="table-filters" class="datatable">
             <thead>
