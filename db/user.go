@@ -51,7 +51,8 @@ func GetUser(login string) (User, error) {
 	defer stmt.Close()
 
 	var u User
-	err = stmt.QueryRow(login).Scan(&u.Id, &u.Worker, &u.Login, &u.Hash, &u.Level)
+	err = stmt.QueryRow(login).Scan(&u.Id, &u.Worker, &u.Hash, &u.Level)
+	u.Login = login
 	return u, nil
 }
 
