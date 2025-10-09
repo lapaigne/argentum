@@ -9,22 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (e Endpoints) me_(c echo.Context) error {
-	uid := getClaims(c).UID
-
-	d := struct {
-		Data   *Data
-		Helper *Helper
-		UID    int
-	}{
-		Data:   &data,
-		Helper: &helper,
-		UID:    uid,
-	}
-
-	return c.Render(200, "me", d)
-}
-
 func (e Endpoints) me_conf(c echo.Context) error {
 	id, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
@@ -90,5 +74,17 @@ func (e Endpoints) me_POST(c echo.Context) error {
 }
 
 func (e Endpoints) me_GET(c echo.Context) error {
-	return e.me_(c)
+	uid := getClaims(c).UID
+
+	d := struct {
+		Data   *Data
+		Helper *Helper
+		UID    int
+	}{
+		Data:   &data,
+		Helper: &helper,
+		UID:    uid,
+	}
+
+	return c.Render(200, "me", d)
 }
