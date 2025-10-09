@@ -68,13 +68,15 @@
                     <div>
                         <label>Срок выполнения</label>
                         <input type="date" id="do-until" name="do-until" hx-post="/newtask/until"
-                            hx-target="#until-test" hx-swap="innerHTML">
+                            hx-target="#until-test" hx-swap="innerHTML" hx-history="false" hx-push-url="false">
                     </div>
                     <div id="until-test">
                     </div>
                     <div>
                         <label>Без определенного срока</label>
-                        <input type="checkbox" id="until-checkbox">
+                        <input type="checkbox" id="until-checkbox" name="until-checkbox"
+                            hx-on:click="$('#do-until').toggle(!this.checked)" hx-post="/newtask/until" hx-swap="none"
+                            hx-history="false" hx-push-url="false" value="checked">
                     </div>
                 </div>
             </div>
