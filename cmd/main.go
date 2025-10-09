@@ -73,7 +73,7 @@ func main() {
 	e.GET("/me/*", endpoints.me_GET)
 	e.POST("/me/*", endpoints.me_POST)
 
-	e.GET("/workers/", endpoints.workes_GET)
+	e.GET("/workers/", endpoints.workers_GET)
 	e.POST("/workers/*", endpoints.workers_POST)
 
 	e.GET("/newtask/", endpoints.newtask_GET)
