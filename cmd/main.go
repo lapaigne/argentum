@@ -70,29 +70,37 @@ func main() {
 
 	e.Use(jwtMiddleware(config))
 
-	e.GET("/me/*", endpoints.me_GET)
+	e.GET("/me", endpoints.me_GET)
+	e.GET("/me/", endpoints.me_GET)
 	e.POST("/me/*", endpoints.me_POST)
 
+	e.GET("/workers", endpoints.workers_GET)
 	e.GET("/workers/", endpoints.workers_GET)
 	e.POST("/workers/*", endpoints.workers_POST)
 
+	e.GET("/newtask", endpoints.newtask_GET)
 	e.GET("/newtask/", endpoints.newtask_GET)
 	e.POST("/newtask/*", endpoints.newtask_POST)
 
+	e.GET("/cats", endpoints.cats_GET)
 	e.GET("/cats/", endpoints.cats_GET)
 	e.POST("/cats/*", endpoints.cats_POST)
 
+	e.GET("/addrs", endpoints.addrs_GET)
 	e.GET("/addrs/", endpoints.addrs_GET)
 	e.POST("/addrs/*", endpoints.addrs_POST)
 
 	e.GET("/", endpoints.slash_GET)
 	e.POST("/", endpoints.slash_POST)
 
+	e.GET("/menu", endpoints.menu)
 	e.GET("/menu/", endpoints.menu)
 
+	e.GET("/alltasks", endpoints.alltasks)
 	e.GET("/alltasks/", endpoints.alltasks)
 
 	e.GET("/signin", endpoints.signin)
+	e.GET("/signin/", endpoints.signin)
 
 	e.POST("/signout", endpoints.logout)
 	e.POST("/submit-auth", endpoints.login)
