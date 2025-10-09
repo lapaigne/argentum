@@ -2,12 +2,19 @@ package main
 
 import (
 	"argentum/db"
+	"database/sql"
+	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
 )
 
 func (e Endpoints) cats_GET(c echo.Context) error {
+	if getClaims(c).Level < ACC_DISPATCHER {
+		c.Redirect(303, "/menu/")
+	}
+
 	return c.Render(200, "cats", data.Cats)
 }
 
@@ -39,7 +46,6 @@ func (e Endpoints) cats_POST(c echo.Context) error {
 	}
 }
 
-// click on btn, calls panel
 func (e Endpoints) cats_addpanel(c echo.Context) error {
 	parents := []db.Category{}
 	for _, v := range data.Cats {
@@ -50,22 +56,96 @@ func (e Endpoints) cats_addpanel(c echo.Context) error {
 	return c.Render(200, "cats-add", parents)
 }
 
-// click on row, calls panel
 func (e Endpoints) cats_edit(c echo.Context) error {
-	return nil
+	acc := getClaims(c).Level
+	if acc != ACC_ADMIN && acc != ACC_DISPATCHER {
+		return echo.ErrUnauthorized
+	}
+
+	id, err := strconv.Atoi(c.Get("id").(string))
+	if err != nil {
+		return err
+	}
+
+	d := data.Cats[id]
+
+	return c.Render(200, "cats-upd", d)
 }
 
-// returns row (upd data)
 func (e Endpoints) cats_upd(c echo.Context) error {
-	return nil
+	catName := c.FormValue("cat-name")
+
+	id, err := strconv.Atoi(c.Get("id").(string))
+	if err != nil {
+		return err
+	}
+
+	cat := data.Cats[id]
+	if catName != cat.Name {
+		cat.Name = catName
+		if err := db.UpdateCategory(id, *cat); err != nil {
+			return err
+		}
+	}
+
+	return c.Render(200, "cats-row", data.Cats[id])
 }
 
-// returns row (new row)
 func (e Endpoints) cats_add(c echo.Context) error {
-	return nil
+	catName := c.FormValue("cat-name")
+	checked := c.FormValue("no-parent")
+
+	par, err := strconv.Atoi(c.FormValue("cats-parent-sel"))
+	if err != nil {
+		return err
+	}
+
+	var parent sql.NullInt32
+	if checked != "checked" {
+		parent.Int32 = int32(par)
+		parent.Valid = true
+	}
+
+	parCat, ok := data.Cats[par]
+	if !ok {
+		return fmt.Errorf("no parent cat w/ id %d", par)
+	}
+
+	data.MCat++
+
+	cat := db.Category{
+		Id:     data.MCat,
+		Name:   catName,
+		Parent: parent,
+		Level:  parCat.Level,
+		Active: true,
+	}
+
+	if _, err := db.AddCategory(cat); err != nil {
+		return err
+	}
+
+	data.Cats[cat.Id] = &cat
+
+	return c.Render(200, "cats-row", cat)
 }
 
-// returns row (soft del)
 func (e Endpoints) cats_del(c echo.Context) error {
-	return nil
+	id, err := strconv.Atoi(c.Get("id").(string))
+	if err != nil {
+		return err
+	}
+
+	cat, ok := data.Cats[id]
+	if !ok {
+		return echo.ErrNotFound
+	}
+
+	cat.Active = false
+
+	if err := db.UpdateCategory(id, *cat); err != nil {
+		return err
+	}
+
+	return c.Render(200, "cats-row", cat)
 }
