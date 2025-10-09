@@ -1,6 +1,6 @@
 {{ define "addrs-row" }}
 <tr id="addrs-row-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#addrs-panel" hx-swap="innerHTML"
-    hx-trigger="click">
+    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
     <td>{{ .Address }}</td>
     <td>{{ if .Active }} ✔ {{ else }} ✘ {{ end }}</td>
 </tr>

@@ -20,7 +20,7 @@
             {{ range $i, $v := $tasks }}
             {{ if eq $v.Worker $uid }}
             <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
-                hx-trigger="click">
+                hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
                 <td>{{ (index $cats $v.Cat1).Name }} <br> {{ (index $cats $v.Cat2).Name }} <br> {{ (index $cats
                     $v.Cat3).Name }}</td>
                 <td class="desc">{{ $v.Desc }}</td>

@@ -1,6 +1,7 @@
 {{ define "cats-row" }}
-<tr class="cats-row-{{ .Level }}" data-id="{{ .Id }}" data-parent="{{ .Parent }}" id="cats-row-{{ .Id }}"
-    hx-post="/cats/edit-{{ .Id }}" hx-target="#cats-panel" hx-swap="innerHTML" hx-trigger="click">
+<tr class="cats-row-{{ .Level }}" id="cats-row-{{ .Id }}" hx-post="/cats/edit-{{ .Id }}" hx-target="#cats-panel"
+    hx-swap="innerHTML" hx-trigger="click"
+    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
     {{ if eq .Level 3 }}
     <td>{{ . }}</td>
     {{ else }}
@@ -20,7 +21,8 @@
         <input id="cat-name" name="cat-name">
 
         <label for="no-parent-checkbox">Категория верхневого уровня</label>
-        <input type="checkbox" id="no-parent-checkbox" onclick="$('#cats-parent-sel').toggle(!this.checked)">
+        <input type="checkbox" id="no-parent-checkbox" name="no-parent"
+            hx-on:click="$('#cats-parent-sel').toggle(!this.checked)">
 
         <label for="cats-parent-sel">Родительская категория</label>
         <select id="cats-parent-sel" name="cats-parent-sel">

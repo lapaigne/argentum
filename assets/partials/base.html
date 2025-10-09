@@ -123,19 +123,8 @@
             }
 
         })
-
-        // "safely" adds/removes a class in datatable
-        htmx.on("htmx:beforeRequest", function (e) {
-            const row = e.target.closest("tr")
-            if (!row) return
-
-            const table = $(".datatable").DataTable()
-            $(table.rows().nodes()).removeClass("selrow")
-            $(row).addClass("selrow")
-        })
     </script>
 </body>
 
 </html>
-
 {{ end }}
