@@ -115,6 +115,21 @@ img {
 }
 
 /* Desktop */
+@media (min-width: 1250px) {
+    .newtask-container {
+        display: flex;
+        gap: 1rem;
+        height: 100%;
+        padding: 1rem;
+        box-sizing: border-box;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+    }
+}
+
+/* Desktop */
 @media (min-width: 1024px) {
     body {
 
@@ -124,6 +139,17 @@ img {
         height: 48px;
         font-size: 1rem;
         padding: 0 16px;
+    }
+
+    .split-container {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        box-sizing: border-box;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
     }
 
     .menu {

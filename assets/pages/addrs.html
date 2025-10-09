@@ -1,10 +1,9 @@
 {{ define "content" }}
-<div>
-    <div id="">
-        <button hx-post="/addrs/add-panel" hx-target="#addrs-panel" hx-swap="innerHTML">ADD</button>
-    </div>
-
-    <div>
+<div class="split-container">
+    <div class="left">
+        <div id="">
+            <button hx-post="/addrs/add-panel" hx-target="#addrs-panel" hx-swap="innerHTML">ADD</button>
+        </div>
         <table class="datatable" id="addrs-table">
             <thead>
                 <th>Адрес</th>
@@ -18,7 +17,7 @@
         </table>
     </div>
 
-    <div>
+    <div class="right">
         <h3>Данные</h3>
         <div id="addrs-panel"></div>
     </div>

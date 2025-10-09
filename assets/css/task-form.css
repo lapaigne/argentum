@@ -75,10 +75,6 @@
 
 /* Desktop */
 @media (min-width: 1024px) {
-    .split-container {
-        display: flex;
-        justify-content: space-around;
-    }
 
     .form-start {
         display: grid;
