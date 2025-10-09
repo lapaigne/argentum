@@ -1,0 +1,26 @@
+@page {
+    margin: 20mm 10mm 20mm 20mm;
+}
+
+@media print {
+    * {
+        height: auto !important;
+    }
+
+    .no-print,
+    button,
+    select,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"] {
+        display: none !important;
+    }
+
+    .dt-container > .dt-layout-row:not(.dt-layout-table) {
+        display: none !important;
+    }
+
+    thead {
+        display: none;
+    }
+}
