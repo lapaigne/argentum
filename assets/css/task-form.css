@@ -1,6 +1,7 @@
 .form-date {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
 }
 
 #until-div {

@@ -11,6 +11,18 @@
     color: #333;
 }
 
+#addrs-table td,
+#cats-table td,
+#workers-table td {
+    font-size: 22px;
+}
+
+#addrs-table th,
+#cats-table th,
+#workers-table th {
+    font-size: 20px;
+}
+
 #workers-table thead th {
     background-color: #f3f6fa;
     color: #1a3e72;
@@ -77,6 +89,20 @@ tr.selrow {
 
 #workers-table td input[type="button"]:hover {
     background-color: #c3d2f6;
+}
+
+@media (min-width: 768px) {
+    #addrs-table td,
+    #cats-table td,
+    #workers-table td {
+        font-size: 16px;
+    }
+
+    #addrs-table th,
+    #cats-table th,
+    #workers-table th {
+        font-size: 16px;
+    }
 }
 
 /* Responsive tweaks */
