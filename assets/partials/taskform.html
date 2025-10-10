@@ -1,0 +1,74 @@
+{{ define "taskform" }}
+<div class="newtask-form">
+    <form hx-post="/newtask/" id="task-form" hx-target="#content" hx-swap="innerHTML" hx-push-url="true"
+        autocomplete="off">
+        <div>
+            <div class="form-start">
+                <div id="comb-cat-wrap">
+                    <label>Категории задачи</label>
+                    <div class="{{ if and .Errors .Errors.Cat1 }} form-error {{ end }}" id="cat1">
+                        {{ template "tf-cat-1" . }}
+                    </div>
+                    <div class="{{ if and .Errors .Errors.Cat2 }} form-error {{ end }}" id="cat2">
+                        {{ template "tf-cat-2" . }}
+                    </div>
+                    <div class="{{ if and .Errors .Errors.Cat3 }} form-error {{ end }}" id="cat3">
+                        {{ template "tf-cat-3" . }}
+                    </div>
+                </div>
+                <div class="{{ if and .Errors .Errors.Addr }} form-error {{ end }}">
+                    <label>Адрес</label>
+                    {{ template "tf-addr" . }}
+                </div>
+                <div class="{{ if and .Errors .Errors.Desc }} form-error {{ end }}">
+                    <label>Описание задачи</label>
+                    <textarea class="form-textarea" id="description" name="desc">
+                        {{ if .Filled }}{{ .Filled.Desc }}{{ end }}
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-executor">
+                <div class="{{ if and .Errors .Errors.Worker }} form-error {{ end }}" id="act-div">
+                    <label>Исполнитель</label>
+                    {{ template "tf-act" . }}
+                </div>
+                <div>
+                    <label>Комментарий</label>
+                    <input type="text" id="comment" name="comment"
+                        value="{{ if .Filled }}{{ .Filled.Comment }}{{ end }}">
+                </div>
+            </div>
+            <div class="form-date">
+                <div>
+                    <label>Дата создания</label>
+                    <input type="date" id="created" name="created"
+                        value='{{ if .Filled }}{{ .Filled.Created_date.Format "2006-01-02" }}{{ else }}{{ .Today }}{{ end }}'>
+                </div>
+                <div id="until-div" class="{{ if and .Errors .Errors.Until }} form-error {{ end }}">
+                    <div>
+                        <label>Срок выполнения</label>
+                        {{ if .Filled }}
+                        {{ if .Filled.Until_date.Valid }}
+                        {{ $date := .Filled.Until_date.Time.Format "2006-01-02" }}
+                        <input type="date" id="do-until" name="do-until" value="{{ $date }}">
+                        {{ else }}
+                        <input type="date" id="do-until" name="do-until" style="display: none;">
+                        {{ end }}
+                        {{ end }}
+                        <input type="date" id="do-until" name="do-until">
+                    </div>
+                    <div>
+                        <label>Без определенного срока</label>
+                        <input type="checkbox" id="until-checkbox" name="until-checkbox" value="checked" {{ if and
+                            .Filled (not .Filled.Until_date.Valid) }} checked {{ end }}
+                            hx-on:click="$('#do-until').toggle(!this.checked)">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button type="submit">Добавить задачу</button>
+            </div>
+        </div>
+    </form>
+</div>
+{{ end }}
