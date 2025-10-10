@@ -7,71 +7,20 @@
         height: auto !important;
     }
 
+    .datatable {
+        display: none;
+    }
+
+    .print-content {
+        display: table;
+    }
+
     .no-print,
     button,
     select,
     input[type="button"],
     input[type="submit"],
     input[type="reset"] {
-        display: none !important;
-    }
-
-    table thead tr {
-        display: table-row !important;
-        gap: 0 !important;
-    }
-
-    table thead th {
-        flex: none !important;
-        min-width: auto !important;
-        white-space: normal !important;
-        text-align: left !important;
-        display: table-cell !important;
-    }
-
-    table tbody {
-        margin-bottom: 0 !important;
-        border: none !important;
-        padding: 0 !important;
-        display: table-row-group !important;
-    }
-
-    table tbody tr {
-        width: auto !important;
-        display: table-row !important;
-        grid-template-columns: none !important;
-        grid-template-rows: none !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        page-break-inside: avoid;
-    }
-
-    table tbody td {
-        padding: 6px 8px !important;
-        text-align: left !important;
-        border: 1px solid #000 !important;
-        max-width: none !important;
-        display: table-cell !important;
-        vertical-align: top !important;
-    }
-
-    table tbody td::before {
-        display: none !important;
-    }
-
-    table span{
-        display: inline !important;
-    }
-
-    .dt-length,
-    .dt-search,
-    .dt-paging,
-    .dt-container > .dt-layout-row:first-child,
-    .dt-container > .dt-layout-row:last-child,
-    .dt-column-order,
-    .no-print {
         display: none !important;
     }
 
@@ -87,6 +36,9 @@
     table td {
         border: 1px solid #000 !important;
         padding: 8px 10px !important;
+        display: table-cell !important;
+        vertical-align: top !important;
+        text-align: left !important;
     }
 
     table th {
@@ -94,5 +46,15 @@
         font-weight: bold !important;
         -webkit-print-color-adjust: exact;
         color-adjust: exact;
+    }
+
+    .dt-length,
+    .dt-search,
+    .dt-paging,
+    .dt-container > .dt-layout-row:first-child,
+    .dt-container > .dt-layout-row:last-child,
+    .dt-column-order,
+    .no-print {
+        display: none !important;
     }
 }
