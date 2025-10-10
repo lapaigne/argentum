@@ -7,45 +7,8 @@
 {{ $tasks := .Data.Tasks }}
 
 <div class="no-print" style="margin-bottom: 20px;">
-    <button onclick="window.print()">
-        🖨️ Печать
-    </button>
-</div>
-
-<div class="print-content">
-    <table>
-        <thead>
-        <th>К1</th>
-        <th>К2</th>
-        <th>К3</th>
-        <th>Постановка</th>
-        <th>Объект</th>
-        <th>Создано</th>
-        <th>Срок</th>
-        <th>Отмечено</th>
-        <th>Выполнено</th>
-        <th>Исполнитель</th>
-        <th>Комментарий</th>
-        </thead>
-        <tbody>
-            {{ range $tasks }}
-            <tr>
-                <td>{{ (index $cats .Cat1).Name }}</td>
-                <td>{{ (index $cats .Cat2).Name }}</td>
-                <td>{{ (index $cats .Cat3).Name }}</td>
-                <td>{{ .Desc }}</td>
-                <td>{{ (index $addrs .Addr_obj).Address }}</td>
-                <td>{{ call $helper.Format .Created_date }}</td>
-                <td>{{ call $helper.NFormat .Until_date }}</td>
-                <td>{{ call $helper.Status .Mark_date }}</td>
-                <td>{{ call $helper.NFormat .Completed_date }}</td>
-                <td>{{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{
-                    $w.O_name }}</td>
-                <td>{{ .Comment }}</td>
-            </tr>
-            {{ end }}
-        </tbody>
-    </table>
+    <button hx-post="/print" hx-target="#print-frame" hx-swap="none" id="print-btn">🖨️ Печать</button>
+    <iframe id="print-frame" style="display: none;"></iframe>
 </div>
 
 <div id="alltasks-wrap" class="table content">

@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="/assets/css/auth.css">
     <link rel="stylesheet" href="/assets/css/task-form.css">
     <link rel="stylesheet" href="/assets/css/block-table.css">
-    <link rel="stylesheet" href="/assets/css/print.css">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
     <link rel="stylesheet" href="/assets/css/datatables.min.css">
@@ -123,6 +122,22 @@
                 dataTableInit()
             }
 
+        })
+
+        htmx.on("htmx:afterOnLoad", function (e) {
+            if (e.target.id !== "print-btn") return
+            const html = e.detail.xhr.responseText
+            let $frame = $("#print-frame")
+            if (!$frame.length) {
+                $frame = $("<iframe>", {id: "print-frame", style: "display: none"}).appendTo("body")
+            }
+            $frame.off("load")
+            $frame.on("load", function () {
+                const win = this.contentWindow
+                win.focus()
+                win.print()
+            })
+            $frame[0].srcdoc = html
         })
     </script>
 </body>
