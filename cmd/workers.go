@@ -9,11 +9,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (e Endpoints) workes_GET(c echo.Context) error {
+func (e Endpoints) workers_GET(c echo.Context) error {
+	if getClaims(c).Level < ACC_DISPATCHER {
+		c.Redirect(303, "/menu/")
+	}
+
 	return c.Render(200, "workers", data.UWs)
 }
 
 func (e Endpoints) workers_POST(c echo.Context) error {
+	if getClaims(c).Level < ACC_DISPATCHER {
+		c.Redirect(303, "/menu/")
+	}
+
 	url := c.Request().URL.Path
 
 	if id, ok := strings.CutPrefix(url, "/workers/edit-"); ok {

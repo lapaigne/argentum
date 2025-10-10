@@ -16,26 +16,19 @@
                 <th class="until col tab-date">Срок</th>
                 <th class="mark_date col tab-date">Отметка</th>
             </thead>
-            <tbody>
-                {{ range $i, $v := $tasks }}
-                {{ if eq $v.Worker $uid }}
-                <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
-                    hx-trigger="click">
-                    <td data-label="Категории">
-                        {{ (index $cats $v.Cat1).Name }} <br>
-                        {{ (index $cats $v.Cat2).Name }} <br>
-                        {{ (index $cats $v.Cat3).Name }}
-                    </td>
-                    <td data-label="Постановка" class="desc">
-                        {{ $v.Desc }}
-                    </td>
-                    <td data-label="Объект">{{ (index $addrs $v.Addr_obj).Address }}</td>
-                    <td data-label="Срок">{{ call $helper.NFormat $v.Until_date }}</td>
-                    <td data-label="Отметка">{{ call $helper.NFormat $v.Mark_date }}</td>
-                </tr>
-                {{ end }}
-                {{ end }}
-            </tbody>
+            {{ range $i, $v := $tasks }}
+            {{ if eq $v.Worker $uid }}
+            <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
+                hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
+                <td>{{ (index $cats $v.Cat1).Name }} <br> {{ (index $cats $v.Cat2).Name }} <br> {{ (index $cats
+                    $v.Cat3).Name }}</td>
+                <td class="desc">{{ $v.Desc }}</td>
+                <td>{{ (index $addrs $v.Addr_obj).Address }}</td>
+                <td>{{ call $helper.NFormat $v.Until_date }}</td>
+                <td>{{ call $helper.NFormat $v.Mark_date }}</td>
+            </tr>
+            {{ end }}
+            {{ end }}
         </table>
     </div>
 

@@ -1,6 +1,6 @@
 {{ define "workers-row" }}
 <tr id="workers-row-{{ .Id }}" hx-post="/workers/edit-{{ .Id }}" hx-target="#workers-panel" hx-swap="innerHTML"
-    hx-trigger="click">
+    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
     <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
     <td>{{ .U.Level }}</td>
 </tr>

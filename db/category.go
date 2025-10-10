@@ -12,22 +12,33 @@ type Category struct {
 	Parent sql.NullInt32
 	Name   string
 	Level  int
+	Active bool
 }
 
-func AddCategory(parent, level int, name string) (int, error) {
-	if level > 3 {
-		s := fmt.Sprintf("Invalid category level of %d, when adding category <%s>", level, name)
+func UpdateCategory(id int, cat Category) error {
+	stmt, err := db.Prepare(`UPDATE public.categories SET "name" = $1, "active" = $2 WHERE "id" = $3`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(cat.Name, cat.Active, id)
+	return err
+}
+
+func AddCategory(cat Category) (int, error) {
+	if cat.Level > 3 {
+		s := fmt.Sprintf("Invalid category level of %d, when adding category <%s>", cat.Level, cat.Name)
 		return -1, errors.New(s)
 	}
 
-	stmt, err := db.Prepare(`INSERT INTO public.categories ("parent_id", "name", "level") VALUES ($1, $2, $3) RETURNING id`)
+	stmt, err := db.Prepare(`INSERT INTO public.categories ("parent_id", "name", "level", "active") VALUES ($1, $2, $3, $4) RETURNING id`)
 	if err != nil {
 		return -1, err
 	}
 	defer stmt.Close()
 
 	var id *int
-	if err := stmt.QueryRow(parent, name, level).Scan(&id); err != nil {
+	if err := stmt.QueryRow(cat.Parent, cat.Name, cat.Level, cat.Active).Scan(&id); err != nil {
 		return -1, err
 	}
 
@@ -35,7 +46,7 @@ func AddCategory(parent, level int, name string) (int, error) {
 }
 
 func GetCategories(ctx context.Context) ([]Category, error) {
-	stmt, err := db.PrepareContext(ctx, `SELECT * FROM public.categories`)
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "parent_id", "name", "level", "active" FROM public.categories`)
 	if err != nil {
 		return []Category{}, err
 	}
@@ -50,7 +61,7 @@ func GetCategories(ctx context.Context) ([]Category, error) {
 	res := []Category{}
 	for rows.Next() {
 		var cat Category
-		if err := rows.Scan(&cat.Id, &cat.Parent, &cat.Name, &cat.Level); err != nil {
+		if err := rows.Scan(&cat.Id, &cat.Parent, &cat.Name, &cat.Level, &cat.Active); err != nil {
 			return res, err
 		}
 		res = append(res, cat)
