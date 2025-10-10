@@ -17,23 +17,25 @@ func (e Endpoints) newtask_GET(c echo.Context) error {
 	}
 
 	d := struct {
-		Filled *db.Task
-		Errors any
-		Data   *Data
-		Helper *Helper
-		Today  string
-		Cat1   sql.NullInt32
-		Cat2   sql.NullInt32
-		Addr   int
+		Filled  *db.Task
+		Checked bool
+		Errors  any
+		Data    *Data
+		Helper  *Helper
+		Today   string
+		Cat1    sql.NullInt32
+		Cat2    sql.NullInt32
+		Addr    int
 	}{
-		Filled: nil,
-		Errors: nil,
-		Data:   &data,
-		Helper: &helper,
-		Today:  Today().Format(time.DateOnly),
-		Cat1:   SQLInt(-1, false),
-		Cat2:   SQLInt(-1, false),
-		Addr:   -1,
+		Filled:  nil,
+		Errors:  nil,
+		Checked: false,
+		Data:    &data,
+		Helper:  &helper,
+		Today:   Today().Format(time.DateOnly),
+		Cat1:    SQLInt(-1, false),
+		Cat2:    SQLInt(-1, false),
+		Addr:    -1,
 	}
 
 	return c.Render(200, "newtask", d)
@@ -80,7 +82,9 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 
 	var until sql.NullTime
 
-	if c.FormValue("until-checkbox") != "checked" {
+	checked := c.FormValue("until-checkbox") == "checked"
+
+	if !checked {
 		untilTime, err := time.Parse(time.DateOnly, c.FormValue("do-until"))
 		if err != nil {
 			fmt.Println(err)
@@ -117,7 +121,7 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	}
 
 	c3, err := strconv.Atoi(c.FormValue("cat3"))
-	v, ok = data.Cats[c2]
+	v, ok = data.Cats[c3]
 	if err != nil || !ok || v.Level != 3 {
 		errs.Cat3 = true
 		errs.Any = true
@@ -152,29 +156,29 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	}
 
 	d := struct {
-		Filled *db.Task
-		Errors any
-		Data   *Data
-		Helper *Helper
-		Today  string
-		Cat1   sql.NullInt32
-		Cat2   sql.NullInt32
-		Addr   int
+		Filled  *db.Task
+		Errors  any
+		Checked bool
+		Data    *Data
+		Helper  *Helper
+		Today   string
+		Cat1    sql.NullInt32
+		Cat2    sql.NullInt32
+		Addr    int
 	}{
-		Filled: &t,
-		Errors: errs,
-		Data:   &data,
-		Helper: &helper,
-		Today:  Today().Format(time.DateOnly),
-		Cat1:   SQLInt(t.Cat1, t.Cat1 != 0),
-		Cat2:   SQLInt(t.Cat2, t.Cat2 != 0),
-		Addr:   t.Addr_obj,
+		Filled:  &t,
+		Errors:  errs,
+		Checked: checked,
+		Data:    &data,
+		Helper:  &helper,
+		Today:   Today().Format(time.DateOnly),
+		Cat1:    SQLInt(t.Cat1, t.Cat1 != 0),
+		Cat2:    SQLInt(t.Cat2, t.Cat2 != 0),
+		Addr:    t.Addr_obj,
 	}
 
 	if errs.Any {
-		fmt.Println()
-		fmt.Println(&t)
-		fmt.Println()
+		fmt.Println(d.Filled.Cat3)
 		return c.Render(200, "newtask", d)
 	}
 
@@ -194,15 +198,17 @@ func (e Endpoints) newtask_cat1(c echo.Context) error {
 	}
 
 	d := struct {
-		Data  *Data
-		Today string
-		Cat1  sql.NullInt32
-		Cat2  sql.NullInt32
+		Data   *Data
+		Today  string
+		Cat1   sql.NullInt32
+		Cat2   sql.NullInt32
+		Filled any
 	}{
-		Data:  &data,
-		Today: Today().Format(time.DateOnly),
-		Cat1:  SQLInt(val, true),
-		Cat2:  SQLInt(-1, true),
+		Data:   &data,
+		Today:  Today().Format(time.DateOnly),
+		Cat1:   SQLInt(val, true),
+		Cat2:   SQLInt(-1, true),
+		Filled: nil,
 	}
 
 	return c.Render(200, "tf-cat-1-res", d)
@@ -215,13 +221,15 @@ func (e Endpoints) newtask_cat2(c echo.Context) error {
 	}
 
 	d := struct {
-		Data  *Data
-		Today string
-		Cat2  sql.NullInt32
+		Data   *Data
+		Today  string
+		Cat2   sql.NullInt32
+		Filled any
 	}{
-		Data:  &data,
-		Today: Today().Format(time.DateOnly),
-		Cat2:  SQLInt(val, true),
+		Data:   &data,
+		Today:  Today().Format(time.DateOnly),
+		Cat2:   SQLInt(val, true),
+		Filled: nil,
 	}
 
 	return c.Render(200, "tf-cat-3", d)

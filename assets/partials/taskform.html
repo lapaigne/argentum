@@ -48,19 +48,24 @@
                     <div>
                         <label>Срок выполнения</label>
                         {{ if .Filled }}
+                        {{ if .Checked }}
+                        <input type="date" id="do-until" name="do-until" style="display: none;">
+                        {{ else }}
                         {{ if .Filled.Until_date.Valid }}
                         {{ $date := .Filled.Until_date.Time.Format "2006-01-02" }}
                         <input type="date" id="do-until" name="do-until" value="{{ $date }}">
                         {{ else }}
-                        <input type="date" id="do-until" name="do-until" style="display: none;">
-                        {{ end }}
-                        {{ end }}
                         <input type="date" id="do-until" name="do-until">
+                        {{ end }}
+                        {{ end }}
+                        {{ else }}
+                        <input type="date" id="do-until" name="do-until">
+                        {{ end }}
                     </div>
                     <div>
                         <label>Без определенного срока</label>
-                        <input type="checkbox" id="until-checkbox" name="until-checkbox" value="checked" {{ if and
-                            .Filled (not .Filled.Until_date.Valid) }} checked {{ end }}
+                        <input type="checkbox" id="until-checkbox" name="until-checkbox" value="checked" {{ if and (and
+                            .Filled (not .Filled.Until_date.Valid) .Checked )}} checked {{ end }}
                             hx-on:click="$('#do-until').toggle(!this.checked)">
                     </div>
                 </div>
