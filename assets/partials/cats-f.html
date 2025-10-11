@@ -16,8 +16,9 @@
 </tr>
 {{ end }}
 
+
 {{ define "cats-add" }}
-<form hx-post="/cats/add" id="cats-add-f" hx-target="#cats-table-body" hx-swap="beforeend" hx-push-url="false"
+<form hx-post="/cats/add" id="cats-add-f" hx-target="#cats-table-body" hx-swap="outerHTML" hx-push-url="false"
     hx-history="false">
     <div>
         <label for="cat-name">Название</label>
@@ -25,7 +26,7 @@
 
         <label for="no-parent-checkbox">Категория верхневого уровня</label>
         <input type="checkbox" id="no-parent-checkbox" name="no-parent"
-            hx-on:click="$('#cats-parent-sel').toggle(!this.checked)">
+            hx-on:click="$('#cats-parent-sel').toggle(!this.checked)" value="checked">
 
         <label for="cats-parent-sel">Родительская категория</label>
         <select id="cats-parent-sel" name="cats-parent-sel">
@@ -47,4 +48,13 @@
     <button type="submit">UPD</button>
     <button hx-post="/cats/del-{{ .Id }}" hx-target="#cats-row-{{ .Id }}">DEL</button>
 </form>
+{{ end }}
+
+
+{{ define "cats-tbody" }}
+<tbody id="cats-table-body">
+    {{ range . }}
+    {{ template "cats-row" . }}
+    {{ end }}
+</tbody>
 {{ end }}

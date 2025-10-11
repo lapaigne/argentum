@@ -3,9 +3,9 @@ package main
 import (
 	"argentum/db"
 	"database/sql"
-	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -17,19 +17,25 @@ func (e Endpoints) newtask_GET(c echo.Context) error {
 	}
 
 	d := struct {
-		Data   *Data
-		Helper *Helper
-		Today  string
-		Cat1   sql.NullInt32
-		Cat2   sql.NullInt32
-		Addr   int
+		Filled  *db.Task
+		Checked bool
+		Errors  any
+		Data    *Data
+		Helper  *Helper
+		Today   string
+		Cat1    sql.NullInt32
+		Cat2    sql.NullInt32
+		Addr    int
 	}{
-		Data:   &data,
-		Helper: &helper,
-		Today:  Today().Format(time.DateOnly),
-		Cat1:   SQLInt(-1, false),
-		Cat2:   SQLInt(-1, false),
-		Addr:   -1,
+		Filled:  nil,
+		Errors:  nil,
+		Checked: false,
+		Data:    &data,
+		Helper:  &helper,
+		Today:   Today().Format(time.DateOnly),
+		Cat1:    SQLInt(-1, false),
+		Cat2:    SQLInt(-1, false),
+		Addr:    -1,
 	}
 
 	return c.Render(200, "newtask", d)
@@ -41,12 +47,8 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 	switch url {
 	case "/newtask/":
 		return e.newtask_submit(c)
-	case "/newtask/act":
-		return e.newtask_act(c)
 	case "/newtask/addr":
 		return e.newtask_addr(c)
-	case "/newtask/until":
-		return e.newtask_until(c)
 	case "/newtask/cat-1":
 		return e.newtask_cat1(c)
 	case "/newtask/cat-2":
@@ -58,63 +60,133 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 }
 
 func (e Endpoints) newtask_submit(c echo.Context) error {
-	var err error
 	var t db.Task
 
-	date, err := time.Parse(time.DateOnly, c.FormValue("created"))
+	errs := struct {
+		Any    bool
+		Cat1   bool
+		Cat2   bool
+		Cat3   bool
+		Addr   bool
+		Worker bool
+		Desc   bool
+		Until  bool
+	}{}
+
+	created, err := time.Parse(time.DateOnly, c.FormValue("created"))
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 
-	dif := time.Since(date)
+	t.Created_date = created
 
-	if dif.Hours() > 24 {
-		errS := fmt.Sprintf("Invalid creation date: %v", date)
-		return errors.New(errS)
+	var until sql.NullTime
+
+	checked := c.FormValue("until-checkbox") == "checked"
+
+	if !checked {
+		untilTime, err := time.Parse(time.DateOnly, c.FormValue("do-until"))
+		if err != nil {
+			fmt.Println(err)
+			errs.Until = true
+			errs.Any = true
+			until.Valid = false
+		} else {
+			until.Time = untilTime
+			until.Valid = true
+		}
 	}
 
-	t.Created_date = date
+	t.Until_date = until
 
 	c1, err := strconv.Atoi(c.FormValue("cat1"))
-	if err != nil {
-		return err
+	v, ok := data.Cats[c1]
+	if err != nil || !ok || v.Level != 1 {
+		errs.Cat1 = true
+		errs.Cat2 = true
+		errs.Cat3 = true
+		errs.Any = true
+	} else {
+		t.Cat1 = c1
 	}
-	t.Cat1 = c1
 
 	c2, err := strconv.Atoi(c.FormValue("cat2"))
-	if err != nil {
-		return err
+	v, ok = data.Cats[c2]
+	if err != nil || !ok || v.Level != 2 {
+		errs.Cat2 = true
+		errs.Cat3 = true
+		errs.Any = true
+	} else {
+		t.Cat2 = c2
 	}
-	t.Cat2 = c2
 
 	c3, err := strconv.Atoi(c.FormValue("cat3"))
-	if err != nil {
-		return err
+	v, ok = data.Cats[c3]
+	if err != nil || !ok || v.Level != 3 {
+		errs.Cat3 = true
+		errs.Any = true
+	} else {
+		t.Cat3 = c3
 	}
-	t.Cat3 = c3
 
-	t.Desc = c.FormValue("desc")
+	desc := c.FormValue("desc")
+	if len(strings.TrimSpace(desc)) == 0 {
+		errs.Desc = true
+		errs.Any = true
+	} else {
+		t.Desc = desc
+	}
 
 	addr, err := strconv.Atoi(c.FormValue("address"))
 	if err != nil {
-		return err
+		errs.Addr = true
+		errs.Any = true
+	} else {
+		t.Addr_obj = addr
 	}
-	t.Addr_obj = addr
 
 	t.Comment = c.FormValue("comment")
 
 	w, err := strconv.Atoi(c.FormValue("act"))
 	if err != nil {
-		return err
+		errs.Worker = true
+		errs.Any = true
+	} else {
+		t.Worker = w
 	}
-	t.Worker = w
 
-	id, err := db.AddTask(t)
-	if err != nil {
-		return err
+	d := struct {
+		Filled  *db.Task
+		Errors  any
+		Checked bool
+		Data    *Data
+		Helper  *Helper
+		Today   string
+		Cat1    sql.NullInt32
+		Cat2    sql.NullInt32
+		Addr    int
+	}{
+		Filled:  &t,
+		Errors:  errs,
+		Checked: checked,
+		Data:    &data,
+		Helper:  &helper,
+		Today:   Today().Format(time.DateOnly),
+		Cat1:    SQLInt(t.Cat1, t.Cat1 != 0),
+		Cat2:    SQLInt(t.Cat2, t.Cat2 != 0),
+		Addr:    t.Addr_obj,
 	}
-	data.Tasks[id] = &t
+
+	if errs.Any {
+		fmt.Println(d.Filled.Cat3)
+		return c.Render(200, "newtask", d)
+	}
+
+	data.MTask++
+	if _, err := db.AddTask(t); err != nil {
+		fmt.Println(err)
+	}
+	data.Tasks[data.MTask] = &t
 
 	return c.Redirect(303, "/alltasks/")
 }
@@ -126,15 +198,17 @@ func (e Endpoints) newtask_cat1(c echo.Context) error {
 	}
 
 	d := struct {
-		Data  *Data
-		Today string
-		Cat1  sql.NullInt32
-		Cat2  sql.NullInt32
+		Data   *Data
+		Today  string
+		Cat1   sql.NullInt32
+		Cat2   sql.NullInt32
+		Filled any
 	}{
-		Data:  &data,
-		Today: Today().Format(time.DateOnly),
-		Cat1:  SQLInt(val, true),
-		Cat2:  SQLInt(-1, true),
+		Data:   &data,
+		Today:  Today().Format(time.DateOnly),
+		Cat1:   SQLInt(val, true),
+		Cat2:   SQLInt(-1, true),
+		Filled: nil,
 	}
 
 	return c.Render(200, "tf-cat-1-res", d)
@@ -147,13 +221,15 @@ func (e Endpoints) newtask_cat2(c echo.Context) error {
 	}
 
 	d := struct {
-		Data  *Data
-		Today string
-		Cat2  sql.NullInt32
+		Data   *Data
+		Today  string
+		Cat2   sql.NullInt32
+		Filled any
 	}{
-		Data:  &data,
-		Today: Today().Format(time.DateOnly),
-		Cat2:  SQLInt(val, true),
+		Data:   &data,
+		Today:  Today().Format(time.DateOnly),
+		Cat2:   SQLInt(val, true),
+		Filled: nil,
 	}
 
 	return c.Render(200, "tf-cat-3", d)
@@ -176,12 +252,4 @@ func (e Endpoints) newtask_addr(c echo.Context) error {
 	}
 
 	return c.Render(200, "addrtable", d)
-}
-
-func (e Endpoints) newtask_act(c echo.Context) error {
-	return c.Render(200, "tf-act", nil)
-}
-
-func (e Endpoints) newtask_until(c echo.Context) error {
-	return c.Render(200, "tf-until", nil)
 }

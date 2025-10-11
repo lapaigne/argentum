@@ -1,0 +1,82 @@
+{{ define "tf-cat-1" }}
+<select required name="cat1" hx-post="/newtask/cat-1" hx-swap="outerHTML" hx-target="#cat2" hx-trigger="change changed"
+    hx-history="false" id="s1" hx-push-url="false" autocomplete="off">
+
+    <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Cat1 0) }}selected{{ end }}>Не выбрано!</option>
+    {{ range .Data.Cats }}
+    {{ if eq .Level 1 }}
+    <option value="{{ .Id }}" {{ if and $.Filled (eq .Id $.Filled.Cat1) }}selected{{ end }}>
+        {{ .Name }}
+    </option>
+    {{ end }}
+    {{ end }}
+
+</select>
+{{ end }}
+
+{{ define "tf-cat-2" }}
+{{ $val := .Cat1.Int32 }}
+<select required name="cat2" hx-post="/newtask/cat-2" hx-swap="innerHTML" hx-target="#cat3" hx-trigger="change changed"
+    hx-history="false" id="s2" hx-push-url="false" autocomplete="off">
+    <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Cat2 0) }}selected{{ end }}>Не выбрано!</option>
+
+    {{ range .Data.Cats }}
+    {{ if eq .Parent.Int32 $val }}
+    <option value="{{ .Id }}" {{ if and $.Filled (eq .Id $.Filled.Cat2) }}selected{{ end }}>
+        {{ .Name }}
+    </option>
+    {{ end }}
+    {{ end }}
+
+</select>
+{{ end }}
+
+
+{{ define "tf-cat-3" }}
+{{ $val := .Cat2.Int32 }}
+<select required name="cat3" id="s3" autocomplete="off">
+
+    <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Cat3 0) }}selected{{ end }}>Не выбрано!</option>
+    {{ range .Data.Cats }}
+    {{ if eq .Parent.Int32 $val }}
+    <option value="{{ .Id }}" {{ if and $.Filled (eq .Id $.Filled.Cat3) }}selected{{ end }}>
+        {{ .Name }}
+    </option>
+    {{ end }}
+    {{ end }}
+
+</select>
+{{ end }}
+
+
+{{ define "tf-cat-1-res" }}
+<div id="cat2">
+    {{ template "tf-cat-2" . }}
+</div>
+<div id="cat3" hx-swap-oob="innerHTML">
+    {{ template "tf-cat-3" . }}
+</div>
+{{ end }}
+
+
+{{ define "tf-addr" }}
+<select required name="address" id="addr" hx-post="/newtask/addr" hx-trigger="change changed" hx-target="#table"
+    hx-swap="outerHTML" hx-history="false" hx-push-url="false" autocomplete="off">
+    <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Addr_obj 0) }}selected{{ end }}>Не выбран!</option>
+    {{ range $i, $v := .Data.Addrs }}
+    <option value="{{ $v.Id }}" {{ if and $.Filled (eq $v.Id $.Filled.Addr_obj) }}selected{{ end }}>
+        {{ $i }} - {{ $v.Address }}
+    </option> {{ end }}
+</select>
+{{ end }}
+
+
+{{ define "tf-act" }}
+<select id="actor-selector" required name="act" autocomplete="off">
+    <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Worker 0) }}selected{{ end }}>Не выбран!</option>
+    {{ range $i, $v := .Data.UWs }}
+    <option value="{{ $i }}" {{ if and $.Filled (eq $i $.Filled.Worker) }}selected{{ end }}>
+        {{ $v.W }}
+    </option> {{ end }}
+</select>
+{{end }}

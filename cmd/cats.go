@@ -15,7 +15,7 @@ func (e Endpoints) cats_GET(c echo.Context) error {
 		c.Redirect(303, "/menu/")
 	}
 
-	return c.Render(200, "cats", data.Cats)
+	return c.Render(200, "cats", data.Cats.Sort())
 }
 
 func (e Endpoints) cats_POST(c echo.Context) error {
@@ -117,7 +117,7 @@ func (e Endpoints) cats_add(c echo.Context) error {
 		Id:     data.MCat,
 		Name:   catName,
 		Parent: parent,
-		Level:  parCat.Level,
+		Level:  parCat.Level + 1,
 		Active: true,
 	}
 
@@ -127,7 +127,7 @@ func (e Endpoints) cats_add(c echo.Context) error {
 
 	data.Cats[cat.Id] = &cat
 
-	return c.Render(200, "cats-row", cat)
+	return c.Render(200, "cats-tbody", data.Cats.Sort())
 }
 
 func (e Endpoints) cats_del(c echo.Context) error {
