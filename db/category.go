@@ -46,7 +46,7 @@ func AddCategory(cat Category) (int, error) {
 }
 
 func GetCategories(ctx context.Context) ([]Category, error) {
-	stmt, err := db.PrepareContext(ctx, `SELECT "id", "parent_id", "name", "level", "active" FROM public.categories`)
+	stmt, err := db.PrepareContext(ctx, `SELECT "id", "parent_id", "name", "level", "active" FROM public.categories ORDER BY id ASC`)
 	if err != nil {
 		return []Category{}, err
 	}

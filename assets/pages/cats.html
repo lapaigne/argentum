@@ -5,15 +5,11 @@
     </div>
 
     <div>
-        <table class="datatable" id="cats-table">
+        <table class="" id="cats-table">
             <thead>
                 <th class="no-sort">Категория</th>
             </thead>
-            <tbody id="cats-table-body">
-                {{ range . }}
-                {{ template "cats-row" . }}
-                {{ end }}
-            </tbody>
+            {{ template "cats-tbody" .}}
         </table>
     </div>
 
