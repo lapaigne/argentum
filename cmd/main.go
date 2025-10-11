@@ -96,8 +96,8 @@ func main() {
 	e.GET("/menu", endpoints.menu)
 	e.GET("/menu/", endpoints.menu)
 
-	e.GET("/alltasks", endpoints.alltasks)
-	e.GET("/alltasks/", endpoints.alltasks)
+	e.GET("/alltasks", endpoints.alltasks_GET)
+	e.GET("/alltasks/", endpoints.alltasks_GET)
 
 	e.GET("/signin", endpoints.signin)
 	e.GET("/signin/", endpoints.signin)
