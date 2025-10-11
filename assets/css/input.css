@@ -1,6 +1,5 @@
-/* input-button.css */
+/* input.css */
 
-/* Inputs, selects, textareas */
 input[type="tel"],
 input[type="text"],
 input[type="email"],
@@ -9,7 +8,7 @@ input[type="number"],
 select,
 textarea {
     font-family: inherit;
-    font-size: 16px;
+    font-size: 20px;
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -18,7 +17,7 @@ textarea {
     background-color: #fff;
     color: #222;
     width: 100%;
-    min-height: 44px;
+    min-height: 55px;
     box-sizing: border-box;
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -33,7 +32,6 @@ select:focus,
 textarea:focus {
     outline: none;
     border-color: #0056b3;
-    /* less bright blue */
     box-shadow: 0 0 3px 1px rgba(0, 86, 179, 0.5);
     background-color: #fff;
 }
@@ -49,13 +47,12 @@ label {
     font-weight: 500;
 }
 
-/* Buttons and input buttons */
 button,
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 500;
     padding: 0.5rem 1rem;
     border: 1px solid #0056b3;
@@ -76,6 +73,11 @@ input[type="reset"]:hover {
     color: white;
 }
 
+input[type="checkbox"] {
+    min-width: 50px;
+    min-height: 50px;
+}
+
 button:disabled,
 input[type="button"]:disabled,
 input[type="submit"]:disabled,
@@ -86,7 +88,6 @@ input[type="reset"]:disabled {
     cursor: not-allowed;
 }
 
-/* Secondary variant (white buttons) */
 button.white,
 input.white[type="button"],
 input.white[type="submit"],
@@ -103,4 +104,58 @@ input.white[type="reset"]:hover {
     background-color: #eee;
     border-color: #bbb;
     color: #333;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    input[type="tel"],
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
+        font-size: 16px;
+        min-height: 48px;
+    }
+
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"] {
+        font-size: 1rem;
+        min-height: 37px;
+    }
+
+    input[type="checkbox"] {
+        min-width: 40px;
+        min-height: 40px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    input[type="tel"],
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
+        font-size: 16px;
+        min-height: 44px;
+    }
+
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"] {
+        font-size: 1rem;
+        min-height: 37px;
+    }
+
+    input[type="checkbox"] {
+        min-width: 13px;
+        min-height: 13px;
+    }
 }

@@ -123,6 +123,22 @@
             }
 
         })
+
+        htmx.on("htmx:afterOnLoad", function (e) {
+            if (e.target.id !== "print-btn") return
+            const html = e.detail.xhr.responseText
+            let $frame = $("#print-frame")
+            if (!$frame.length) {
+                $frame = $("<iframe>", {id: "print-frame", style: "display: none"}).appendTo("body")
+            }
+            $frame.off("load")
+            $frame.on("load", function () {
+                const win = this.contentWindow
+                win.focus()
+                win.print()
+            })
+            $frame[0].srcdoc = html
+        })
     </script>
 </body>
 

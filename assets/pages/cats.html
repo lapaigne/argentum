@@ -1,11 +1,10 @@
 {{ define "content" }}
-<div>
-    <div id="">
-        <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML">ADD</button>
-    </div>
-
-    <div>
-        <table class="" id="cats-table">
+<div class="split-container">
+    <div class="left">
+        <div id="">
+            <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML">ADD</button>
+        </div>
+        <table id="cats-table">
             <thead>
                 <th class="no-sort">Категория</th>
             </thead>
@@ -13,7 +12,7 @@
         </table>
     </div>
 
-    <div>
+    <div class="right">
         <h3>Данные</h3>
         <div id="cats-panel"></div>
     </div>
