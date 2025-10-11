@@ -106,5 +106,15 @@ func main() {
 	e.POST("/submit-auth", endpoints.login)
 	e.POST("/submit-auth/tel", endpoints.authTel)
 
+	e.POST("/print", func(c echo.Context) error {
+		return c.Render(200, "printtable", struct {
+			Data   Data
+			Helper Helper
+		}{
+			Data:   data,
+			Helper: helper,
+		})
+	})
+
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
 }

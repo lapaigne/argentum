@@ -1,6 +1,5 @@
-/* style.css — GENERAL + LAYOUT — Modern & clean, ASP.NET-like vibe */
+/* style.css */
 
-/* Reset box sizing */
 *,
 *::before,
 *::after {
@@ -9,7 +8,6 @@
     padding: 0;
 }
 
-/* Base font and colors */
 html, body {
     height: 100%;
     width: 100%;
@@ -36,6 +34,15 @@ header {
     font-size: 1.2rem;
 }
 
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.print-content {
+    display: none;
+}
+
 .menu {
     margin: 0 auto;
     width: 50%;
@@ -46,16 +53,10 @@ header {
     display: grid;
 }
 
-img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
 .sort-block {
     display: flex;
 }
 
-/* Main content fills remaining space */
 #content {
     height: 100%;
     flex-grow: 1;
@@ -67,38 +68,27 @@ img {
     min-height: 0;
     overflow-y: auto;
     margin: 0 auto;
-}
 
-/* Scrollbar styling (optional) */
-#content::-webkit-scrollbar {
-    width: 8px;
-}
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
 
-#content::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-}
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+    }
 
-#content::-webkit-scrollbar-track {
-    background: transparent;
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
 }
 
 /* Tablet */
 @media (min-width: 768px) {
-    body {
-
-    }
-
     header {
         height: 56px;
         font-size: 1rem;
         padding: 0 1.5rem;
-    }
-
-    .menu {
-        margin: 0 auto;
-        width: 50%;
-        text-align: center;
     }
 
     img {
@@ -113,6 +103,12 @@ img {
         width: 100%;
     }
 
+    .menu {
+        margin: 0 auto;
+        width: 50%;
+        text-align: center;
+    }
+
     .sort-block {
         width: 350px;
     }
@@ -120,14 +116,21 @@ img {
 
 /* Desktop */
 @media (min-width: 1024px) {
-    body {
-
-    }
-
     header {
         height: 48px;
         font-size: 1rem;
         padding: 0 16px;
+    }
+
+    img {
+        max-width: 25%;
+        max-height: 25%;
+    }
+
+    #content {
+        padding: 16px 16px;
+        border-radius: 0;
+        box-shadow: none;
     }
 
     .menu {
@@ -140,15 +143,15 @@ img {
         display: grid;
     }
 
-    img {
-        max-width: 25%;
-        max-height: 25%;
-    }
-
-    #content {
-        padding: 16px 16px;
-        border-radius: 0;
-        box-shadow: none;
+    .split-container {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        box-sizing: border-box;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-around;
     }
 
     .sort-block {
@@ -165,15 +168,13 @@ img {
     cursor: pointer;
     border-radius: 3px;
     transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+        background: white;
+        color: #0056b3;
+    }
 }
 
-.signout-btn:hover {
-    background: white;
-    color: #0056b3;
-    /* same blue on hover */
-}
-
-/* Shared styles for header links/buttons */
 .header-link {
     font-family: inherit;
     font-size: 1rem;
@@ -185,16 +186,14 @@ img {
     cursor: pointer;
     text-decoration: none;
     transition: background-color 0.2s ease;
-}
 
-/* Optional: hover effect */
-.header-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-}
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
 
-/* Optional: active focus style for accessibility */
-.header-link:focus {
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
+    &:focus {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
+    }
 }

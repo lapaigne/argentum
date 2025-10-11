@@ -6,8 +6,13 @@
 {{ $helper := .Helper }}
 {{ $tasks := .Data.Tasks }}
 
+<div class="no-print" style="margin-bottom: 20px;">
+    <button hx-post="/print" hx-target="#print-frame" hx-swap="none" id="print-btn">🖨️ Печать</button>
+    <iframe id="print-frame" style="display: none;"></iframe>
+</div>
+
 <div id="alltasks-wrap" class="table content">
-    <table id="block-table" class="datatable">
+    <table id="alltask-block-table" class="datatable">
         <thead>
             <tr>
                 <th>Статус</th>
