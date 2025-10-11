@@ -1,5 +1,9 @@
 /* tables.css */
 
+table td {
+    word-break: break-all;
+}
+
 #workers-table table {
     width: 100%;
     border-collapse: collapse;

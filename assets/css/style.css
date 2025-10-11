@@ -128,7 +128,7 @@ img {
         box-sizing: border-box;
         flex-direction: row;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-around;
     }
 }
@@ -152,7 +152,7 @@ img {
         box-sizing: border-box;
         flex-direction: row;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-around;
     }
 

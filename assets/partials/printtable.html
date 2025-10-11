@@ -7,6 +7,10 @@
 {{ $tasks := .Data.Tasks }}
 
 <style>
+    table td {
+        word-break: break-word;
+    }
+
     .print-table thead tr {
         display: none;
     }
@@ -21,7 +25,7 @@
     .print-table tbody tr {
         width: 100%;
         display: grid;
-        grid-template-columns: 135px 700px auto;
+        grid-template-columns: 135px auto 100px;
         grid-template-rows: auto auto auto;
         border: 1px solid #494949;
         page-break-inside: avoid;
