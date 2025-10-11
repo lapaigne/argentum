@@ -4,17 +4,6 @@ table td {
     word-break: break-all;
 }
 
-#workers-table table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ccc;
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    background-color: #fff;
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
 #addrs-table,
 #cats-table,
 #workers-table {
@@ -27,7 +16,17 @@ table td {
     }
 }
 
-#workers-table {
+#workers-table,
+#cats-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    background-color: #fff;
+    margin-bottom: 1.5rem;
+    color: #333;
+
     & thead th {
         background-color: #f3f6fa;
         color: #1a3e72;
