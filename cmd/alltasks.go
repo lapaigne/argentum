@@ -1,27 +1,94 @@
 package main
 
-import "github.com/labstack/echo/v4"
+import (
+	"argentum/db"
+	"strconv"
+
+	"github.com/labstack/echo/v4"
+)
+
+type Filter struct {
+	Worker int
+	Addr   int
+}
+
+func (e Endpoints) print(c echo.Context) error {
+	return c.Render(200, "printtable", struct {
+		Data   Data
+		Helper Helper
+	}{
+		Data:   data,
+		Helper: helper,
+	})
+}
 
 func (e Endpoints) alltasks_GET(c echo.Context) error {
+	filter := Filter{
+		Worker: 0,
+		Addr:   0,
+	}
+
 	d := struct {
-		Data   *Data
-		Helper *Helper
+		Filter Filter
+		Data   Data
+		Helper Helper
 	}{
-		Data:   &data,
-		Helper: &helper,
+		Filter: filter,
+		Data:   data,
+		Helper: helper,
 	}
 
 	return c.Render(200, "alltasks", d)
 }
 
-func (e Endpoints) alltasks_worker(c echo.Context) error {
-	return nil
-}
+func (e Endpoints) alltasks_filter(c echo.Context) error {
+	wid, _ := strconv.Atoi(c.FormValue("f-worker"))
+	addr, _ := strconv.Atoi(c.FormValue("f-addr"))
 
-func (e Endpoints) alltasks_created(c echo.Context) error {
-	return nil
-}
+	filter := Filter{
+		Worker: wid,
+		Addr:   addr,
+	}
 
-func (e Endpoints) alltasks_addr(c echo.Context) error {
-	return nil
+	tasks := []db.Task{}
+
+	cmp := func(data, form int) bool {
+		if form == 0 {
+			return true
+		}
+		if data != form {
+			return false
+		}
+		return true
+	}
+
+	for _, v := range data.Tasks {
+		if cmp(v.Worker, wid) && cmp(v.Addr_obj, addr) {
+			tasks = append(tasks, *v)
+		}
+	}
+
+	temp := struct {
+		Tasks []db.Task
+		Cats  CatMap
+		Addrs map[int]*db.Address
+		UWs   map[int]*UserWorker
+	}{
+		Tasks: tasks,
+		Cats:  data.Cats,
+		Addrs: data.Addrs,
+		UWs:   data.UWs,
+	}
+
+	d := struct {
+		Filter Filter
+		Data   any
+		Helper Helper
+	}{
+		Filter: filter,
+		Data:   temp,
+		Helper: helper,
+	}
+
+	return c.Render(200, "alltasks", d)
 }

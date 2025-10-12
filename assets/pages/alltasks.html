@@ -2,13 +2,45 @@
 {{ $cats := .Data.Cats }}
 {{ $workers := .Data.UWs }}
 {{ $addrs := .Data.Addrs }}
-
-{{ $helper := .Helper }}
 {{ $tasks := .Data.Tasks }}
+{{ $helper := .Helper }}
 
 <div class="no-print" style="margin-bottom: 20px;">
     <button hx-post="/print" hx-target="#print-frame" hx-swap="none" id="print-btn">🖨️ Печать</button>
     <iframe id="print-frame" style="display: none;"></iframe>
+</div>
+
+<div id="alltasks-filters">
+    <div>
+    </div>
+
+    <div id="filter-worker">
+        <select hx-post="/alltasks/filter" name="f-worker" hx-target="#content" autocomplete="off" hx-swap="innerHTML"
+            hx-include="#alltasks-filters *">
+            <option {{ if eq $.Filter.Worker 0 }} selected {{end}} value="0">Работник не выбран</option>
+            {{ range $workers }}
+            <option {{ if eq $.Filter.Worker .W.Id}} selected {{end}} value="{{ .W.Id }}">
+                {{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}
+            </option>
+            {{ end }}
+        </select>
+    </div>
+    <div id="filter-addr">
+        <select hx-post="/alltasks/filter" name="f-addr" hx-target="#content" autocomplete="off" hx-swap="innerHTML"
+            hx-include="#alltasks-filters *">
+            <option {{ if eq $.Filter.Addr 0 }} selected {{end}} value="0">Адрес не выбран</option>
+            {{ range $addrs }}
+            <option {{ if eq $.Filter.Addr .Id}} selected {{end}} value="{{ .Id }}">
+                {{ .Address }}
+            </option>
+            {{ end }}
+        </select>
+    </div>
+
+    <!-- <div id="filter"> -->
+    <!--     <select hx-post="/alltasks/filter" hx-name="" hx-target="#content"> -->
+    <!--     </select> -->
+    <!-- </div> -->
 </div>
 
 <div id="alltasks-wrap" class="table content">
@@ -33,10 +65,15 @@
                     <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
                     <span>{{ (index $cats .Cat3).Name }}</span>
                 </td>
-                <td data-label="Объект">{{ (index $addrs .Addr_obj).Address }}</td>
-                <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{
-                    $w.O_name }}</td>
-                <td data-label="Постановка">{{ .Desc }}</td>
+                <td data-label="Объект">
+                    {{ (index $addrs .Addr_obj).Address }}
+                </td>
+                <td data-label="Исполнитель">
+                    {{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}
+                </td>
+                <td data-label="Постановка">
+                    {{ .Desc }}
+                </td>
             </tr>
             {{ end }}
         </tbody>

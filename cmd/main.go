@@ -98,6 +98,7 @@ func main() {
 
 	e.GET("/alltasks", endpoints.alltasks_GET)
 	e.GET("/alltasks/", endpoints.alltasks_GET)
+	e.POST("/alltasks/filter", endpoints.alltasks_filter)
 
 	e.GET("/signin", endpoints.signin)
 	e.GET("/signin/", endpoints.signin)
@@ -106,15 +107,7 @@ func main() {
 	e.POST("/submit-auth", endpoints.login)
 	e.POST("/submit-auth/tel", endpoints.authTel)
 
-	e.POST("/print", func(c echo.Context) error {
-		return c.Render(200, "printtable", struct {
-			Data   Data
-			Helper Helper
-		}{
-			Data:   data,
-			Helper: helper,
-		})
-	})
+	e.POST("/print", endpoints.print)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
 }
