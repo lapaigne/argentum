@@ -5,7 +5,9 @@
         <div>
             <div class="form-start">
                 <div id="comb-cat-wrap">
-                    <label>Категории задачи</label>
+                    <label class="{{ if and .Errors (or .Errors.Cat1 .Errors.Cat2 .Errors.Cat3) }} form-error {{ end }}">
+                        Категории задачи
+                    </label>
                     <div class="{{ if and .Errors .Errors.Cat1 }} form-error {{ end }}" id="cat1">
                         {{ template "tf-cat-1" . }}
                     </div>
@@ -70,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div style="text-align: center">
                 <button type="submit">Добавить задачу</button>
             </div>
         </div>
