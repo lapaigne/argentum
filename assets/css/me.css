@@ -62,9 +62,8 @@
 
     .split-container {
         display: flex;
-        align-items: stretch;
+        align-items: flex-start;
         gap: 20px;
-        height: 100%;
     }
 }
 
