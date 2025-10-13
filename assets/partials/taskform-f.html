@@ -22,9 +22,11 @@
 
     {{ range .Data.Cats }}
     {{ if eq .Parent.Int32 $val }}
+    {{ if eq .Level 2 }}
     <option value="{{ .Id }}" {{ if and $.Filled (eq .Id $.Filled.Cat2) }}selected{{ end }}>
         {{ .Name }}
     </option>
+    {{ end }}
     {{ end }}
     {{ end }}
 
@@ -39,9 +41,11 @@
     <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Cat3 0) }}selected{{ end }}>Не выбрано!</option>
     {{ range .Data.Cats }}
     {{ if eq .Parent.Int32 $val }}
+    {{ if eq .Level 3 }}
     <option value="{{ .Id }}" {{ if and $.Filled (eq .Id $.Filled.Cat3) }}selected{{ end }}>
         {{ .Name }}
     </option>
+    {{ end }}
     {{ end }}
     {{ end }}
 

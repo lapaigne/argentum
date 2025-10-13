@@ -178,7 +178,6 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	}
 
 	if errs.Any {
-		fmt.Println(d.Filled.Cat3)
 		return c.Render(200, "newtask", d)
 	}
 
