@@ -2,6 +2,7 @@ package main
 
 import (
 	"argentum/db"
+	"fmt"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -13,16 +14,20 @@ type Filter struct {
 }
 
 func (e Endpoints) print(c echo.Context) error {
-	return c.Render(200, "printtable", struct {
+	d := struct {
 		Data   Data
 		Helper Helper
 	}{
 		Data:   data,
 		Helper: helper,
-	})
+	}
+
+	return c.Render(200, "printtable", d)
 }
 
 func (e Endpoints) alltasks_GET(c echo.Context) error {
+	data.Filtered = []int{}
+
 	filter := Filter{
 		Worker: 0,
 		Addr:   0,
@@ -51,6 +56,7 @@ func (e Endpoints) alltasks_filter(c echo.Context) error {
 	}
 
 	tasks := []db.Task{}
+	fids := []int{}
 
 	cmp := func(data, form int) bool {
 		if form == 0 {
@@ -65,8 +71,11 @@ func (e Endpoints) alltasks_filter(c echo.Context) error {
 	for _, v := range data.Tasks {
 		if cmp(v.Worker, wid) && cmp(v.Addr_obj, addr) {
 			tasks = append(tasks, *v)
+			fids = append(fids, v.Id)
 		}
 	}
+
+	data.Filtered = fids
 
 	temp := struct {
 		Tasks []db.Task

@@ -14,6 +14,8 @@ type Data struct {
 	Addrs map[int]*db.Address
 	UWs   map[int]*UserWorker
 
+	Filtered []int
+
 	MTask   int
 	MCat    int
 	MAddr   int
