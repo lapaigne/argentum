@@ -2,7 +2,6 @@ package main
 
 import (
 	"argentum/db"
-	"fmt"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
