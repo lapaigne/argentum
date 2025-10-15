@@ -24,7 +24,6 @@
 
     & th, td {
         padding: 0.5rem;
-        text-align: center;
         font-size: 0.9rem;
     }
 }
@@ -64,6 +63,12 @@
         display: flex;
         align-items: flex-start;
         gap: 20px;
+    }
+}
+
+@media (max-width: 1325px) {
+    .left, .right {
+        width: 100%;
     }
 }
 
