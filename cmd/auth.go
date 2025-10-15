@@ -68,13 +68,13 @@ func (e Endpoints) register(c echo.Context) error {
 	return nil
 }
 
-func (e Endpoints) login(c echo.Context) error {
+func (e Endpoints) signin_POST(c echo.Context) error {
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
 
 	u, err := db.GetUser(tel)
 	if err != nil || bcrypt.CompareHashAndPassword([]byte(u.Hash), []byte(pass)) != nil {
-		return echo.ErrUnauthorized
+		return c.Redirect(303, "/signin")
 	}
 
 	now := time.Now()
@@ -84,12 +84,12 @@ func (e Endpoints) login(c echo.Context) error {
 
 	accSigned, accClaims, err := signToken(u.Worker, u.Level, aTime, accSecret)
 	if err != nil {
-		return echo.ErrUnauthorized
+		return c.Redirect(303, "/signin")
 	}
 
 	refSigned, _, err := signToken(u.Worker, u.Level, rTime, refSecret)
 	if err != nil {
-		return echo.ErrUnauthorized
+		return c.Redirect(303, "/signin")
 	}
 
 	setCookie(c, "token", accSigned, aTime)
@@ -99,18 +99,17 @@ func (e Endpoints) login(c echo.Context) error {
 	case 10, 50, 100:
 		return c.Redirect(303, "/menu/")
 	default:
-		return echo.ErrUnauthorized
+		return c.Redirect(303, "/signin")
 	}
 }
 
 func (e Endpoints) logout(c echo.Context) error {
-
 	clearCookie(c, "token")
 	clearCookie(c, "ref")
 
 	return c.Redirect(303, "/signin")
 }
-func (e Endpoints) signin(c echo.Context) error {
+func (e Endpoints) signin_GET(c echo.Context) error {
 	return c.Render(200, "signin", nil)
 }
 

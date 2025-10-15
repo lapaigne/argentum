@@ -4,7 +4,7 @@
 
 {{ define "content" }}
 <div class="auth-wrapper">
-    <form hx-post="/submit-auth" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
+    <form hx-post="/signin" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
         <input type="tel" name="tel">
         <input id="password" type="password" name="pass">
 

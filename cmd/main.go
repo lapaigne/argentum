@@ -27,8 +27,7 @@ var helper = Helper{
 }
 
 var public = map[string]bool{
-	"/signin":      true,
-	"/submit-auth": true,
+	"/signin": true,
 }
 
 func main() {
@@ -102,12 +101,12 @@ func main() {
 	e.GET("/alltasks/", endpoints.alltasks_GET)
 	e.POST("/alltasks/filter", endpoints.alltasks_filter)
 
-	e.GET("/signin", endpoints.signin)
-	e.GET("/signin/", endpoints.signin)
+	e.GET("/signin", endpoints.signin_GET)
+	e.GET("/signin/", endpoints.signin_GET)
+	e.POST("/signin", endpoints.signin_POST)
 
 	e.POST("/signout", endpoints.logout)
-	e.POST("/submit-auth", endpoints.login)
-	e.POST("/submit-auth/tel", endpoints.authTel)
+	e.POST("/signin/tel", endpoints.authTel)
 
 	e.POST("/print", endpoints.print)
 
