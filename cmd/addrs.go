@@ -94,11 +94,11 @@ func (e Endpoints) addrs_add(c echo.Context) error {
 		Active:  true,
 	}
 
+	data.Addrs[a.Id] = &a
+
 	if _, err := db.AddAddress(a); err != nil {
 		return err
 	}
-
-	data.Addrs[a.Id] = &a
 
 	return c.Render(200, "addrs-row", a)
 }
