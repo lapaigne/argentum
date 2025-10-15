@@ -25,7 +25,13 @@ func (e Endpoints) print(c echo.Context) error {
 }
 
 func (e Endpoints) alltasks_GET(c echo.Context) error {
-	data.Filtered = []int{}
+	fids := []int{}
+
+	for _, v := range data.Tasks {
+		fids = append(fids, v.Id)
+	}
+
+	data.Filtered = fids
 
 	filter := Filter{
 		Worker: 0,
