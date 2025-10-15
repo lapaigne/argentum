@@ -2,16 +2,19 @@
 <tr class="cats-row-{{ .Level }}" id="cats-row-{{ .Id }}" hx-post="/cats/edit-{{ .Id }}" hx-target="#cats-panel"
     hx-swap="innerHTML" hx-trigger="click"
     hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
-    <td>
-    {{ if eq .Level 1 }}
-        <span>1: {{ .Name }}</span>
-    {{ end }}
-    {{ if eq .Level 2 }}
-        <span style="padding-left: 60px">2: {{ .Name }}</span>
-    {{ end }}
-    {{ if eq .Level 3 }}
-        <span style="padding-left: 120px">3: {{ .Name }}</span>
-    {{ end }}
+    <td class="cats-name">
+        {{ if eq .Level 1 }}
+            <span>1: {{ .Name }}</span>
+        {{ end }}
+        {{ if eq .Level 2 }}
+            <span>2: {{ .Name }}</span>
+        {{ end }}
+        {{ if eq .Level 3 }}
+            <span>3: {{ .Name }}</span>
+        {{ end }}
+    </td>
+    <td class="cats-active">
+        {{ if .Active }} ✔ {{ else }} ✘ {{ end }}
     </td>
 </tr>
 {{ end }}
