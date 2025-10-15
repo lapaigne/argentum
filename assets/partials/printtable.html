@@ -70,16 +70,16 @@
                     {{ (index $cats $t.Cat3).Name }}
                 </td>
                 <td data-label="Постановка">{{ $t.Desc }}</td>
-                <td data-label="Создано">{{ call $helper.Format $t.Created_date }}</td>
+                <td data-label="Создано">{{ call $helper.PFormat $t.Created_date }}</td>
                 <td data-label="Объект">{{ (index $addrs $t.Addr_obj).Address }}</td>
-                <td data-label="Срок">{{ call $helper.NFormat $t.Until_date }}</td>
+                <td data-label="Срок">{{ call $helper.PNFormat $t.Until_date }}</td>
                 <td data-label="Исполнитель">
                     {{ $w := (index $workers $t.Worker).W }}
                     {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}
                 </td>
                 <td data-label="Комментарий">{{ $t.Comment }}</td>
                 <td data-label="Выполнено">
-                    {{ call $helper.NFormat $t.Completed_date }}
+                    {{ call $helper.PNFormat $t.Completed_date }}
                     {{ call $helper.Status $t.Mark_date }}
                 </td>
             </tr>

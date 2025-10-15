@@ -19,9 +19,11 @@ var endpoints Endpoints
 
 var data Data
 var helper = Helper{
-	NFormat: NFormat,
-	Format:  Format,
-	Status:  Status,
+	PNFormat: PNFormat,
+	PFormat:  PFormat,
+	NFormat:  NFormat,
+	Format:   Format,
+	Status:   Status,
 }
 
 var public = map[string]bool{

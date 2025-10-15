@@ -24,10 +24,12 @@ type Data struct {
 }
 
 type Helper struct {
-	Today   string
-	Format  func(time.Time) string
-	NFormat func(sql.NullTime) string
-	Status  func(sql.NullTime) string
+	Today    string
+	Format   func(time.Time) string
+	NFormat  func(sql.NullTime) string
+	Status   func(sql.NullTime) string
+	PNFormat func(sql.NullTime) string
+	PFormat  func(time.Time) string
 }
 
 type UserWorker struct {
