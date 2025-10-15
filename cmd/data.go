@@ -52,7 +52,7 @@ func (uw *UserWorker) SoftDelete() {
 type CatMap map[int]*db.Category
 type CatArr []db.Category
 
-func (cats CatMap) Sort() CatArr {
+func (cats CatMap) Sorted() CatArr {
 	vals := slices.Collect(maps.Values(cats))
 	slices.SortFunc(vals, func(a, b *db.Category) int {
 		if a.Id > b.Id {
