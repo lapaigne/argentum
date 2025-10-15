@@ -15,7 +15,7 @@ func (e Endpoints) cats_GET(c echo.Context) error {
 		c.Redirect(303, "/menu/")
 	}
 
-	return c.Render(200, "cats", data.Cats.Sort())
+	return c.Render(200, "cats", data.Cats.Sorted())
 }
 
 func (e Endpoints) cats_POST(c echo.Context) error {
@@ -121,13 +121,13 @@ func (e Endpoints) cats_add(c echo.Context) error {
 		Active: true,
 	}
 
+	data.Cats[cat.Id] = &cat
+
 	if _, err := db.AddCategory(cat); err != nil {
 		return err
 	}
 
-	data.Cats[cat.Id] = &cat
-
-	return c.Render(200, "cats-tbody", data.Cats.Sort())
+	return c.Render(200, "cats-tbody", data.Cats.Sorted())
 }
 
 func (e Endpoints) cats_del(c echo.Context) error {

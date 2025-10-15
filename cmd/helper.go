@@ -5,6 +5,18 @@ import (
 	"time"
 )
 
+func PFormat(t time.Time) string {
+	return t.Format("02.01.2006")
+}
+
+func PNFormat(t sql.NullTime) string {
+	if t.Valid {
+		return t.Time.Format("02.01.2006")
+	}
+
+	return ""
+}
+
 func Format(t time.Time) string {
 	return t.Format(time.DateOnly)
 }

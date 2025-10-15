@@ -5,6 +5,7 @@
 
 {{ $helper := .Helper }}
 {{ $tasks := .Data.Tasks }}
+{{ $fids := .Data.Filtered }}
 
 <style>
     table td {
@@ -63,25 +64,29 @@
 <div class="print-content">
     <table class="print-table">
         <tbody>
-        {{ range $tasks }}
-        <tr>
-            <td data-label="Категории" style="text-align: center">
-                {{ (index $cats .Cat1).Name }} <br>
-                {{ (index $cats .Cat2).Name }} <br>
-                {{ (index $cats .Cat3).Name }}
-            </td>
-            <td data-label="Постановка">{{ .Desc }}</td>
-            <td data-label="Создано">{{ call $helper.Format .Created_date }}</td>
-            <td data-label="Объект">{{ (index $addrs .Addr_obj).Address }}</td>
-            <td data-label="Срок">{{ call $helper.NFormat .Until_date }}</td>
-            <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{
-                $w.O_name }}
-            </td>
-            <td data-label="Комментарий">{{ .Comment }}</td>
-            <td data-label="Выполнено">{{ call $helper.NFormat .Completed_date }} {{ call $helper.Status .Mark_date }}
-            </td>
-        </tr>
-        {{ end }}
+            {{ range $fids }}
+            {{ $t := (index $tasks .) }}
+            <tr>
+                <td data-label="Категории" style="text-align: center">
+                    {{ (index $cats $t.Cat1).Name }} <br>
+                    {{ (index $cats $t.Cat2).Name }} <br>
+                    {{ (index $cats $t.Cat3).Name }}
+                </td>
+                <td data-label="Постановка">{{ $t.Desc }}</td>
+                <td data-label="Создано">{{ call $helper.PFormat $t.Created_date }}</td>
+                <td data-label="Объект">{{ (index $addrs $t.Addr_obj).Address }}</td>
+                <td data-label="Срок">{{ call $helper.PNFormat $t.Until_date }}</td>
+                <td data-label="Исполнитель">
+                    {{ $w := (index $workers $t.Worker).W }}
+                    {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}
+                </td>
+                <td data-label="Комментарий">{{ $t.Comment }}</td>
+                <td data-label="Выполнено">
+                    {{ call $helper.PNFormat $t.Completed_date }}
+                    {{ call $helper.Status $t.Mark_date }}
+                </td>
+            </tr>
+            {{ end }}
         </tbody>
     </table>
 </div>

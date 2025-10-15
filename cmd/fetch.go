@@ -105,15 +105,19 @@ func (d *Data) fetchTasks(ctx context.Context) error {
 		return err
 	}
 
+	fd := []int{}
+
 	temp := make(map[int]*db.Task)
 
 	for _, v := range tasks {
+		fd = append(fd, v.Id)
 		temp[v.Id] = &v
 	}
 
 	if len(tasks) == 0 {
 		d.MTask = 0
 	} else {
+		d.Filtered = fd
 		d.Tasks = temp
 		d.MTask = tasks[len(tasks)-1].Id
 	}

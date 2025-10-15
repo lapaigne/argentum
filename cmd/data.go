@@ -14,6 +14,8 @@ type Data struct {
 	Addrs map[int]*db.Address
 	UWs   map[int]*UserWorker
 
+	Filtered []int
+
 	MTask   int
 	MCat    int
 	MAddr   int
@@ -22,10 +24,12 @@ type Data struct {
 }
 
 type Helper struct {
-	Today   string
-	Format  func(time.Time) string
-	NFormat func(sql.NullTime) string
-	Status  func(sql.NullTime) string
+	Today    string
+	Format   func(time.Time) string
+	NFormat  func(sql.NullTime) string
+	Status   func(sql.NullTime) string
+	PNFormat func(sql.NullTime) string
+	PFormat  func(time.Time) string
 }
 
 type UserWorker struct {
@@ -48,7 +52,7 @@ func (uw *UserWorker) SoftDelete() {
 type CatMap map[int]*db.Category
 type CatArr []db.Category
 
-func (cats CatMap) Sort() CatArr {
+func (cats CatMap) Sorted() CatArr {
 	vals := slices.Collect(maps.Values(cats))
 	slices.SortFunc(vals, func(a, b *db.Category) int {
 		if a.Id > b.Id {

@@ -19,9 +19,11 @@ var endpoints Endpoints
 
 var data Data
 var helper = Helper{
-	NFormat: NFormat,
-	Format:  Format,
-	Status:  Status,
+	PNFormat: PNFormat,
+	PFormat:  PFormat,
+	NFormat:  NFormat,
+	Format:   Format,
+	Status:   Status,
 }
 
 var public = map[string]bool{
@@ -96,8 +98,9 @@ func main() {
 	e.GET("/menu", endpoints.menu)
 	e.GET("/menu/", endpoints.menu)
 
-	e.GET("/alltasks", endpoints.alltasks)
-	e.GET("/alltasks/", endpoints.alltasks)
+	e.GET("/alltasks", endpoints.alltasks_GET)
+	e.GET("/alltasks/", endpoints.alltasks_GET)
+	e.POST("/alltasks/filter", endpoints.alltasks_filter)
 
 	e.GET("/signin", endpoints.signin)
 	e.GET("/signin/", endpoints.signin)
@@ -106,15 +109,7 @@ func main() {
 	e.POST("/submit-auth", endpoints.login)
 	e.POST("/submit-auth/tel", endpoints.authTel)
 
-	e.POST("/print", func(c echo.Context) error {
-		return c.Render(200, "printtable", struct {
-			Data   Data
-			Helper Helper
-		}{
-			Data:   data,
-			Helper: helper,
-		})
-	})
+	e.POST("/print", endpoints.print)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
 }

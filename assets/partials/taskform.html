@@ -24,7 +24,11 @@
                 </div>
                 <div class="{{ if and .Errors .Errors.Desc }} form-error {{ end }}">
                     <label>Описание задачи</label>
-                    <textarea class="form-textarea" id="description" name="desc">{{ if .Filled }}{{ .Filled.Desc }}{{ end }}</textarea>
+                    {{ if .Filled }}
+                    <textarea class="form-textarea" id="description" name="desc">{{ .Filled.Desc }}</textarea>
+                    {{ else }}
+                    <textarea class="form-textarea" id="description" name="desc"></textarea>
+                    {{ end }}
                 </div>
             </div>
             <div class="form-executor">
