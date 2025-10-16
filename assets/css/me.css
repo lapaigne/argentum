@@ -8,9 +8,18 @@
     align-items: center;
 }
 
+.split-container {
+    display: flex;
+    grid-template-areas: "overlay";
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
 .left {
-    flex-grow: 0.5;
-    min-width: 0;
+    position: relative;
+    z-index: 1;
+
     border: 1px solid #ccc;
     background: #fff;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
@@ -29,17 +38,47 @@
 }
 
 .right {
+    position: fixed;
+    display: none;
+    z-index: 2;
+
     border: 1px solid #ccc;
     background: #fafafa;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     padding: 1rem;
-    display: flex;
     flex-direction: column;
-    gap: 1rem;
-    height: 100%;
+    gap: 0.5rem;
     min-width: 300px;
+    width: 90%;
     margin: 10px;
+}
+
+.taskform-left {
+    border: 1px solid #ccc;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 0.5rem;
+    width: 100%;
+    margin: 10px;
+}
+
+.taskform-right {
+    border: 1px solid #ccc;
+    background: #fafafa;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 1rem;
+    width: 100%;
+    margin: 10px;
+}
+
+.close-btn {
+    padding: 0;
+    margin: 0;
+    width: 30px;
+    height: 30px;
 }
 
 #mt-left,
@@ -54,30 +93,48 @@
     }
 }
 
-@media (min-width: 1024px) {
-    .task-wrapper {
-        max-width: 600px;
+@media (max-width: 1024px) {
+    #content {
+        padding: 2% 2%;
     }
 
+    .left {
+        width: 100%;
+    }
+
+    .right {
+        margin-top: 25px;
+    }
+}
+
+@media (min-width: 1024px) {
     .split-container {
         display: flex;
         align-items: flex-start;
         gap: 20px;
+        flex-direction: row;
     }
-}
 
-@media (max-width: 1325px) {
+    .left {
+        width:75%;
+    }
+
+    .right {
+        display: flex;
+        width: 25%;
+    }
+
+    .close-btn {
+        display: none;
+    }
+
     .left, .right {
-        width: 100%;
+        position: relative;
     }
 }
 
 @media (min-width: 1350px) {
-    .task-wrapper {
-        max-width: 700px;
-    }
-
     .left, .right {
-        max-width: 50%;
+        position: relative;
     }
 }

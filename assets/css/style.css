@@ -148,7 +148,6 @@ img {
         padding: 1rem;
         box-sizing: border-box;
         flex-direction: row;
-        flex-wrap: wrap;
         align-items: flex-start;
         justify-content: space-around;
     }

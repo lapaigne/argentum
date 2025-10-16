@@ -1,6 +1,8 @@
 {{ define "workers-row" }}
 <tr id="workers-row-{{ .Id }}" hx-post="/workers/edit-{{ .Id }}" hx-target="#workers-panel" hx-swap="innerHTML"
-    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
+    hx-trigger="click"
+    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
+    document.querySelector('.right').style.display = 'flex';">
     <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
     <td>{{ .U.Level }}</td>
 </tr>
@@ -28,7 +30,8 @@
         <option value="50">Диспетчер</option>
         <option value="100">Администратор</option>
     </select>
-    <button type="submit">ADD</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">ADD</button>
 </form>
 {{ end }}
 
@@ -47,7 +50,9 @@
         <option value="{{ .Level }}" {{ if .Sel}} selected {{ end }}>{{ .Name }}</option>
         {{ end }}
     </select>
-    <button type="submit">UPD</button>
-    <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}">DEL</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">UPD</button>
+    <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">DEL</button>
 </form>
 {{ end }}

@@ -1,7 +1,7 @@
 {{ define "cats-row" }}
 <tr class="cats-row-{{ .Level }}" id="cats-row-{{ .Id }}" hx-post="/cats/edit-{{ .Id }}" hx-target="#cats-panel"
     hx-swap="innerHTML" hx-trigger="click"
-    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
+    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow'); document.querySelector('.right').style.display = 'flex';">
     <td class="cats-name">
         {{ if eq .Level 1 }}
             <span>1: {{ .Name }}</span>
@@ -38,7 +38,8 @@
             {{ end }}
         </select>
     </div>
-    <button type="submit">ADD</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">ADD</button>
 </form>
 {{ end }}
 
@@ -48,8 +49,10 @@
     <div>
         <input id="cat-name" name="cat-name" value="{{ . }}">
     </div>
-    <button type="submit">UPD</button>
-    <button hx-post="/cats/del-{{ .Id }}" hx-target="#cats-row-{{ .Id }}">DEL</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">UPD</button>
+    <button hx-post="/cats/del-{{ .Id }}" hx-target="#cats-row-{{ .Id }}"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">DEL</button>
 </form>
 {{ end }}
 
