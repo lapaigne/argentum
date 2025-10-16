@@ -47,12 +47,15 @@ label {
     font-weight: 500;
 }
 
+.dt-length select {
+    width: 70px;
+}
+
 button,
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
     font-family: inherit;
-    font-size: 1.5rem;
     font-weight: 500;
     padding: 0.5rem 1rem;
     border: 1px solid #0056b3;
@@ -74,8 +77,8 @@ input[type="reset"]:hover {
 }
 
 input[type="checkbox"] {
-    min-width: 50px;
-    min-height: 50px;
+    min-width: 40px;
+    min-height: 40px;
 }
 
 button:disabled,
@@ -155,7 +158,7 @@ input.white[type="reset"]:hover {
     }
 
     input[type="checkbox"] {
-        min-width: 13px;
-        min-height: 13px;
+        min-width: 20px;
+        min-height: 20px;
     }
 }

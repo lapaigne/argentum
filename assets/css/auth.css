@@ -15,7 +15,8 @@
 }
 
 .auth-wrapper input[type="tel"],
-.auth-wrapper input[type="password"] {
+.auth-wrapper input[type="password"],
+.auth-wrapper input[type="text"] {
     padding: 0.6rem 0.8rem;
     font-size: 1.1rem;
     border: 1px solid #ccc;
@@ -39,4 +40,14 @@
 
 .auth-wrapper button[type="submit"]:hover {
     background-color: #004494;
+}
+
+.password-field {
+    display: flex;
+    flex-direction: row;
+}
+
+#password-toggle {
+    border-radius: 5px;
+    margin-right: 0;
 }

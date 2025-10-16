@@ -45,7 +45,6 @@ img {
 
 .menu {
     margin: 0 auto;
-    width: 50%;
     text-align: center;
 }
 
@@ -156,6 +155,10 @@ img {
 
     .sort-block {
         width: 350px;
+    }
+
+    #workers-panel {
+        max-width: 300px;
     }
 }
 

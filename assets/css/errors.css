@@ -1,0 +1,11 @@
+.form-error {
+    color: red;
+
+    & select, textarea {
+        color: red;
+    }
+
+    & option {
+        color: black;
+    }
+}
