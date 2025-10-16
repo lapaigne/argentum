@@ -19,7 +19,9 @@
             {{ range $i, $v := $tasks }}
             {{ if eq $v.Worker $uid }}
             <tr id="mt-row-{{ $i }}" hx-post="/me/exp-{{ $v.Id }}" hx-target="#mt-exp" hx-swap="innerHTML"
-                hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
+                hx-trigger="click"
+                hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
+                document.querySelector('.right').style.display = 'flex';">
                 <td data-label="Категория">{{ (index $cats $v.Cat1).Name }} <br> {{ (index $cats $v.Cat2).Name }} <br> {{ (index $cats
                     $v.Cat3).Name }}</td>
                 <td data-label="Описание" class="desc">{{ $v.Desc }}</td>
@@ -48,16 +50,24 @@
 
 {{ $md := call $helper.NFormat $t.Mark_date }}
 
+<button class="close-btn"
+        hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
 <div id="mt-left">
+    <h1>Категории</h1>
     <p>{{ (index $cats $t.Cat1).Name }} <br> {{ (index $cats $t.Cat2).Name }} <br> {{ (index $cats
         $t.Cat3).Name }}</p>
+    <h1>Адрес</h1>
     <p>{{ (index $addrs $t.Addr_obj).Address }}</p>
+    <h1>Отметка</h1>
     <p>{{ call $helper.NFormat $t.Until_date }}</p>
     <p>{{ $md }}</p>
 </div>
 
 <div id="mt-right">
+    <h1>Описание</h1>
     <p>{{ $t.Desc }}</p>
+
+    <h1>Коментарий</h1>
     <p>{{ $t.Comment }}</p>
 </div>
 

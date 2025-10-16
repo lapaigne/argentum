@@ -6,7 +6,7 @@
 {{ $helper := .Helper }}
 {{ $tasks := .Data.Tasks }}
 {{ $cur := (index $addrs $a) }}
-<div class="right" id="table">
+<div class="taskform-right" id="table">
     <h2>Задачи на объекте: {{ if $cur }} {{ $cur.Address }} {{ else }} "Не выбран!" {{ end }}</h2>
     <div>
         <table id="addr-block-table" class="datatable">

@@ -2,7 +2,8 @@
 <div class="split-container">
     <div class="left">
         <div id="">
-            <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML">ADD</button>
+            <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML"
+                    hx-on:click="document.querySelector('.right').style.display = 'flex';">ADD</button>
         </div>
         <table id="cats-table">
             <thead>
@@ -15,6 +16,8 @@
     </div>
 
     <div class="right">
+        <button class="close-btn"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
         <h3>Данные</h3>
         <div id="cats-panel"></div>
     </div>

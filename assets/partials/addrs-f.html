@@ -1,6 +1,8 @@
 {{ define "addrs-row" }}
 <tr id="addrs-row-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#addrs-panel" hx-swap="innerHTML"
-    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
+    hx-trigger="click"
+    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
+    document.querySelector('.right').style.display = 'flex';">
     <td>{{ .Address }}</td>
     <td>{{ if .Active }} ✔ {{ else }} ✘ {{ end }}</td>
 </tr>
@@ -13,7 +15,8 @@
     <div>
         <input type="text" name="addr">
     </div>
-    <button type="submit">ADD</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">ADD</button>
 </form>
 {{ end }}
 
@@ -23,7 +26,9 @@
     <div>
         <input type="text" name="addr" value="{{ .Address }}">
     </div>
-    <button type="submit">UPD</button>
-    <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }}">DEL</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">UPD</button>
+    <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }} "
+            hx-on:click="document.querySelector('.right').style.display = 'none';">DEL</button>
 </form>
 {{ end }}
