@@ -16,7 +16,7 @@
         <input type="text" name="addr"  placeholder="Адрес">
     </div>
     <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">ADD</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить адрес</button>
 </form>
 {{ end }}
 
@@ -27,8 +27,8 @@
         <input type="text" name="addr" value="{{ .Address }}">
     </div>
     <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">UPD</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
     <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }} "
-            hx-on:click="document.querySelector('.right').style.display = 'none';">DEL</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
 </form>
 {{ end }}

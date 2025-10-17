@@ -39,7 +39,7 @@
         </select>
     </div>
     <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">ADD</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить категорию</button>
 </form>
 {{ end }}
 
@@ -50,9 +50,9 @@
         <input id="cat-name" name="cat-name" value="{{ . }}">
     </div>
     <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">UPD</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
     <button hx-post="/cats/del-{{ .Id }}" hx-target="#cats-row-{{ .Id }}"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">DEL</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
 </form>
 {{ end }}
 
