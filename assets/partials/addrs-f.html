@@ -13,7 +13,7 @@
 <form hx-post="/addrs/add" id="addrs-add-f" hx-target="#addrs-table-body" hx-swap="beforeend" hx-push-url="false"
     hx-history="false">
     <div>
-        <input type="text" name="addr">
+        <input type="text" name="addr"  placeholder="Адрес">
     </div>
     <button type="submit"
             hx-on:click="document.querySelector('.right').style.display = 'none';">ADD</button>
