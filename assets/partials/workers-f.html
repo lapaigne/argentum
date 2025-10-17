@@ -13,7 +13,7 @@
 {{ define "workers-add" }}
 <form hx-post="/workers/add" id="workers-add-f" hx-target="#workers-table-body" hx-swap="beforeend" hx-push-url="false"
     hx-history="false">
-    <div>
+    <div class="menus-data" style="display: contents">
         <input type="text" name="f_name" placeholder="Имя">
         <input type="text" name="i_name" placeholder="Фамилия">
         <input type="text" name="o_name" placeholder="Отчество">
@@ -40,7 +40,7 @@
 {{ define "workers-upd" }}
 {{ $opts := .Opts }}
 <form hx-post="/workers/upd-{{ .Id }}" id="workers-upd-f" hx-target="#workers-row-{{ .Id }}" hx-swap="outerHTML">
-    <div>
+    <div class="menus-data">
         <input type="text" name="f_name" value="{{ .W.F_name }}">
         <input type="text" name="i_name" value="{{ .W.I_name }}">
         <input type="text" name="o_name" value="{{ .W.O_name }}">
@@ -50,9 +50,11 @@
         <option value="{{ .Level }}" {{ if .Sel}} selected {{ end }}>{{ .Name }}</option>
         {{ end }}
     </select>
-    <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
-    <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+    <div class="menus-buttons">
+        <button type="submit"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+    </div>
 </form>
 {{ end }}

@@ -19,8 +19,10 @@
     </div>
 
     <div class="right">
-        <button class="close-btn"
-                hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
+        <div class="close-btn-container">
+            <button class="close-btn"
+                    hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
+        </div>
         <h3>Данные</h3>
         <div id="workers-panel"></div>
     </div>

@@ -50,8 +50,10 @@
 
 {{ $md := call $helper.NFormat $t.Mark_date }}
 
-<button class="close-btn"
-        hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
+<div class="close-btn-container">
+    <button class="close-btn"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
+</div>
 <div id="mt-left">
     <h1>Категории</h1>
     <p>{{ (index $cats $t.Cat1).Name }} <br> {{ (index $cats $t.Cat2).Name }} <br> {{ (index $cats
