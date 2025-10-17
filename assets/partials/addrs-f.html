@@ -12,7 +12,7 @@
 {{ define "addrs-add" }}
 <form hx-post="/addrs/add" id="addrs-add-f" hx-target="#addrs-table-body" hx-swap="beforeend" hx-push-url="false"
     hx-history="false">
-    <div>
+    <div class="menus-data">
         <input type="text" name="addr"  placeholder="Адрес">
     </div>
     <button type="submit"
@@ -23,12 +23,14 @@
 
 {{ define "addrs-upd" }}
 <form hx-post="/addrs/upd-{{ .Id }}" id="addrs-upd-f" hx-target="#addrs-row-{{ .Id }}" hx-swap="outerHTML">
-    <div>
+    <div class="menus-data">
         <input type="text" name="addr" value="{{ .Address }}">
     </div>
-    <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
-    <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }} "
-            hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+    <div class="menus-buttons">
+        <button type="submit"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }} "
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+    </div>
 </form>
 {{ end }}
