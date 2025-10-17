@@ -50,6 +50,10 @@
     }
 }
 
+#addr-block-table {
+    width: 100%;
+}
+
 /* Индивидуальные grid-расположения */
 #alltask-block-table tbody tr {
     & td:nth-child(1) { grid-column: 1 / 4; }
