@@ -22,7 +22,7 @@
 
         </div>
         <input type="text" name="pass" id="workers-pass" placeholder="Пароль">
-        <button hx-post="/workers/gen" hx-target="#workers-pass" hx-swap="outerHTML">GENERATE PASSWORD</button>
+        <button hx-post="/workers/gen" hx-target="#workers-pass" hx-swap="outerHTML">Сгенерировать пароль</button>
     </div>
     <select name="workers-lvl-sel" hx-post="/workers/sel">
         <option selected disabled value="0">Не выбрано!</option>
@@ -31,7 +31,7 @@
         <option value="100">Администратор</option>
     </select>
     <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">ADD</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить работника</button>
 </form>
 {{ end }}
 
@@ -51,8 +51,8 @@
         {{ end }}
     </select>
     <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">UPD</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
     <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">DEL</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
 </form>
 {{ end }}
