@@ -74,13 +74,6 @@
     margin: 10px;
 }
 
-.close-btn {
-    padding: 0;
-    margin: 0;
-    width: 30px;
-    height: 30px;
-}
-
 #mt-left,
 #mt-right {
     flex: none;
@@ -122,10 +115,6 @@
     .right {
         display: flex;
         width: 25%;
-    }
-
-    .close-btn {
-        display: none;
     }
 
     .left, .right {
