@@ -3,7 +3,7 @@
     <div class="left">
         <div id="">
             <button hx-post="/workers/add-panel" hx-target="#workers-panel" hx-swap="innerHTML"
-                    hx-on:click="document.querySelector('.right').style.display = 'flex';">Добавить работника</button>
+                hx-on:click="document.querySelector('.right').style.display = 'flex';">Добавить работника</button>
         </div>
         <table class="datatable" id="workers-table">
             <thead>
@@ -18,12 +18,11 @@
         </table>
     </div>
 
-    <div class="right">
+    <div class="right" style="display: none;">
         <div class="close-btn-container">
-            <button class="close-btn"
-                    hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
+            <button class="close-btn" hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
         </div>
-        <h3>Данные</h3>
+        <h3>Создание/редактирование сотрудника</h3>
         <div id="workers-panel"></div>
     </div>
 </div>
