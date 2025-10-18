@@ -104,5 +104,5 @@ func (e Endpoints) alltasks_filter(c echo.Context) error {
 		Helper: helper,
 	}
 
-	return c.Render(200, "alltasks", d)
+	return c.Render(200, "alltasks-tbody", d)
 }

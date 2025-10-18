@@ -15,8 +15,8 @@
     </div>
 
     <div id="filter-worker">
-        <select hx-post="/alltasks/filter" name="f-worker" hx-target="#content" autocomplete="off" hx-swap="innerHTML"
-            hx-include="#alltasks-filters *">
+        <select hx-post="/alltasks/filter" name="f-worker" hx-target="#alltasks-tbody" autocomplete="off"
+            hx-swap="innerHTML" hx-include="#alltasks-filters *">
             <option {{ if eq $.Filter.Worker 0 }} selected {{end}} value="0">Работник не выбран</option>
             {{ range $workers }}
             <option {{ if eq $.Filter.Worker .W.Id}} selected {{end}} value="{{ .W.Id }}">
@@ -26,8 +26,8 @@
         </select>
     </div>
     <div id="filter-addr">
-        <select hx-post="/alltasks/filter" name="f-addr" hx-target="#content" autocomplete="off" hx-swap="innerHTML"
-            hx-include="#alltasks-filters *">
+        <select hx-post="/alltasks/filter" name="f-addr" hx-target="#alltasks-tbody" autocomplete="off"
+            hx-swap="innerHTML" hx-include="#alltasks-filters *">
             <option {{ if eq $.Filter.Addr 0 }} selected {{end}} value="0">Адрес не выбран</option>
             {{ range $addrs }}
             <option {{ if eq $.Filter.Addr .Id}} selected {{end}} value="{{ .Id }}">
@@ -54,28 +54,8 @@
                 <th>Постановка</th>
             </tr>
         </thead>
-        <tbody>
-            {{ range $tasks }}
-            <tr>
-                <td data-label="">
-                    {{ call $helper.Status .Mark_date }}
-                </td>
-                <td data-label="Категории">
-                    <span>{{ (index $cats .Cat1).Name }}&nbsp</span>
-                    <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
-                    <span>{{ (index $cats .Cat3).Name }}</span>
-                </td>
-                <td data-label="Объект">
-                    {{ (index $addrs .Addr_obj).Address }}
-                </td>
-                <td data-label="Исполнитель">
-                    {{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}
-                </td>
-                <td data-label="Постановка">
-                    {{ .Desc }}
-                </td>
-            </tr>
-            {{ end }}
+        <tbody id="alltasks-tbody">
+            {{ template "alltasks-tbody" . }}
         </tbody>
     </table>
 </div>
