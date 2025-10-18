@@ -1,4 +1,5 @@
 {{ define "addrtable" }}
+
 {{ $cats:= .Data.Cats }}
 {{ $workers := .Data.UWs }}
 {{ $addrs:= .Data.Addrs }}
@@ -6,8 +7,13 @@
 {{ $helper := .Helper }}
 {{ $tasks := .Data.Tasks }}
 {{ $cur := (index $addrs $a) }}
+
 <div class="taskform-right" id="table">
-    <h2>Задачи на объекте: {{ if $cur }} {{ $cur.Address }} {{ else }} "Не выбран!" {{ end }}</h2>
+    {{ if $cur }}
+    <h2>Задачи на объекте: {{ $cur.Address }}</h2>
+    {{ else }}
+    <h2>Выберите объект</h2>
+    {{ end }}
     <div>
         <table id="addr-block-table" class="datatable">
             <thead>
@@ -18,22 +24,8 @@
                     <th>Исполнитель</th>
                 </tr>
             </thead>
-            <tbody>
-                {{ range $tasks }}
-                {{ if eq .Addr_obj $a }}
-                <tr>
-                    <td data-label="Категории">
-                        <span>{{ (index $cats .Cat1).Name }}&nbsp</span>
-                        <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
-                        <span>{{ (index $cats .Cat3).Name }}</span>
-                    </td>
-                    <td data-label="Постановка">{{ .Desc }}</td>
-                    <td data-label="Срок">{{ call $helper.NFormat .Until_date }}</td>
-                    <td data-label="Исполнитель">{{ $w := (index $workers .Worker).W }} {{$w.F_name}} {{$w.I_name}}
-                        {{$w.O_name}}</td>
-                </tr>
-                {{ end }}
-                {{ end }}
+            <tbody id="addrs-tbody">
+                {{ template "addrs-tbody" . }}
             </tbody>
         </table>
     </div>

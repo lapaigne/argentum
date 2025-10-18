@@ -1,0 +1,28 @@
+{{ define "addrs-tbody" }}
+
+{{ $cats:= .Data.Cats }}
+{{ $workers := .Data.UWs }}
+{{ $addrs:= .Data.Addrs }}
+{{ $a := .Addr }}
+{{ $helper := .Helper }}
+{{ $tasks := .Data.Tasks }}
+{{ $cur := (index $addrs $a) }}
+
+{{ range $tasks }}
+{{ if eq .Addr_obj $a }}
+<tr>
+    <td data-label="Категории">
+        <span>{{ (index $cats .Cat1).Name }}&nbsp</span>
+        <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
+        <span>{{ (index $cats .Cat3).Name }}</span>
+    </td>
+    <td data-label="Постановка">{{ .Desc }}</td>
+    <td data-label="Срок">{{ call $helper.NFormat .Until_date }}</td>
+    <td data-label="Исполнитель">
+        {{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}
+    </td>
+</tr>
+{{ end }}
+{{ end }}
+
+{{ end }}
