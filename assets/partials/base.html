@@ -92,11 +92,6 @@
         })
 
         htmx.on('htmx:afterSwap', function (e) {
-            if (e.target.classList.contains("force-rep")) {
-                dataTableInit()
-                return
-            }
-
             const sw = (sel) => (e.target.closest && e.target.closest(sel))
             const te = sw(".datatable")
 
@@ -122,6 +117,7 @@
 
             if (e.target.id == "content" || sw(".datatable")) {
                 dataTableInit()
+                return
             }
 
         })

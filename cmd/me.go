@@ -32,7 +32,7 @@ func (e Endpoints) me_conf(c echo.Context) error {
 		UID:    uid,
 	}
 
-	return c.Render(200, "me", d)
+	return c.Render(200, "me-tbody", d)
 }
 
 func (e Endpoints) me_exp(c echo.Context) error {

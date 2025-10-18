@@ -1,5 +1,30 @@
 {{ define "content" }}
-{{ template "me-f" . }}
+
+{{ $helper := .Helper }}
+{{ $addrs := .Data.Addrs }}
+{{ $cats := .Data.Cats }}
+{{ $tasks := .Data.Tasks }}
+{{ $uid := .UID }}
+
+<div class="split-container">
+    <div id="mytasks" class="taskform-left">
+        <table id="mytask-block-table" class="datatable">
+            <thead>
+                <th class="cat col">Категория</th>
+                <th class="desc col">Описание</th>
+                <th class="addr col">Адрес</th>
+                <th class="until col tab-date">Срок</th>
+                <th class="mark_date col tab-date">Отметка</th>
+            </thead>
+            <tbody id="me-tbody">
+                {{ template "me-tbody" . }}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="mt-exp" class="right" style="display: none;">
+    </div>
+</div>
 {{ end }}
 
 {{ define "me" }}
