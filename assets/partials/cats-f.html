@@ -28,7 +28,7 @@
         <div class="cats-checkbox">
             <label for="no-parent-checkbox">Категория верхневого уровня</label>
             <input type="checkbox" id="no-parent-checkbox" name="no-parent"
-                   hx-on:click="$('#cats-parent-div').toggle(!this.checked)" value="checked">
+                hx-on:click="$('#cats-parent-div').toggle(!this.checked)" value="checked">
         </div>
         <div id="cats-parent-div">
             <label for="cats-parent-sel">Родительская категория</label>
@@ -39,8 +39,8 @@
             </select>
         </div>
     </div>
-    <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить категорию</button>
+    <button type="submit" hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить
+        категорию</button>
 </form>
 {{ end }}
 
@@ -51,10 +51,12 @@
         <input type="text" id="cat-name" name="cat-name" value="{{ . }}">
     </div>
     <div class="menus-buttons">
-        <button type="submit"
-                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button type="submit" hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
         <button hx-post="/cats/del-{{ .Id }}" hx-target="#cats-row-{{ .Id }}"
-                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">
+            {{ if .Active }}Удалить{{ else }}Восстановить{{ end }}
+        </button>
+
     </div>
 </form>
 {{ end }}

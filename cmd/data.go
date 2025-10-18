@@ -80,19 +80,25 @@ func (cats CatMap) Sorted() CatArr {
 		if x.Level == 1 {
 			sorted = append(sorted, *x)
 
+			if !x.Active {
+				continue
+			}
+
 			for _, y := range l2 {
 				if y.Parent.Int32 == int32(x.Id) {
 					sorted = append(sorted, y)
+
+					if !y.Active {
+						continue
+					}
 
 					for _, z := range l3 {
 						if z.Parent.Int32 == int32(y.Id) {
 							sorted = append(sorted, z)
 						}
 					}
-
 				}
 			}
-
 		}
 	}
 

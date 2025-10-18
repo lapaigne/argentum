@@ -141,7 +141,7 @@ func (e Endpoints) cats_del(c echo.Context) error {
 		return echo.ErrNotFound
 	}
 
-	cat.Active = false
+	cat.Active = !cat.Active
 
 	if err := db.UpdateCategory(id, *cat); err != nil {
 		return err
