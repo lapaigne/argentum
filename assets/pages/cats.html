@@ -2,17 +2,24 @@
 <div class="split-container">
     <div class="left">
         <div id="">
-            <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML">ADD</button>
+            <button hx-post="/cats/add-panel" hx-target="#cats-panel" hx-swap="innerHTML"
+                    hx-on:click="document.querySelector('.right').style.display = 'flex';">Добавить категорию</button>
         </div>
         <table id="cats-table">
             <thead>
                 <th class="no-sort">Категория</th>
+                <th class="no-sort">Вкл</th>
             </thead>
             {{ template "cats-tbody" .}}
+
         </table>
     </div>
 
     <div class="right">
+        <div class="close-btn-container">
+            <button class="close-btn"
+                    hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
+        </div>
         <h3>Данные</h3>
         <div id="cats-panel"></div>
     </div>

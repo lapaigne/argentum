@@ -1,6 +1,8 @@
 {{ define "addrs-row" }}
 <tr id="addrs-row-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#addrs-panel" hx-swap="innerHTML"
-    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
+    hx-trigger="click"
+    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
+    document.querySelector('.right').style.display = 'flex';">
     <td>{{ .Address }}</td>
     <td>{{ if .Active }} ✔ {{ else }} ✘ {{ end }}</td>
 </tr>
@@ -10,20 +12,25 @@
 {{ define "addrs-add" }}
 <form hx-post="/addrs/add" id="addrs-add-f" hx-target="#addrs-table-body" hx-swap="beforeend" hx-push-url="false"
     hx-history="false">
-    <div>
-        <input type="text" name="addr">
+    <div class="menus-data">
+        <input type="text" name="addr"  placeholder="Адрес">
     </div>
-    <button type="submit">ADD</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить адрес</button>
 </form>
 {{ end }}
 
 
 {{ define "addrs-upd" }}
 <form hx-post="/addrs/upd-{{ .Id }}" id="addrs-upd-f" hx-target="#addrs-row-{{ .Id }}" hx-swap="outerHTML">
-    <div>
+    <div class="menus-data">
         <input type="text" name="addr" value="{{ .Address }}">
     </div>
-    <button type="submit">UPD</button>
-    <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }}">DEL</button>
+    <div class="menus-buttons">
+        <button type="submit"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }} "
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+    </div>
 </form>
 {{ end }}

@@ -8,7 +8,7 @@ textarea {
     font-family: Roboto, sans-serif;
     color: #333;
     line-height: 1.6;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -33,13 +33,13 @@ p {
 /* Tablet */
 @media (min-width: 768px) {
     body {
-        font-size: 15px;
+        font-size: 16px;
         line-height: 1.6;
     }
 
-    h1 { font-size: 1.75rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.25rem; }
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1rem; }
+    h3 { font-size: 1rem; }
 
     p {
         font-size: 1rem;
@@ -52,9 +52,9 @@ p {
         font-size: 16px;
     }
 
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.75rem; }
-    h3 { font-size: 1.5rem; }
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1rem; }
+    h3 { font-size: 1rem; }
 
     p {
         font-size: 1rem;

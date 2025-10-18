@@ -1,6 +1,8 @@
 {{ define "workers-row" }}
 <tr id="workers-row-{{ .Id }}" hx-post="/workers/edit-{{ .Id }}" hx-target="#workers-panel" hx-swap="innerHTML"
-    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
+    hx-trigger="click"
+    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
+    document.querySelector('.right').style.display = 'flex';">
     <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
     <td>{{ .U.Level }}</td>
 </tr>
@@ -11,16 +13,16 @@
 {{ define "workers-add" }}
 <form hx-post="/workers/add" id="workers-add-f" hx-target="#workers-table-body" hx-swap="beforeend" hx-push-url="false"
     hx-history="false">
-    <div>
-        <input type="text" name="f_name">
-        <input type="text" name="i_name">
-        <input type="text" name="o_name">
-        <input type="text" name="login" hx-post="/workers/add/tel">
+    <div class="menus-data" style="display: contents">
+        <input type="text" name="f_name" placeholder="Имя">
+        <input type="text" name="i_name" placeholder="Фамилия">
+        <input type="text" name="o_name" placeholder="Отчество">
+        <input type="text" name="login" hx-post="/workers/add/tel" placeholder="Логин">
         <div id="workers-add-tel-err">
 
         </div>
-        <input type="text" name="pass" id="workers-pass">
-        <button hx-post="/workers/gen" hx-target="#workers-pass" hx-swap="outerHTML">GENERATE PASSWORD</button>
+        <input type="text" name="pass" id="workers-pass" placeholder="Пароль">
+        <button hx-post="/workers/gen" hx-target="#workers-pass" hx-swap="outerHTML">Сгенерировать пароль</button>
     </div>
     <select name="workers-lvl-sel" hx-post="/workers/sel">
         <option selected disabled value="0">Не выбрано!</option>
@@ -28,7 +30,8 @@
         <option value="50">Диспетчер</option>
         <option value="100">Администратор</option>
     </select>
-    <button type="submit">ADD</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить работника</button>
 </form>
 {{ end }}
 
@@ -37,7 +40,7 @@
 {{ define "workers-upd" }}
 {{ $opts := .Opts }}
 <form hx-post="/workers/upd-{{ .Id }}" id="workers-upd-f" hx-target="#workers-row-{{ .Id }}" hx-swap="outerHTML">
-    <div>
+    <div class="menus-data">
         <input type="text" name="f_name" value="{{ .W.F_name }}">
         <input type="text" name="i_name" value="{{ .W.I_name }}">
         <input type="text" name="o_name" value="{{ .W.O_name }}">
@@ -47,7 +50,11 @@
         <option value="{{ .Level }}" {{ if .Sel}} selected {{ end }}>{{ .Name }}</option>
         {{ end }}
     </select>
-    <button type="submit">UPD</button>
-    <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}">DEL</button>
+    <div class="menus-buttons">
+        <button type="submit"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+    </div>
 </form>
 {{ end }}

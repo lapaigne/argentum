@@ -6,9 +6,24 @@
 <div class="auth-wrapper">
     <form hx-post="/signin" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
         <input type="tel" name="tel">
-        <input id="password" type="password" name="pass">
+        <div class="password-field">
+            <input id="password" type="password" name="pass">
+            <button type="button" id="password-toggle">👁</button>
+        </div>
 
         <button type="submit">Войти</button>
     </form>
+
+    <script>
+        var p = document.getElementById("password");
+
+        document.getElementById("password-toggle").addEventListener("click", function () {
+            if (p.getAttribute('type') === 'password') {
+                p.setAttribute('type', 'text');
+            } else {
+                p.setAttribute('type', 'password');
+            }
+        })
+    </script>
 </div>
 {{ end }}

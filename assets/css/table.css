@@ -1,7 +1,7 @@
 /* tables.css */
 
 table td {
-    word-break: break-all;
+    word-break: break-word;
 }
 
 #addrs-table,
@@ -16,6 +16,7 @@ table td {
     }
 }
 
+#addrs-table,
 #workers-table,
 #cats-table {
     width: 100%;
@@ -37,12 +38,23 @@ table td {
         user-select: none;
     }
 
-    & tbody td {
-        padding: 0.75rem 1rem;
-        border: 1px solid #ccc;
-        vertical-align: middle;
-        text-align: center;
-        word-break: break-word;
+    &:not(#cats-table) {
+        & tbody td {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ccc;
+            vertical-align: middle;
+            text-align: center;
+            word-break: break-word;
+        }
+    }
+
+    &:not(#addrs-table), :not(#workers-table) {
+        & tbody td {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ccc;
+            vertical-align: middle;
+            word-break: break-word;
+        }
     }
 
     & .col.cat {
@@ -85,6 +97,28 @@ table td {
         &:hover {
             background-color: #c3d2f6;
         }
+    }
+}
+
+#cats-table {
+
+
+}
+
+#cats-table-body {
+    & .cats-row-1 {
+        text-align: left;
+    }
+    & .cats-row-2 {
+        text-align: center;
+    }
+    & .cats-row-3 {
+        text-align: right;
+    }
+
+    & .cats-active {
+        text-align: center;
+        width: 75px;
     }
 }
 

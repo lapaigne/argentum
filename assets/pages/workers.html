@@ -2,12 +2,13 @@
 <div class="split-container">
     <div class="left">
         <div id="">
-            <button hx-post="/workers/add-panel" hx-target="#workers-panel" hx-swap="innerHTML">ADD</button>
+            <button hx-post="/workers/add-panel" hx-target="#workers-panel" hx-swap="innerHTML"
+                    hx-on:click="document.querySelector('.right').style.display = 'flex';">Добавить работника</button>
         </div>
         <table class="datatable" id="workers-table">
             <thead>
-                <th>FULLNAME</th>
-                <th>ROLE</th>
+                <th>ФИО</th>
+                <th>Роль</th>
             </thead>
             <tbody id="workers-table-body">
                 {{ range . }}
@@ -18,6 +19,10 @@
     </div>
 
     <div class="right">
+        <div class="close-btn-container">
+            <button class="close-btn"
+                    hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
+        </div>
         <h3>Данные</h3>
         <div id="workers-panel"></div>
     </div>

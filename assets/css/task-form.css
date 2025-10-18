@@ -23,6 +23,12 @@
     min-width: 250px;
 }
 
+#comb-cat-wrap {
+    & #cat1, #cat2, #cat3 {
+        margin: 0;
+    }
+}
+
 /* Tablet */
 @media (min-width: 768px) {
     .form-start {

@@ -45,7 +45,6 @@ img {
 
 .menu {
     margin: 0 auto;
-    width: 50%;
     text-align: center;
 }
 
@@ -149,13 +148,16 @@ img {
         padding: 1rem;
         box-sizing: border-box;
         flex-direction: row;
-        flex-wrap: wrap;
         align-items: flex-start;
         justify-content: space-around;
     }
 
     .sort-block {
         width: 350px;
+    }
+
+    #workers-panel {
+        max-width: 300px;
     }
 }
 

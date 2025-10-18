@@ -1,17 +1,20 @@
 {{ define "cats-row" }}
 <tr class="cats-row-{{ .Level }}" id="cats-row-{{ .Id }}" hx-post="/cats/edit-{{ .Id }}" hx-target="#cats-panel"
     hx-swap="innerHTML" hx-trigger="click"
-    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow')">
-    <td>
-    {{ if eq .Level 1 }}
-        <span>1: {{ .Name }}</span>
-    {{ end }}
-    {{ if eq .Level 2 }}
-        <span style="padding-left: 60px">2: {{ .Name }}</span>
-    {{ end }}
-    {{ if eq .Level 3 }}
-        <span style="padding-left: 120px">3: {{ .Name }}</span>
-    {{ end }}
+    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow'); document.querySelector('.right').style.display = 'flex';">
+    <td class="cats-name">
+        {{ if eq .Level 1 }}
+            <span>1: {{ .Name }}</span>
+        {{ end }}
+        {{ if eq .Level 2 }}
+            <span>2: {{ .Name }}</span>
+        {{ end }}
+        {{ if eq .Level 3 }}
+            <span>3: {{ .Name }}</span>
+        {{ end }}
+    </td>
+    <td class="cats-active">
+        {{ if .Active }} ✔ {{ else }} ✘ {{ end }}
     </td>
 </tr>
 {{ end }}
@@ -20,33 +23,39 @@
 {{ define "cats-add" }}
 <form hx-post="/cats/add" id="cats-add-f" hx-target="#cats-table-body" hx-swap="outerHTML" hx-push-url="false"
     hx-history="false">
-    <div>
-        <label for="cat-name">Название</label>
-        <input id="cat-name" name="cat-name">
-
-        <label for="no-parent-checkbox">Категория верхневого уровня</label>
-        <input type="checkbox" id="no-parent-checkbox" name="no-parent"
-            hx-on:click="$('#cats-parent-sel').toggle(!this.checked)" value="checked">
-
-        <label for="cats-parent-sel">Родительская категория</label>
-        <select id="cats-parent-sel" name="cats-parent-sel">
-            {{ range . }}
-            <option value="{{ .Id }}">NAME: {{ .Name }} <br>LEVEL: {{ .Level }}</option>
-            {{ end }}
-        </select>
+    <div class="menus-data">
+        <input type="text" id="cat-name" name="cat-name" placeholder="Название">
+        <div class="cats-checkbox">
+            <label for="no-parent-checkbox">Категория верхневого уровня</label>
+            <input type="checkbox" id="no-parent-checkbox" name="no-parent"
+                   hx-on:click="$('#cats-parent-div').toggle(!this.checked)" value="checked">
+        </div>
+        <div id="cats-parent-div">
+            <label for="cats-parent-sel">Родительская категория</label>
+            <select id="cats-parent-sel" name="cats-parent-sel">
+                {{ range . }}
+                <option value="{{ .Id }}">NAME: {{ .Name }} <br>LEVEL: {{ .Level }}</option>
+                {{ end }}
+            </select>
+        </div>
     </div>
-    <button type="submit">ADD</button>
+    <button type="submit"
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить категорию</button>
 </form>
 {{ end }}
 
 
 {{ define "cats-upd" }}
 <form hx-post="/cats/upd-{{ .Id }}" id="cats-upd-f" hx-target="#cats-row-{{ .Id }}" hx-swap="outerHTML">
-    <div>
-        <input id="cat-name" name="cat-name" value="{{ . }}">
+    <div class="menus-data">
+        <input type="text" id="cat-name" name="cat-name" value="{{ . }}">
     </div>
-    <button type="submit">UPD</button>
-    <button hx-post="/cats/del-{{ .Id }}" hx-target="#cats-row-{{ .Id }}">DEL</button>
+    <div class="menus-buttons">
+        <button type="submit"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button hx-post="/cats/del-{{ .Id }}" hx-target="#cats-row-{{ .Id }}"
+                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+    </div>
 </form>
 {{ end }}
 
