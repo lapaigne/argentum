@@ -11,29 +11,36 @@
     <button class="close-btn" hx-on:click="document.querySelector('.right').style.display = 'none';">❌</button>
 </div>
 <div id="mt-left">
-    <h1>Категории</h1>
-    <p>
-        {{ (index $cats $t.Cat1).Name }}
-        <br> {{ (index $cats $t.Cat2).Name }}
-        <br>
-        {{ (index $cats $t.Cat3).Name }}
-    </p>
-
-    <h1>Адрес</h1>
-    <p>{{ (index $addrs $t.Addr_obj).Address }}</p>
-
+    <div class="menus-group">
+        <h1>Категории</h1>
+        <p>
+            {{ (index $cats $t.Cat1).Name }} <br>
+            {{ (index $cats $t.Cat2).Name }} <br>
+            {{ (index $cats $t.Cat3).Name }}
+        </p>
+    </div>
+    <div class="menus-group">
+        <h1>Адрес</h1>
+        <p>{{ (index $addrs $t.Addr_obj).Address }}</p>
+    </div>
     {{ if $t.Until_date.Valid }}
-    <h3>Срок выполнения:</h3>
-    <p>{{ call $helper.PNFormat $t.Until_date }}</p>
+    <div class="menus-group">
+        <h1>Срок выполнения:</h1>
+        <p>{{ call $helper.PNFormat $t.Until_date }}</p>
+    </div>
     {{ end }}
-    <h1>Выполнено:</h1>
-    <p>{{ $md }}</p>
-
-    <h1>Описание</h1>
-    <p>{{ $t.Desc }}</p>
-
-    <h1>Коментарий</h1>
-    <p>{{ $t.Comment }}</p>
+    <div class="menus-group">
+        <h1>Выполнено:</h1>
+        <p>{{ $md }}</p>
+    </div>
+    <div class="menus-group">
+        <h1>Описание</h1>
+        <p>{{ $t.Desc }}</p>
+    </div>
+    <div class="menus-group">
+        <h1>Коментарий</h1>
+        <p>{{ $t.Comment }}</p>
+    </div>
 </div>
 
 <div>
