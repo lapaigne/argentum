@@ -111,21 +111,19 @@ func (e Endpoints) cats_add(c echo.Context) error {
 		return fmt.Errorf("no parent cat w/ id %d", par)
 	}
 
-	data.MCat++
-
 	cat := db.Category{
-		Id:     data.MCat,
 		Name:   catName,
 		Parent: parent,
 		Level:  parCat.Level + 1,
 		Active: true,
 	}
-
-	data.Cats[cat.Id] = &cat
-
-	if _, err := db.AddCategory(cat); err != nil {
+	id, err := db.AddCategory(cat)
+	if err != nil {
 		return err
 	}
+
+	cat.Id = id
+	data.Cats[cat.Id] = &cat
 
 	return c.Render(200, "cats-tbody", data.Cats.Sorted())
 }

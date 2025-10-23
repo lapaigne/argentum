@@ -86,19 +86,18 @@ func (e Endpoints) addrs_upd(c echo.Context) error {
 func (e Endpoints) addrs_add(c echo.Context) error {
 	addr := c.FormValue("addr")
 
-	data.MAddr++
-
 	a := db.Address{
-		Id:      data.MAddr,
 		Address: addr,
 		Active:  true,
 	}
 
-	data.Addrs[a.Id] = &a
-
-	if _, err := db.AddAddress(a); err != nil {
+	id, err := db.AddAddress(a)
+	if err != nil {
 		return err
 	}
+
+	a.Id = id
+	data.Addrs[a.Id] = &a
 
 	return c.Render(200, "addrs-row", a)
 }

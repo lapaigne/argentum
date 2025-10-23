@@ -64,10 +64,7 @@ func (e Endpoints) workers_add(c echo.Context) error {
 		return err
 	}
 
-	data.MWorker++
-
 	w := db.Worker{
-		Id:     data.MWorker,
 		F_name: f,
 		I_name: i,
 		O_name: o,
@@ -78,22 +75,24 @@ func (e Endpoints) workers_add(c echo.Context) error {
 		return err
 	}
 
-	data.MUser++
-
 	u := db.User{
-		Id:     data.MUser,
-		Worker: w.Id,
-		Login:  login,
-		Hash:   string(hash),
-		Level:  lvl,
+		Login: login,
+		Hash:  string(hash),
+		Level: lvl,
 	}
 
-	if _, err := db.AddWorker(w); err != nil {
+	wid, err := db.AddWorker(w)
+	if err != nil {
 		return err
 	}
-	if _, err := db.AddUser(u); err != nil {
+	w.Id = wid
+	u.Worker = wid
+
+	uid, err := db.AddUser(u)
+	if err != nil {
 		return err
 	}
+	u.Id = uid
 
 	uw := UserWorker{
 		U:  u,
