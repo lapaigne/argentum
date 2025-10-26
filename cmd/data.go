@@ -16,11 +16,7 @@ type Data struct {
 
 	Filtered []int
 
-	MTask   int
-	MCat    int
-	MAddr   int
-	MUser   int
-	MWorker int
+	Logins []string
 }
 
 type Helper struct {

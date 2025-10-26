@@ -3,6 +3,7 @@ package main
 import (
 	"argentum/db"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -44,6 +45,8 @@ func (e Endpoints) workers_POST(c echo.Context) error {
 		return e.workers_addpanel(c)
 	case "/workers/add":
 		return e.workers_add(c)
+	case "/workers/tel":
+		return e.workers_tel(c)
 	case "/workers/gen":
 		return e.workers_gen(c)
 	default:
@@ -64,10 +67,7 @@ func (e Endpoints) workers_add(c echo.Context) error {
 		return err
 	}
 
-	data.MWorker++
-
 	w := db.Worker{
-		Id:     data.MWorker,
 		F_name: f,
 		I_name: i,
 		O_name: o,
@@ -78,22 +78,24 @@ func (e Endpoints) workers_add(c echo.Context) error {
 		return err
 	}
 
-	data.MUser++
-
 	u := db.User{
-		Id:     data.MUser,
-		Worker: w.Id,
-		Login:  login,
-		Hash:   string(hash),
-		Level:  lvl,
+		Login: login,
+		Hash:  string(hash),
+		Level: lvl,
 	}
 
-	if _, err := db.AddWorker(w); err != nil {
+	wid, err := db.AddWorker(w)
+	if err != nil {
 		return err
 	}
-	if _, err := db.AddUser(u); err != nil {
+	w.Id = wid
+	u.Worker = wid
+
+	uid, err := db.AddUser(u)
+	if err != nil {
 		return err
 	}
+	u.Id = uid
 
 	uw := UserWorker{
 		U:  u,
@@ -188,11 +190,6 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 }
 
 func (e Endpoints) workers_edit(c echo.Context) error {
-	acc := getClaims(c).Level
-	if acc != ACC_ADMIN && acc != ACC_DISPATCHER {
-		return echo.ErrUnauthorized
-	}
-
 	id, err := strconv.Atoi(c.Get("id").(string))
 	if err != nil {
 		return err
@@ -247,9 +244,28 @@ func (e Endpoints) workers_edit(c echo.Context) error {
 }
 
 func (e Endpoints) workers_addpanel(c echo.Context) error {
-	if err := isAdminErr(c); err != nil {
-		return err
+	return c.Render(200, "workers-add", nil)
+}
+
+func (e Endpoints) workers_tel(c echo.Context) error {
+	raw := c.FormValue("login")
+
+	str := fmt.Sprintf(`<input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login" hx-swap="outerHTML" placeholder="Логин" value="%s"`, raw)
+	end := ">"
+
+	var check bool
+
+	if _, err := strconv.Atoi(raw); err != nil {
+		check = true
 	}
 
-	return c.Render(200, "workers-add", nil)
+	if slices.Contains(data.Logins, raw) {
+		check = true
+	}
+
+	if check {
+		return c.HTML(200, str+`class=form-error`+end)
+	}
+
+	return c.HTML(200, str+end)
 }

@@ -1,10 +1,15 @@
 {{ define "workers-row" }}
 <tr id="workers-row-{{ .Id }}" hx-post="/workers/edit-{{ .Id }}" hx-target="#workers-panel" hx-swap="innerHTML"
-    hx-trigger="click"
-    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
+    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
     document.querySelector('.right').style.display = 'flex';">
     <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
-    <td>{{ .U.Level }}</td>
+    <td>
+        {{ if eq .U.Level 0 }}Отключен{{ else }}
+        {{ if eq .U.Level 10 }}Сотрудник{{ else }}
+        {{ if eq .U.Level 50 }}Диспетчер{{ else }}
+        {{ if eq .U.Level 100 }}Администратор{{ end }}
+        {{ end }}{{ end }}{{ end }}
+    </td>
 </tr>
 {{ end }}
 
@@ -17,21 +22,19 @@
         <input type="text" name="f_name" placeholder="Имя">
         <input type="text" name="i_name" placeholder="Фамилия">
         <input type="text" name="o_name" placeholder="Отчество">
-        <input type="text" name="login" hx-post="/workers/add/tel" placeholder="Логин">
-        <div id="workers-add-tel-err">
-
-        </div>
+        <input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login"
+            hx-swap="outerHTML" placeholder="Логин">
         <input type="text" name="pass" id="workers-pass" placeholder="Пароль">
         <button hx-post="/workers/gen" hx-target="#workers-pass" hx-swap="outerHTML">Сгенерировать пароль</button>
     </div>
-    <select name="workers-lvl-sel" hx-post="/workers/sel">
+    <select name="workers-lvl-sel">
         <option selected disabled value="0">Не выбрано!</option>
         <option value="10">Работник</option>
         <option value="50">Диспетчер</option>
         <option value="100">Администратор</option>
     </select>
-    <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить работника</button>
+    <button type="submit" hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить
+        работника</button>
 </form>
 {{ end }}
 

@@ -181,13 +181,13 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 		return c.Render(200, "newtask", d)
 	}
 
-	data.MTask++
-	t.Id = data.MTask
-	data.Tasks[t.Id] = &t
-
-	if _, err := db.AddTask(t); err != nil {
-		fmt.Println(err)
+	id, err := db.AddTask(t)
+	if err != nil {
+		return err
 	}
+
+	t.Id = id
+	data.Tasks[t.Id] = &t
 
 	return c.Redirect(303, "/alltasks/")
 }

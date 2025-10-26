@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 )
 
@@ -12,7 +11,6 @@ type User struct {
 	Login  string
 	Hash   string
 	Level  int
-	Token  sql.NullString
 }
 
 func DeleteUser(id int) error {

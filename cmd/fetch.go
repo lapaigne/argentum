@@ -64,26 +64,16 @@ func (d *Data) fetchUWs(ctx context.Context) error {
 		return err
 	}
 
-	if len(workers) == 0 {
-		d.MWorker = 0
-	} else {
-		d.MWorker = workers[len(workers)-1].Id
-	}
-
 	users, err := db.GetUsers(ctx)
 	if err != nil {
 		return err
 	}
 
-	if len(users) == 0 {
-		d.MUser = 0
-	} else {
-		d.MUser = users[len(users)-1].Id
-	}
-
+	ls := []string{}
 	um := make(map[int]db.User)
 	for _, u := range users {
 		um[u.Worker] = u
+		ls = append(ls, u.Login)
 	}
 
 	temp := make(map[int]*UserWorker)
@@ -92,9 +82,8 @@ func (d *Data) fetchUWs(ctx context.Context) error {
 		temp[w.Id] = &UserWorker{Id: w.Id, W: w, U: um[w.Id]}
 	}
 
-	if len(temp) != 0 {
-		d.UWs = temp
-	}
+	d.Logins = ls
+	d.UWs = temp
 
 	return nil
 }
@@ -114,12 +103,10 @@ func (d *Data) fetchTasks(ctx context.Context) error {
 		temp[v.Id] = &v
 	}
 
-	if len(tasks) == 0 {
-		d.MTask = 0
-	} else {
+	d.Tasks = temp
+
+	if len(tasks) != 0 {
 		d.Filtered = fd
-		d.Tasks = temp
-		d.MTask = tasks[len(tasks)-1].Id
 	}
 
 	return nil
@@ -137,12 +124,7 @@ func (d *Data) fetchCats(ctx context.Context) error {
 		temp[v.Id] = &v
 	}
 
-	if len(cats) == 0 {
-		d.MCat = 0
-	} else {
-		d.Cats = temp
-		d.MCat = cats[len(cats)-1].Id
-	}
+	d.Cats = temp
 
 	return nil
 }
@@ -159,12 +141,7 @@ func (d *Data) fetchAddrs(ctx context.Context) error {
 		temp[v.Id] = &v
 	}
 
-	if len(addrs) == 0 {
-		d.MAddr = 0
-	} else {
-		d.Addrs = temp
-		d.MAddr = addrs[len(addrs)-1].Id
-	}
+	d.Addrs = temp
 
 	return nil
 }

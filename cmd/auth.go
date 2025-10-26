@@ -2,7 +2,6 @@ package main
 
 import (
 	"argentum/db"
-	"database/sql"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -58,7 +57,6 @@ func (e Endpoints) register(c echo.Context) error {
 		Login:  tel,
 		Hash:   string(hash),
 		Level:  0,
-		Token:  sql.NullString{},
 	}
 
 	if _, err := db.AddUser(u); err != nil {
