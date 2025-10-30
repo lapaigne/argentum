@@ -100,12 +100,6 @@ func (e Endpoints) cats_add(c echo.Context) error {
 		return err
 	}
 
-	var parent sql.NullInt32
-	if checked != "checked" {
-		parent.Int32 = int32(par)
-		parent.Valid = true
-	}
-
 	parCat, ok := data.Cats[par]
 	if !ok {
 		return fmt.Errorf("no parent cat w/ id %d", par)
@@ -113,10 +107,20 @@ func (e Endpoints) cats_add(c echo.Context) error {
 
 	cat := db.Category{
 		Name:   catName,
-		Parent: parent,
-		Level:  parCat.Level + 1,
 		Active: true,
 	}
+
+	var parent sql.NullInt32
+	if checked != "checked" {
+		parent.Int32 = int32(par)
+		parent.Valid = true
+		cat.Level = parCat.Level + 1
+	} else {
+		cat.Level = 1
+	}
+
+	cat.Parent = parent
+
 	id, err := db.AddCategory(cat)
 	if err != nil {
 		return err
