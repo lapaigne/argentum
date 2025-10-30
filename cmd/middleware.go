@@ -9,11 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const (
-	refSecret = "ref-secret"
-	accSecret = "secret"
-)
-
 type jwtClaims struct {
 	UID   int `json:"uid"`
 	Level int `json:"level"`

@@ -30,6 +30,11 @@ var public = map[string]bool{
 	"/signin": true,
 }
 
+var (
+	refSecret = os.Getenv("AQUA_REF")
+	accSecret = os.Getenv("AQUA_SEC")
+)
+
 func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
