@@ -10,6 +10,9 @@
         {{ if eq .U.Level 100 }}Администратор{{ end }}
         {{ end }}{{ end }}{{ end }}
     </td>
+    <td>
+        {{ .U.Login }}
+    </td>
 </tr>
 {{ end }}
 
@@ -54,10 +57,9 @@
         {{ end }}
     </select>
     <div class="menus-buttons">
-        <button type="submit"
-                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button type="submit" hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
         <button hx-post="/workers/del-{{ .Id }}" hx-target="#workers-row-{{ .Id }}"
-                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
     </div>
 </form>
 {{ end }}
