@@ -22,8 +22,8 @@
 <form hx-post="/workers/add" id="workers-add-f" hx-target="#workers-table-body" hx-swap="beforeend" hx-push-url="false"
     hx-history="false">
     <div class="menus-data" style="display: contents">
-        <input type="text" name="f_name" placeholder="Имя">
-        <input type="text" name="i_name" placeholder="Фамилия">
+        <input type="text" name="f_name" placeholder="Фамилия">
+        <input type="text" name="i_name" placeholder="Имя">
         <input type="text" name="o_name" placeholder="Отчество">
         <input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login"
             hx-swap="outerHTML" placeholder="Логин">
