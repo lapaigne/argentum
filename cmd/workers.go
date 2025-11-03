@@ -62,6 +62,13 @@ func (e Endpoints) workers_add(c echo.Context) error {
 	login := c.FormValue("login")
 	pass := c.FormValue("pass")
 
+	if !validLogin(login) {
+		res := fmt.Sprintf(`<input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login" hx-swap="outerHTML" placeholder="Логин" value="%s" class="form-error">`, login)
+		c.Response().Header().Set("HX-Retarget", "#workers-login")
+		c.Response().Header().Set("HX-Reswap", "outerHTML")
+		return c.HTML(200, res)
+	}
+
 	lvl, err := strconv.Atoi(c.FormValue("workers-lvl-sel"))
 	if err != nil {
 		return err
@@ -105,7 +112,7 @@ func (e Endpoints) workers_add(c echo.Context) error {
 
 	data.UWs[w.Id] = &uw
 
-	return c.Render(200, "workers-row", uw)
+	return c.Render(200, "workers", data.UWs)
 }
 
 func (e Endpoints) workers_gen(c echo.Context) error {
@@ -248,24 +255,30 @@ func (e Endpoints) workers_addpanel(c echo.Context) error {
 }
 
 func (e Endpoints) workers_tel(c echo.Context) error {
-	raw := c.FormValue("login")
+	login := c.FormValue("login")
 
-	str := fmt.Sprintf(`<input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login" hx-swap="outerHTML" placeholder="Логин" value="%s"`, raw)
+	str := fmt.Sprintf(`<input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login" hx-swap="outerHTML" placeholder="Логин" value="%s"`, login)
 	end := ">"
 
-	var check bool
-
-	if _, err := strconv.Atoi(raw); err != nil {
-		check = true
+	if validLogin(login) {
+		return c.HTML(200, str+end)
 	}
 
-	if slices.Contains(data.Logins, raw) {
-		check = true
+	return c.HTML(200, str+`class=form-error`+end)
+}
+
+func validLogin(login string) bool {
+	if len(login) == 0 {
+		return false
 	}
 
-	if check {
-		return c.HTML(200, str+`class=form-error`+end)
+	if _, err := strconv.Atoi(login); err != nil {
+		return false
 	}
 
-	return c.HTML(200, str+end)
+	if slices.Contains(data.Logins, login) {
+		return false
+	}
+
+	return true
 }

@@ -17,10 +17,8 @@
 {{ end }}
 
 
-
 {{ define "workers-add" }}
-<form hx-post="/workers/add" id="workers-add-f" hx-target="#workers-table-body" hx-swap="beforeend" hx-push-url="false"
-    hx-history="false">
+<form hx-post="/workers/add" id="workers-add-f" hx-target="#content" hx-push-url="false" hx-history="false">
     <div class="menus-data" style="display: contents">
         <input type="text" name="f_name" placeholder="Фамилия">
         <input type="text" name="i_name" placeholder="Имя">
@@ -36,8 +34,7 @@
         <option value="50">Диспетчер</option>
         <option value="100">Администратор</option>
     </select>
-    <button type="submit" hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить
-        работника</button>
+    <button type="submit">Добавить работника</button>
 </form>
 {{ end }}
 
