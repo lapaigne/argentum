@@ -29,6 +29,10 @@
     }
 }
 
+#until-checkbox {
+    width: 10%;
+}
+
 /* Tablet */
 @media (min-width: 768px) {
     .form-start {
