@@ -2,7 +2,7 @@
     color: red;
     border-color: red;
 
-    & select, textarea {
+    & select, textarea, input {
         color: red;
         border-color: red;
     }
@@ -10,8 +10,4 @@
     & option {
         color: black;
     }
-}
-
-input.form-error {
-    color: red;
 }
