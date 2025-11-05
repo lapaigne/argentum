@@ -138,6 +138,11 @@
             $frame[0].srcdoc = html
         })
     </script>
+    <script>
+        $(document).on('input change', '.reoc', function () {
+            $(this).closest('.form-error').removeClass('form-error')
+        })
+    </script>
 </body>
 
 </html>
