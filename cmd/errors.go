@@ -20,21 +20,20 @@ func ErrorHandler(err error, c echo.Context) {
 	}
 
 	if code == 401 {
-
 		if public[c.Request().URL.Path] {
 			return
 		}
 
 		if c.Request().Header.Get("HX-Request") == "true" {
-			c.NoContent(401)
+			_ = c.NoContent(401)
 		} else {
-			c.Redirect(303, "/signin")
+			_ = c.Redirect(303, "/signin")
 		}
 		return
 	}
 
 	if !c.Response().Committed {
-		c.JSON(code, map[string]any{
+		_ = c.JSON(code, map[string]any{
 			"error": msg,
 		})
 	}

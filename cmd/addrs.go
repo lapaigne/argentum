@@ -10,7 +10,7 @@ import (
 
 func (e Endpoints) addrs_GET(c echo.Context) error {
 	if getClaims(c).Level < ACC_DISPATCHER {
-		c.Redirect(303, "/menu/")
+		return c.Redirect(303, "/menu/")
 	}
 
 	return c.Render(200, "addrs", data.Addrs)

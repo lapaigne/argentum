@@ -13,7 +13,7 @@ import (
 
 func (e Endpoints) newtask_GET(c echo.Context) error {
 	if getClaims(c).Level < ACC_DISPATCHER {
-		c.Redirect(303, "/menu/")
+		return c.Redirect(303, "/menu/")
 	}
 
 	d := struct {

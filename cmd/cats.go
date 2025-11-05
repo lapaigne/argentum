@@ -12,7 +12,7 @@ import (
 
 func (e Endpoints) cats_GET(c echo.Context) error {
 	if getClaims(c).Level < ACC_DISPATCHER {
-		c.Redirect(303, "/menu/")
+		return c.Redirect(303, "/menu/")
 	}
 
 	return c.Render(200, "cats", data.Cats.Sorted())
