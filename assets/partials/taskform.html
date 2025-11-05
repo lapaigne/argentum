@@ -1,20 +1,18 @@
 {{ define "taskform" }}
-<div class="taskform-left">
-    <form hx-post="/newtask/" id="task-form" hx-target="#content" hx-swap="innerHTML" hx-push-url="true"
+<div class="taskform-left" id="tf-left">
+    <form hx-post="/newtask/" id="task-form" hx-target="#tf-left" hx-swap="outerHTML" hx-push-url="false"
         autocomplete="off">
         <div>
             <div class="form-start">
-                <div id="comb-cat-wrap">
-                    <label class="{{ if and .Errors (or .Errors.Cat1 .Errors.Cat2 .Errors.Cat3) }} form-error {{ end }}">
-                        Категории задачи
-                    </label>
-                    <div class="{{ if and .Errors .Errors.Cat1 }} form-error {{ end }}" id="cat1">
+                <div id="comb-cat-wrap" class="{{ if and .Errors .Errors.Cats }} form-error {{ end }}">
+                    <label>Категории задачи</label>
+                    <div id="cat1">
                         {{ template "tf-cat-1" . }}
                     </div>
-                    <div class="{{ if and .Errors .Errors.Cat2 }} form-error {{ end }}" id="cat2">
+                    <div id="cat2">
                         {{ template "tf-cat-2" . }}
                     </div>
-                    <div class="{{ if and .Errors .Errors.Cat3 }} form-error {{ end }}" id="cat3">
+                    <div id="cat3">
                         {{ template "tf-cat-3" . }}
                     </div>
                 </div>
@@ -25,9 +23,9 @@
                 <div class="{{ if and .Errors .Errors.Desc }} form-error {{ end }}">
                     <label>Описание задачи</label>
                     {{ if .Filled }}
-                    <textarea class="form-textarea" id="description" name="desc">{{ .Filled.Desc }}</textarea>
+                    <textarea class="form-textarea reoc" id="description" name="desc">{{ .Filled.Desc }}</textarea>
                     {{ else }}
-                    <textarea class="form-textarea" id="description" name="desc"></textarea>
+                    <textarea class="form-textarea reoc" id="description" name="desc"></textarea>
                     {{ end }}
                 </div>
             </div>
@@ -45,31 +43,36 @@
             <div class="form-date">
                 <div>
                     <label>Дата создания</label>
-                    <input type="date" id="created" name="created"
-                        value='{{ if .Filled }}{{ .Filled.Created_date.Format "2006-01-02" }}{{ else }}{{ .Today }}{{ end }}'>
+                    {{ $date := "" }}
+                    {{- if .Filled -}}
+                    {{ $date = .Filled.Created_date.Format "2006-01-02" -}}
+                    {{ else }}
+                    {{ $date = .Today }}
+                    {{ end }}
+                    <input type="date" id="created" name="created" value='{{ $date }}'>
                 </div>
                 <div id="until-div" class="{{ if and .Errors .Errors.Until }} form-error {{ end }}">
                     <div>
                         <label>Срок выполнения</label>
                         {{ if .Filled }}
                         {{ if .Checked }}
-                        <input type="date" id="do-until" name="do-until" style="display: none;">
+                        <input type="date" class="reoc" id="do-until" name="do-until" style="display: none;">
                         {{ else }}
                         {{ if .Filled.Until_date.Valid }}
                         {{ $date := .Filled.Until_date.Time.Format "2006-01-02" }}
-                        <input type="date" id="do-until" name="do-until" value="{{ $date }}">
+                        <input type="date" class="reoc" id="do-until" name="do-until" value="{{ $date }}">
                         {{ else }}
-                        <input type="date" id="do-until" name="do-until">
+                        <input type="date" class="reoc" id="do-until" name="do-until">
                         {{ end }}
                         {{ end }}
                         {{ else }}
-                        <input type="date" id="do-until" name="do-until">
+                        <input type="date" class="reoc" id="do-until" name="do-until">
                         {{ end }}
                     </div>
                     <div>
                         <label>Без определенного срока</label>
-                        <input type="checkbox" id="until-checkbox" name="until-checkbox" value="checked" {{ if and (and
-                            .Filled (not .Filled.Until_date.Valid) .Checked )}} checked {{ end }}
+                        <input type="checkbox" class="reoc" id="until-checkbox" name="until-checkbox" value="checked" {{
+                            if and (and .Filled (not .Filled.Until_date.Valid) .Checked )}} checked {{ end }}
                             hx-on:click="$('#do-until').toggle(!this.checked)">
                     </div>
                 </div>

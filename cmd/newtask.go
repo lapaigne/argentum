@@ -64,9 +64,7 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 
 	errs := struct {
 		Any    bool
-		Cat1   bool
-		Cat2   bool
-		Cat3   bool
+		Cats   bool
 		Addr   bool
 		Worker bool
 		Desc   bool
@@ -102,10 +100,7 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	c1, err := strconv.Atoi(c.FormValue("cat1"))
 	v, ok := data.Cats[c1]
 	if err != nil || !ok || v.Level != 1 {
-		errs.Cat1 = true
-		errs.Cat2 = true
-		errs.Cat3 = true
-		errs.Any = true
+		errs.Cats = true
 	} else {
 		t.Cat1 = c1
 	}
@@ -113,8 +108,7 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	c2, err := strconv.Atoi(c.FormValue("cat2"))
 	v, ok = data.Cats[c2]
 	if err != nil || !ok || v.Level != 2 {
-		errs.Cat2 = true
-		errs.Cat3 = true
+		errs.Cats = true
 		errs.Any = true
 	} else {
 		t.Cat2 = c2
@@ -123,7 +117,7 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	c3, err := strconv.Atoi(c.FormValue("cat3"))
 	v, ok = data.Cats[c3]
 	if err != nil || !ok || v.Level != 3 {
-		errs.Cat3 = true
+		errs.Cats = true
 		errs.Any = true
 	} else {
 		t.Cat3 = c3
@@ -178,7 +172,8 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	}
 
 	if errs.Any {
-		return c.Render(200, "newtask", d)
+		fmt.Println("rep")
+		return c.Render(200, "taskform", d)
 	}
 
 	id, err := db.AddTask(t)
@@ -189,7 +184,11 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	t.Id = id
 	data.Tasks[t.Id] = &t
 
-	return c.Redirect(303, "/alltasks/")
+	c.Response().Header().Set("HX-Retarget", "#content")
+	c.Response().Header().Set("HX-Reswap", "outerHTML")
+	c.Response().Header().Set("HX-Redirect", "/alltasks/")
+
+	return nil
 }
 
 func (e Endpoints) newtask_cat1(c echo.Context) error {
