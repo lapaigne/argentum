@@ -11,9 +11,6 @@
 </div>
 
 <div id="alltasks-filters">
-    <div>
-    </div>
-
     <div id="filter-worker">
         <select hx-post="/alltasks/filter" name="f-worker" hx-target="#alltasks-tbody" autocomplete="off"
             hx-swap="innerHTML" hx-include="#alltasks-filters *">
@@ -36,11 +33,25 @@
             {{ end }}
         </select>
     </div>
-
-    <!-- <div id="filter"> -->
-    <!--     <select hx-post="/alltasks/filter" hx-name="" hx-target="#content"> -->
-    <!--     </select> -->
-    <!-- </div> -->
+    <div id="filter-recent">
+        <input type="checkbox" name="f-recent" id="f-recent" value="1" {{ if $.Filter.Recent }} checked {{ end }}
+            hx-post="/alltasks/filter" hx-target="#alltasks-tbody" hx-swap="innerHTML" hx-include="#alltasks-filters *">
+        <label for="f-recent">Показать задачи за последние 15 дней</label>
+    </div>
+    <div id="filter-status">
+        <select name="f-status" hx-post="/alltasks/filter" hx-target="#alltasks-tbody" hx-swap="innerHTML"
+            hx-include="#alltasks-filters *" autocomplete="off">
+            <option {{ if eq $.Filter.Status 0 }} selected {{ end }} value="0">
+                Все задачи
+            </option>
+            <option {{ if eq $.Filter.Status 1 }} selected {{ end }} value="1">
+                Только выполненные
+            </option>
+            <option {{ if eq $.Filter.Status -1 }} selected {{ end }} value="-1">
+                Только невыполненные
+            </option>
+        </select>
+    </div>
 </div>
 
 <div id="alltasks-wrap" class="table content">

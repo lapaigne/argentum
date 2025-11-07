@@ -3,13 +3,24 @@ package main
 import (
 	"argentum/db"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
+)
+
+type fStatus int
+
+const (
+	FILTER_INCOMPLETE fStatus = iota - 1
+	FILTER_ALL
+	FILTER_COMPLETE
 )
 
 type Filter struct {
 	Worker int
 	Addr   int
+	Recent bool
+	Status fStatus
 }
 
 func (e Endpoints) print(c echo.Context) error {
@@ -33,10 +44,7 @@ func (e Endpoints) alltasks_GET(c echo.Context) error {
 
 	data.Filtered = fids
 
-	filter := Filter{
-		Worker: 0,
-		Addr:   0,
-	}
+	filter := Filter{}
 
 	d := struct {
 		Filter Filter
@@ -54,30 +62,54 @@ func (e Endpoints) alltasks_GET(c echo.Context) error {
 func (e Endpoints) alltasks_filter(c echo.Context) error {
 	wid, _ := strconv.Atoi(c.FormValue("f-worker"))
 	addr, _ := strconv.Atoi(c.FormValue("f-addr"))
+	recent := c.FormValue("f-recent") == "1"
+	status, _ := strconv.Atoi(c.FormValue("f-status"))
 
 	filter := Filter{
 		Worker: wid,
 		Addr:   addr,
+		Recent: recent,
+		Status: fStatus(status),
 	}
 
 	tasks := []db.Task{}
 	fids := []int{}
 
 	cmp := func(data, form int) bool {
-		if form == 0 {
-			return true
-		}
-		if data != form {
-			return false
-		}
-		return true
+		return form == 0 || data == form
 	}
 
+	cut := time.Now().AddDate(0, 0, -15)
+
 	for _, v := range data.Tasks {
-		if cmp(v.Worker, wid) && cmp(v.Addr_obj, addr) {
-			tasks = append(tasks, *v)
-			fids = append(fids, v.Id)
+		if !cmp(v.Addr_obj, addr) {
+			continue
 		}
+
+		if !cmp(v.Worker, wid) {
+			continue
+		}
+
+		if recent && v.Created_date.Before(cut) {
+			continue
+		}
+
+		switch fStatus(status) {
+		case FILTER_COMPLETE:
+			if !v.Mark_date.Valid {
+				continue
+			}
+		case FILTER_INCOMPLETE:
+			if v.Mark_date.Valid {
+				continue
+			}
+		case FILTER_ALL:
+		default:
+			return echo.ErrBadRequest
+		}
+
+		tasks = append(tasks, *v)
+		fids = append(fids, v.Id)
 	}
 
 	data.Filtered = fids
