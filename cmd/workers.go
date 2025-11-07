@@ -63,7 +63,7 @@ func (e Endpoints) workers_add(c echo.Context) error {
 	pass := c.FormValue("pass")
 
 	if !validLogin(login) {
-		res := fmt.Sprintf(`<input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login" hx-swap="outerHTML" placeholder="Логин" value="%s" class="form-error">`, login)
+		res := fmt.Sprintf(`<input type="text" name="login" id="workers-login" hx-post="/workers/tel" hx-target="#workers-login" hx-swap="outerHTML" placeholder="Логин" value="%s" class="reoc form-error">`, login)
 		c.Response().Header().Set("HX-Retarget", "#workers-login")
 		c.Response().Header().Set("HX-Reswap", "outerHTML")
 		return c.HTML(200, res)

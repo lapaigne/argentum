@@ -4,7 +4,7 @@
     document.querySelector('.right').style.display = 'flex';">
     <td>{{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}</td>
     <td>
-        {{ if eq .U.Level 0 }}Отключен{{ else }}
+        {{ if eq .U.Level 0 }}Неактивный{{ else }}
         {{ if eq .U.Level 10 }}Сотрудник{{ else }}
         {{ if eq .U.Level 50 }}Диспетчер{{ else }}
         {{ if eq .U.Level 100 }}Администратор{{ end }}

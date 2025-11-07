@@ -34,7 +34,7 @@
             <label for="cats-parent-sel">Родительская категория</label>
             <select id="cats-parent-sel" name="cats-parent-sel">
                 {{ range . }}
-                <option value="{{ .Id }}">NAME: {{ .Name }} <br>LEVEL: {{ .Level }}</option>
+                <option value="{{ .Id }}">{{ .Name }}; <br>Уровень: {{ .Level }}</option>
                 {{ end }}
             </select>
         </div>
