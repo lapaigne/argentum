@@ -12,7 +12,7 @@ import (
 var db *sql.DB
 
 func OpenConn() {
-	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s sslmode=require port=5433",
+	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s sslmode=require",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PSWD"),
 		os.Getenv("DB_NAME"),
