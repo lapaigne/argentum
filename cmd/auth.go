@@ -15,57 +15,6 @@ const (
 	ACC_NONE       = 0
 )
 
-func isAdminErr(c echo.Context) error {
-
-	acc := getClaims(c).Level
-	if acc != ACC_ADMIN {
-		return echo.ErrUnauthorized
-	}
-
-	return nil
-}
-
-func checkLevel(c echo.Context, min int) error {
-
-	acc := getClaims(c).Level
-
-	if acc < min {
-		return echo.ErrUnauthorized
-	}
-
-	switch acc {
-	case ACC_ADMIN, ACC_DISPATCHER, ACC_WORKER:
-	default:
-		return echo.ErrUnauthorized
-	}
-
-	return nil
-}
-
-func (e Endpoints) register(c echo.Context) error {
-	tel := c.FormValue("tel")
-	pass := c.FormValue("pass")
-	pwd := []byte(pass)
-
-	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-
-	u := db.User{
-		Worker: 0,
-		Login:  tel,
-		Hash:   string(hash),
-		Level:  0,
-	}
-
-	if _, err := db.AddUser(u); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (e Endpoints) signin_POST(c echo.Context) error {
 	tel := c.FormValue("tel")
 	pass := c.FormValue("pass")
@@ -94,10 +43,12 @@ func (e Endpoints) signin_POST(c echo.Context) error {
 	setCookie(c, "ref", refSigned, rTime)
 
 	switch accClaims.Level {
-	case 10, 50, 100:
+	case ACC_WORKER:
+		return c.Redirect(303, "/me/")
+	case ACC_DISPATCHER, ACC_ADMIN:
 		return c.Redirect(303, "/menu/")
 	default:
-		return c.Redirect(303, "/signin")
+		return e.logout(c)
 	}
 }
 

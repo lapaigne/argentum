@@ -16,7 +16,6 @@ func refTime(now time.Time) time.Time {
 }
 
 func getClaims(c echo.Context) *jwtClaims {
-
 	user := c.Get("user")
 	if user == nil {
 		return nil

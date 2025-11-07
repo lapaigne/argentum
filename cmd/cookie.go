@@ -31,6 +31,5 @@ func clearCookie(c echo.Context, name string) {
 		Expires:  time.Unix(0, 0),
 		MaxAge:   -1,
 	}
-
 	c.SetCookie(cookie)
 }
