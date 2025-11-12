@@ -15,6 +15,10 @@ func (e Endpoints) workers_GET(c echo.Context) error {
 		return c.Redirect(303, "/menu/")
 	}
 
+	if uws, ok := filter(c); ok {
+		return c.Render(200, "workers", uws)
+	}
+
 	return c.Render(200, "workers", data.UWs)
 }
 
@@ -49,6 +53,8 @@ func (e Endpoints) workers_POST(c echo.Context) error {
 		return e.workers_tel(c)
 	case "/workers/gen":
 		return e.workers_gen(c)
+	case "/workers/filter":
+		return e.workers_filter(c)
 	default:
 		return echo.ErrNotFound
 	}
@@ -176,7 +182,6 @@ func (e Endpoints) workers_upd(c echo.Context) error {
 		Id: wid,
 	}
 
-	// slow for now, perhaps would be updated to use channels
 	dw, du := Diffs(*uw, d)
 	if dw {
 		if err = db.UpdateWorker(wid, d.W); err != nil {
@@ -281,4 +286,25 @@ func validLogin(login string) bool {
 	}
 
 	return true
+}
+
+func filter(c echo.Context) ([]UserWorker, bool) {
+	if c.FormValue("w-hide") == "1" {
+		uws := []UserWorker{}
+		for _, v := range data.UWs {
+			if v.U.Level != ACC_NONE {
+				uws = append(uws, *v)
+			}
+		}
+		return uws, true
+	}
+	return nil, false
+}
+
+func (e Endpoints) workers_filter(c echo.Context) error {
+	if uws, ok := filter(c); ok {
+		return c.Render(200, "workers-tbody", uws)
+	}
+
+	return c.Render(200, "workers-tbody", data.UWs)
 }

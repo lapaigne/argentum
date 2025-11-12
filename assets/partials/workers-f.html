@@ -60,3 +60,12 @@
     </div>
 </form>
 {{ end }}
+
+
+{{ define "workers-tbody" }}
+
+{{ range . }}
+{{ template "workers-row" . }}
+{{ end }}
+
+{{ end }}

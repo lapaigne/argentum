@@ -4,6 +4,9 @@
         <div id="">
             <button hx-post="/workers/add-panel" hx-target="#workers-panel" hx-swap="innerHTML"
                 hx-on:click="document.querySelector('.right').style.display = 'flex';">Добавить работника</button>
+            <input type="checkbox" name="w-hide" id="w-hide" value="1" checked hx-post="/workers/filter"
+                hx-target="#workers-table-body" hx-swap="innerHTML" hx-trigger="load, change">
+            <label for="w-hide">Скрыть отключенные аккаунты</label>
         </div>
         <table class="datatable" id="workers-table">
             <thead>
@@ -12,9 +15,7 @@
                 <th>Логин</th>
             </thead>
             <tbody id="workers-table-body">
-                {{ range . }}
-                {{ template "workers-row" . }}
-                {{ end }}
+                {{ template "workers-tbody" . }}
             </tbody>
         </table>
     </div>
