@@ -42,6 +42,10 @@ func (e Endpoints) newtask_GET(c echo.Context) error {
 }
 
 func (e Endpoints) newtask_POST(c echo.Context) error {
+	if getClaims(c).Level < ACC_DISPATCHER {
+		return echo.ErrUnauthorized
+	}
+
 	url := c.Request().URL.Path
 
 	switch url {
@@ -54,7 +58,6 @@ func (e Endpoints) newtask_POST(c echo.Context) error {
 	case "/newtask/cat-2":
 		return e.newtask_cat2(c)
 	default:
-		fmt.Println(url)
 		return echo.ErrNotFound
 	}
 }

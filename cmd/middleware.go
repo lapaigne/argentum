@@ -63,7 +63,6 @@ func jwtMiddleware(config echojwt.Config) echo.MiddlewareFunc {
 
 			signed, claims, err := signToken(refClaims.UID, refClaims.Level, aTime, accSecret)
 			if err != nil {
-				fmt.Println(err)
 				return echo.ErrUnauthorized
 			}
 
