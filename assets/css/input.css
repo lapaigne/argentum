@@ -1,6 +1,6 @@
 /* input.css */
 
-input,
+input:not([type="checkbox"]),
 select,
 textarea {
     font-family: inherit;
@@ -28,6 +28,10 @@ textarea:focus {
     background-color: #fff;
 }
 
+input[type="checkbox"] {
+    margin: 10px;
+}
+
 textarea {
     resize: vertical;
     min-height: 80px;
@@ -41,6 +45,12 @@ label {
 
 .dt-length select {
     width: 70px;
+}
+
+.checkbox-with-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 button,
@@ -99,6 +109,12 @@ input.white[type="reset"]:hover {
     background-color: #eee;
     border-color: #bbb;
     color: #333;
+}
+
+@media (min-width: 450px) {
+    .checkbox-with-text {
+        justify-content: left;
+    }
 }
 
 /* Tablet */
