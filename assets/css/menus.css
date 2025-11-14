@@ -53,9 +53,3 @@
         min-height: 32.39px;
     }
 }
-
-@media (min-width: 1024px) {
-    .close-btn {
-        display: none;
-    }
-}
