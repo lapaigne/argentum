@@ -15,7 +15,7 @@ func (e Endpoints) workers_GET(c echo.Context) error {
 		return c.Redirect(303, "/menu/")
 	}
 
-	if uws, ok := filter(c); ok {
+	if uws, ok := w_filter(c); ok {
 		return c.Render(200, "workers", uws)
 	}
 
@@ -288,7 +288,7 @@ func validLogin(login string) bool {
 	return true
 }
 
-func filter(c echo.Context) ([]UserWorker, bool) {
+func w_filter(c echo.Context) ([]UserWorker, bool) {
 	if c.FormValue("w-hide") == "1" {
 		uws := []UserWorker{}
 		for _, v := range data.UWs {
@@ -302,7 +302,7 @@ func filter(c echo.Context) ([]UserWorker, bool) {
 }
 
 func (e Endpoints) workers_filter(c echo.Context) error {
-	if uws, ok := filter(c); ok {
+	if uws, ok := w_filter(c); ok {
 		return c.Render(200, "workers-tbody", uws)
 	}
 
