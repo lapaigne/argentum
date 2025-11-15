@@ -36,15 +36,10 @@ func (e Endpoints) print(c echo.Context) error {
 }
 
 func (e Endpoints) alltasks_GET(c echo.Context) error {
-	fids := []int{}
 
-	for _, v := range data.Tasks {
-		fids = append(fids, v.Id)
 	}
 
-	data.Filtered = fids
 
-	filter := Filter{}
 
 	d := struct {
 		Filter Filter
@@ -109,10 +104,7 @@ func (e Endpoints) alltasks_filter(c echo.Context) error {
 		}
 
 		tasks = append(tasks, *v)
-		fids = append(fids, v.Id)
 	}
-
-	data.Filtered = fids
 
 	temp := struct {
 		Tasks []db.Task

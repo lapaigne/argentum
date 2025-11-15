@@ -105,10 +105,6 @@ func (d *Data) fetchTasks(ctx context.Context) error {
 
 	d.Tasks = temp
 
-	if len(tasks) != 0 {
-		d.Filtered = fd
-	}
-
 	return nil
 }
 

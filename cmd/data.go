@@ -14,8 +14,6 @@ type Data struct {
 	Addrs map[int]*db.Address
 	UWs   map[int]*UserWorker
 
-	Filtered []int
-
 	Logins []string
 }
 
