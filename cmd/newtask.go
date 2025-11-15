@@ -176,7 +176,6 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	}
 
 	if errs.Any {
-		fmt.Println("rep")
 		return c.Render(200, "taskform", d)
 	}
 

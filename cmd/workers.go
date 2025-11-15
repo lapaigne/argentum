@@ -273,7 +273,7 @@ func (e Endpoints) workers_tel(c echo.Context) error {
 }
 
 func validLogin(login string) bool {
-	if len(login) == 0 {
+	if len(login) < 4 {
 		return false
 	}
 

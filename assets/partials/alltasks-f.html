@@ -16,7 +16,11 @@
         <span>{{ (index $cats .Cat3).Name }}</span>
     </td>
     <td data-label="Объект">
+        {{ if eq .Addr_obj 0 }}
+        "-"
+        {{ else }}
         {{ (index $addrs .Addr_obj).Address }}
+        {{ end }}
     </td>
     <td data-label="Исполнитель">
         {{ $w := (index $workers .Worker).W }} {{ $w.F_name }} {{ $w.I_name }} {{ $w.O_name }}
