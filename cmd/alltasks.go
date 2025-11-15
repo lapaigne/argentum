@@ -2,6 +2,8 @@ package main
 
 import (
 	"argentum/db"
+	"fmt"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -24,11 +26,47 @@ type Filter struct {
 }
 
 func (e Endpoints) print(c echo.Context) error {
+	filter := Filter{}
+
+	if clw, _ := c.Cookie("flw"); clw != nil {
+		filter.Worker, _ = strconv.Atoi(clw.Value)
+	}
+
+	if cla, _ := c.Cookie("fla"); cla != nil {
+		filter.Addr, _ = strconv.Atoi(cla.Value)
+	}
+
+	if cre, _ := c.Cookie("fre"); cre != nil {
+		filter.Recent, _ = strconv.ParseBool(cre.Value)
+	}
+
+	if cst, _ := c.Cookie("fst"); cst != nil {
+		s, _ := strconv.Atoi(cst.Value)
+		filter.Status = fStatus(s)
+	}
+
+	tasks, err := at_filter(filter)
+	if err != nil {
+		fmt.Println(len(tasks))
+	}
+
+	temp := struct {
+		Tasks []db.Task
+		Cats  CatMap
+		Addrs map[int]*db.Address
+		UWs   map[int]*UserWorker
+	}{
+		Tasks: tasks,
+		Cats:  data.Cats,
+		Addrs: data.Addrs,
+		UWs:   data.UWs,
+	}
+
 	d := struct {
-		Data   Data
+		Data   any
 		Helper Helper
 	}{
-		Data:   data,
+		Data:   temp,
 		Helper: helper,
 	}
 
@@ -36,18 +74,40 @@ func (e Endpoints) print(c echo.Context) error {
 }
 
 func (e Endpoints) alltasks_GET(c echo.Context) error {
+	filter := Filter{}
 
+	if clw, _ := c.Cookie("flw"); clw != nil {
+		filter.Worker, _ = strconv.Atoi(clw.Value)
 	}
 
+	if cla, _ := c.Cookie("fla"); cla != nil {
+		filter.Addr, _ = strconv.Atoi(cla.Value)
+	}
 
+	tasks, err := at_filter(filter)
+	if err != nil {
+		fmt.Println(len(tasks))
+	}
+
+	temp := struct {
+		Tasks []db.Task
+		Cats  CatMap
+		Addrs map[int]*db.Address
+		UWs   map[int]*UserWorker
+	}{
+		Tasks: tasks,
+		Cats:  data.Cats,
+		Addrs: data.Addrs,
+		UWs:   data.UWs,
+	}
 
 	d := struct {
 		Filter Filter
-		Data   Data
+		Data   any
 		Helper Helper
 	}{
 		Filter: filter,
-		Data:   data,
+		Data:   temp,
 		Helper: helper,
 	}
 
@@ -60,6 +120,34 @@ func (e Endpoints) alltasks_filter(c echo.Context) error {
 	recent := c.FormValue("f-recent") == "1"
 	status, _ := strconv.Atoi(c.FormValue("f-status"))
 
+	// worker
+	c.SetCookie(&http.Cookie{
+		Name:  "flw",
+		Value: strconv.Itoa(wid),
+		Path:  "/",
+	})
+
+	// addr
+	c.SetCookie(&http.Cookie{
+		Name:  "fla",
+		Value: strconv.Itoa(addr),
+		Path:  "/",
+	})
+
+	// recent
+	c.SetCookie(&http.Cookie{
+		Name:  "fre",
+		Value: strconv.FormatBool(recent),
+		Path:  "/",
+	})
+
+	// status
+	c.SetCookie(&http.Cookie{
+		Name:  "fst",
+		Value: strconv.Itoa(int(status)),
+		Path:  "/",
+	})
+
 	filter := Filter{
 		Worker: wid,
 		Addr:   addr,
@@ -67,43 +155,9 @@ func (e Endpoints) alltasks_filter(c echo.Context) error {
 		Status: fStatus(status),
 	}
 
-	tasks := []db.Task{}
-	fids := []int{}
-
-	cmp := func(data, form int) bool {
-		return form == 0 || data == form
-	}
-
-	cut := time.Now().AddDate(0, 0, -15)
-
-	for _, v := range data.Tasks {
-		if !cmp(v.Addr_obj, addr) {
-			continue
-		}
-
-		if !cmp(v.Worker, wid) {
-			continue
-		}
-
-		if recent && v.Created_date.Before(cut) {
-			continue
-		}
-
-		switch fStatus(status) {
-		case FILTER_COMPLETE:
-			if !v.Mark_date.Valid {
-				continue
-			}
-		case FILTER_INCOMPLETE:
-			if v.Mark_date.Valid {
-				continue
-			}
-		case FILTER_ALL:
-		default:
-			return echo.ErrBadRequest
-		}
-
-		tasks = append(tasks, *v)
+	tasks, err := at_filter(filter)
+	if err != nil {
+		return err
 	}
 
 	temp := struct {
@@ -129,4 +183,47 @@ func (e Endpoints) alltasks_filter(c echo.Context) error {
 	}
 
 	return c.Render(200, "alltasks-tbody", d)
+}
+
+func at_filter(filter Filter) ([]db.Task, error) {
+	worker, addr, recent, status := filter.Worker, filter.Addr, filter.Recent, filter.Status
+	tasks := []db.Task{}
+
+	cmp := func(d, form int) bool {
+		return form == 0 || d == form
+	}
+
+	cut := time.Now().AddDate(0, 0, -15)
+
+	for _, v := range data.Tasks {
+		if !cmp(v.Addr_obj, addr) {
+			continue
+		}
+
+		if !cmp(v.Worker, worker) {
+			continue
+		}
+
+		if recent && v.Created_date.Before(cut) {
+			continue
+		}
+
+		switch fStatus(status) {
+		case FILTER_COMPLETE:
+			if !v.Mark_date.Valid {
+				continue
+			}
+		case FILTER_INCOMPLETE:
+			if v.Mark_date.Valid {
+				continue
+			}
+		case FILTER_ALL:
+		default:
+			return tasks, fmt.Errorf("invalid filter value")
+		}
+
+		tasks = append(tasks, *v)
+	}
+
+	return tasks, nil
 }

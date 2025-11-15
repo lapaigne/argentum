@@ -4,6 +4,7 @@ import (
 	"argentum/db"
 	"database/sql"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -187,11 +188,23 @@ func (e Endpoints) newtask_submit(c echo.Context) error {
 	t.Id = id
 	data.Tasks[t.Id] = &t
 
+	c.SetCookie(&http.Cookie{
+		Name:  "flw",
+		Value: strconv.Itoa(t.Worker),
+		Path:  "/",
+	})
+
+	c.SetCookie(&http.Cookie{
+		Name:  "fla",
+		Value: strconv.Itoa(t.Addr_obj),
+		Path:  "/",
+	})
+
 	c.Response().Header().Set("HX-Retarget", "#content")
 	c.Response().Header().Set("HX-Reswap", "outerHTML")
 	c.Response().Header().Set("HX-Redirect", "/alltasks/")
 
-	return nil
+	return c.NoContent(200)
 }
 
 func (e Endpoints) newtask_cat1(c echo.Context) error {
