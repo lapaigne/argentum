@@ -116,14 +116,4 @@
         display: flex;
         width: 25%;
     }
-
-    .left, .right {
-        position: relative;
-    }
-}
-
-@media (min-width: 1350px) {
-    .left, .right {
-        position: relative;
-    }
 }

@@ -155,10 +155,6 @@ img {
     .sort-block {
         width: 350px;
     }
-
-    #workers-panel {
-        max-width: 300px;
-    }
 }
 
 .signout-btn {

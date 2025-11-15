@@ -33,10 +33,10 @@
             {{ end }}
         </select>
     </div>
-    <div id="filter-recent">
-        <input type="checkbox" name="f-recent" id="f-recent" value="1" {{ if $.Filter.Recent }} checked {{ end }}
-            hx-post="/alltasks/filter" hx-target="#alltasks-tbody" hx-swap="innerHTML" hx-include="#alltasks-filters *">
+    <div id="filter-recent" class="checkbox-with-text">.
         <label for="f-recent">Показать задачи за последние 15 дней</label>
+        <input type="checkbox" name="f-recent" id="f-recent" value="1" {{ if $.Filter.Recent }} checked {{ end }}
+               hx-post="/alltasks/filter" hx-target="#alltasks-tbody" hx-swap="innerHTML" hx-include="#alltasks-filters *">
     </div>
     <div id="filter-status">
         <select name="f-status" hx-post="/alltasks/filter" hx-target="#alltasks-tbody" hx-swap="innerHTML"
