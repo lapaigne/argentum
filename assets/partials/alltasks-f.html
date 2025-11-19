@@ -45,9 +45,11 @@
         hx-swap="innerHTML" hx-include="#alltasks-filters *">
         <option {{ if eq $.Filter.Worker 0 }} selected {{end}} value="0">Работник не выбран</option>
         {{ range $workers }}
+        {{ if ne .U.Level 0 }}
         <option {{ if eq $.Filter.Worker .W.Id}} selected {{end}} value="{{ .W.Id }}">
             {{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}
         </option>
+        {{ end }}
         {{ end }}
     </select>
 </div>
@@ -56,9 +58,11 @@
         hx-include="#alltasks-filters *">
         <option {{ if eq $.Filter.Addr 0 }} selected {{end}} value="0">Адрес не выбран</option>
         {{ range $addrs }}
+        {{ if .Active }}
         <option {{ if eq $.Filter.Addr .Id}} selected {{end}} value="{{ .Id }}">
             {{ .Address }}
         </option>
+        {{ end }}
         {{ end }}
     </select>
 </div>

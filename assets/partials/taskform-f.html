@@ -68,9 +68,12 @@
     hx-swap="innerHTML" hx-history="false" hx-push-url="false" autocomplete="off" class="reoc">
     <option {{ if or (not .Filled) (eq .Filled.Addr_obj 0) }}selected{{ end }}>Не выбран!</option>
     {{ range $v := .Data.Addrs }}
+    {{ if $v.Active }}
     <option value="{{ $v.Id }}" {{ if and $.Filled (eq $v.Id $.Filled.Addr_obj) }}selected{{ end }}>
         {{ $v.Address }}
-    </option> {{ end }}
+    </option>
+    {{ end }}
+    {{ end }}
 </select>
 {{ end }}
 
@@ -79,8 +82,11 @@
 <select id="actor-selector" required name="act" autocomplete="off" class="reoc">
     <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Worker 0) }}selected{{ end }}>Не выбран!</option>
     {{ range $i, $v := .Data.UWs }}
+    {{ if ne $v.U.Level 0 }}
     <option value="{{ $i }}" {{ if and $.Filled (eq $i $.Filled.Worker) }}selected{{ end }}>
         {{ $v.W.F_name }} {{ $v.W.I_name }} {{ $v.W.O_name }}
-    </option> {{ end }}
+    </option>
+    {{ end }}
+    {{ end }}
 </select>
 {{ end }}
