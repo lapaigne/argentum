@@ -37,9 +37,9 @@
     <script>
         document.body.addEventListener('htmx:responseError', function (e) {
             if (e.detail.xhr.status == 401) {
-                window.location.href = "/signin";
+                window.location.href = "/signin"
             }
-        });
+        })
 
         function dataTableInit() {
             $('#content .datatable').each(function () {
@@ -141,6 +141,18 @@
     <script>
         $(document).on('input change', '.reoc', function () {
             $(this).closest('.form-error').removeClass('form-error')
+        })
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $(document).on('init.dt', function (e, settings) {
+                let table = new $.fn.dataTable.Api(settings)
+                let tbody = table.table().body()
+
+                table.on('draw.dt', function () {
+                    htmx.process(tbody)
+                })
+            })
         })
     </script>
 </body>

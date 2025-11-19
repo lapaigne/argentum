@@ -19,10 +19,13 @@
             {{ (index $cats $t.Cat3).Name }}
         </p>
     </div>
+    {{ $addr := (index $addrs $t.Addr_obj) }}
+    {{ if $addr }}
     <div class="menus-group">
         <h1>Адрес</h1>
-        <p>{{ (index $addrs $t.Addr_obj).Address }}</p>
+        <p>{{ .Address }}</p>
     </div>
+    {{ end }}
     {{ if $t.Until_date.Valid }}
     <div class="menus-group">
         <h1>Срок выполнения:</h1>
@@ -64,11 +67,21 @@
 <tr id="mt-row-{{ .Id }}" hx-post="/me/exp-{{ .Id }}" hx-target="#mt-exp" hx-swap="innerHTML" hx-trigger="click"
     hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
                 document.querySelector('.right').style.display = 'flex';">
-    <td data-label="Категория">{{ (index $cats .Cat1).Name }} <br> {{ (index $cats .Cat2).Name }} <br>
-        {{ (index $cats
-        .Cat3).Name }}</td>
+    <td data-label="Категория">
+        {{ (index $cats .Cat1).Name }}
+        <br>
+        {{ (index $cats .Cat2).Name }} <br>
+        {{ (index $cats .Cat3).Name }}
+    </td>
     <td data-label="Описание" class="desc">{{ .Desc }}</td>
-    <td data-label="Адрес">{{ (index $addrs .Addr_obj).Address }}</td>
+    {{ $addr := (index $addrs .Addr_obj) }}
+    <td data-label="Адрес">
+        {{ if $addr }}
+        {{ $addr.Address }}
+        {{ else }}
+        {{ "-" }}
+        {{ end }}
+    </td>
     <td data-label="Срок">{{ call $helper.NFormat .Until_date }}</td>
     <td data-label="Отметка">{{ call $helper.NFormat .Mark_date }}</td>
 </tr>

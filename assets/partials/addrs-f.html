@@ -1,7 +1,6 @@
 {{ define "addrs-row" }}
 <tr id="addrs-row-{{ .Id }}" hx-post="/addrs/edit-{{ .Id }}" hx-target="#addrs-panel" hx-swap="innerHTML"
-    hx-trigger="click"
-    hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
+    hx-trigger="click" hx-on:click="$(this).addClass('selrow');$(this).siblings().removeClass('selrow');
     document.querySelector('.right').style.display = 'flex';">
     <td>{{ .Address }}</td>
     <td>{{ if .Active }} ✔ {{ else }} ✘ {{ end }}</td>
@@ -13,10 +12,9 @@
 <form hx-post="/addrs/add" id="addrs-add-f" hx-target="#addrs-table-body" hx-swap="beforeend" hx-push-url="false"
     hx-history="false">
     <div class="menus-data">
-        <input type="text" name="addr"  placeholder="Адрес">
+        <input type="text" name="addr" placeholder="Адрес">
     </div>
-    <button type="submit"
-            hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить адрес</button>
+    <button type="submit" hx-on:click="document.querySelector('.right').style.display = 'none';">Добавить адрес</button>
 </form>
 {{ end }}
 
@@ -27,10 +25,9 @@
         <input type="text" name="addr" value="{{ .Address }}">
     </div>
     <div class="menus-buttons">
-        <button type="submit"
-                hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
+        <button type="submit" hx-on:click="document.querySelector('.right').style.display = 'none';">Обновить</button>
         <button hx-post="/addrs/del-{{ .Id }}" hx-target="#addrs-row-{{ .Id }} "
-                hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
+            hx-on:click="document.querySelector('.right').style.display = 'none';">Удалить</button>
     </div>
 </form>
 {{ end }}

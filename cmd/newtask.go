@@ -21,18 +21,18 @@ func (e Endpoints) newtask_GET(c echo.Context) error {
 		Filled  *db.Task
 		Checked bool
 		Errors  any
-		Data    *Data
-		Helper  *Helper
+		Data    Data
+		Helper  Helper
 		Today   string
 		Cat1    sql.NullInt32
 		Cat2    sql.NullInt32
 		Addr    int
 	}{
 		Filled:  nil,
-		Errors:  nil,
 		Checked: false,
-		Data:    &data,
-		Helper:  &helper,
+		Errors:  nil,
+		Data:    data,
+		Helper:  helper,
 		Today:   Today().Format(time.DateOnly),
 		Cat1:    SQLInt(-1, false),
 		Cat2:    SQLInt(-1, false),
