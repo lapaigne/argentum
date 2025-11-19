@@ -1,9 +1,4 @@
 {{ define "content" }}
-{{ $cats := .Data.Cats }}
-{{ $workers := .Data.UWs }}
-{{ $addrs := .Data.Addrs }}
-{{ $tasks := .Data.Tasks }}
-{{ $helper := .Helper }}
 
 <div class="no-print" style="margin-bottom: 20px;">
     <button hx-post="/print" hx-target="#print-frame" hx-swap="none" id="print-btn">🖨️ Печать</button>
@@ -11,47 +6,7 @@
 </div>
 
 <div id="alltasks-filters">
-    <div id="filter-worker">
-        <select hx-post="/alltasks/filter" name="f-worker" hx-target="#alltasks-tbody" autocomplete="off"
-            hx-swap="innerHTML" hx-include="#alltasks-filters *">
-            <option {{ if eq $.Filter.Worker 0 }} selected {{end}} value="0">Работник не выбран</option>
-            {{ range $workers }}
-            <option {{ if eq $.Filter.Worker .W.Id}} selected {{end}} value="{{ .W.Id }}">
-                {{ .W.F_name }} {{ .W.I_name }} {{ .W.O_name }}
-            </option>
-            {{ end }}
-        </select>
-    </div>
-    <div id="filter-addr">
-        <select hx-post="/alltasks/filter" name="f-addr" hx-target="#alltasks-tbody" autocomplete="off"
-            hx-swap="innerHTML" hx-include="#alltasks-filters *">
-            <option {{ if eq $.Filter.Addr 0 }} selected {{end}} value="0">Адрес не выбран</option>
-            {{ range $addrs }}
-            <option {{ if eq $.Filter.Addr .Id}} selected {{end}} value="{{ .Id }}">
-                {{ .Address }}
-            </option>
-            {{ end }}
-        </select>
-    </div>
-    <div id="filter-recent" class="checkbox-with-text">.
-        <label for="f-recent">Показать задачи за последние 15 дней</label>
-        <input type="checkbox" name="f-recent" id="f-recent" value="1" {{ if $.Filter.Recent }} checked {{ end }}
-               hx-post="/alltasks/filter" hx-target="#alltasks-tbody" hx-swap="innerHTML" hx-include="#alltasks-filters *">
-    </div>
-    <div id="filter-status">
-        <select name="f-status" hx-post="/alltasks/filter" hx-target="#alltasks-tbody" hx-swap="innerHTML"
-            hx-include="#alltasks-filters *" autocomplete="off">
-            <option {{ if eq $.Filter.Status 0 }} selected {{ end }} value="0">
-                Все задачи
-            </option>
-            <option {{ if eq $.Filter.Status 1 }} selected {{ end }} value="1">
-                Только выполненные
-            </option>
-            <option {{ if eq $.Filter.Status -1 }} selected {{ end }} value="-1">
-                Только невыполненные
-            </option>
-        </select>
-    </div>
+    {{ template "alltasks-filters" . }}
 </div>
 
 <div id="alltasks-wrap" class="table content">

@@ -105,6 +105,7 @@ func main() {
 	e.GET("/alltasks", endpoints.alltasks_GET)
 	e.GET("/alltasks/", endpoints.alltasks_GET)
 	e.POST("/alltasks/filter", endpoints.alltasks_filter)
+	e.POST("/alltasks/reset-filter", endpoints.alltasks_resetFilter)
 
 	e.GET("/signin", endpoints.signin_GET)
 	e.GET("/signin/", endpoints.signin_GET)

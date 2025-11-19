@@ -227,3 +227,22 @@ func at_filter(filter Filter) ([]db.Task, error) {
 
 	return tasks, nil
 }
+
+func (e Endpoints) alltasks_resetFilter(c echo.Context) error {
+	c.SetCookie(&http.Cookie{Name: "flw", Value: "", Path: "/"})
+	c.SetCookie(&http.Cookie{Name: "fla", Value: "", Path: "/"})
+	c.SetCookie(&http.Cookie{Name: "fre", Value: "", Path: "/"})
+	c.SetCookie(&http.Cookie{Name: "fst", Value: "", Path: "/"})
+
+	d := struct {
+		Filter Filter
+		Data   any
+		Helper Helper
+	}{
+		Filter: Filter{},
+		Data:   data,
+		Helper: helper,
+	}
+
+	return c.Render(200, "alltasks-reset", d)
+}
