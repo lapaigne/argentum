@@ -8,7 +8,8 @@
     padding: 0;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     width: 100%;
     background-color: #f3f4f6;
@@ -154,6 +155,10 @@ img {
 
     .sort-block {
         width: 350px;
+    }
+
+    #workers-panel {
+        max-width: 300px;
     }
 }
 

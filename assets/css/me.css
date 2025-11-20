@@ -31,7 +31,8 @@
         width: 100%;
     }
 
-    & th, td {
+    & th,
+    td {
         padding: 0.5rem;
         font-size: 0.9rem;
     }
@@ -109,11 +110,24 @@
     }
 
     .left {
-        width:75%;
+        width: 75%;
     }
 
     .right {
         display: flex;
         width: 25%;
+    }
+
+    .left,
+    .right {
+        position: relative;
+    }
+}
+
+@media (min-width: 1350px) {
+
+    .left,
+    .right {
+        position: relative;
     }
 }
