@@ -4,6 +4,11 @@
         <div id="">
             <button hx-post="/addrs/add-panel" hx-target="#addrs-panel" hx-swap="innerHTML"
                 hx-on:click="document.querySelector('.right').style.display = 'flex';">Добавить адрес</button>
+            <div class="checkbox-with-text">
+                <label for="w-hide">Скрыть отключенные категории</label>
+                <input type="checkbox" name="a-hide" id="a-hide" value="1" checked hx-post="/addrs/filter"
+                    hx-target="#addrs-table-body" hx-swap="innerHTML" hx-trigger="load, change">
+            </div>
         </div>
         <table class="datatable" id="addrs-table">
             <thead>
@@ -11,9 +16,7 @@
                 <th>Вкл</th>
             </thead>
             <tbody id="addrs-table-body">
-                {{ range . }}
-                {{ template "addrs-row" . }}
-                {{ end }}
+                {{ template "addrs-tbody" . }}
             </tbody>
         </table>
     </div>

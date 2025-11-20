@@ -31,3 +31,10 @@
     </div>
 </form>
 {{ end }}
+
+
+{{ define "addrs-tbody" }}
+{{ range . }}
+{{ template "addrs-row" . }}
+{{ end }}
+{{ end }}

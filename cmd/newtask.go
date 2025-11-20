@@ -266,5 +266,5 @@ func (e Endpoints) newtask_addr(c echo.Context) error {
 		Addr:   val,
 	}
 
-	return c.Render(200, "addrs-tbody", d)
+	return c.Render(200, "addrtable-tbody", d)
 }

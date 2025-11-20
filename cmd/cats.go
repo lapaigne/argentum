@@ -15,6 +15,10 @@ func (e Endpoints) cats_GET(c echo.Context) error {
 		return c.Redirect(303, "/menu/")
 	}
 
+	if cats, ok := c_filter(c); ok {
+		return c.Render(200, "cats", cats.Sorted())
+	}
+
 	return c.Render(200, "cats", data.Cats.Sorted())
 }
 
@@ -41,6 +45,8 @@ func (e Endpoints) cats_POST(c echo.Context) error {
 		return e.cats_addpanel(c)
 	case "/cats/add":
 		return e.cats_add(c)
+	case "/cats/filter":
+		return e.cats_filter(c)
 	default:
 		return echo.ErrNotFound
 	}
@@ -150,4 +156,25 @@ func (e Endpoints) cats_del(c echo.Context) error {
 	}
 
 	return c.Render(200, "cats-row", cat)
+}
+
+func c_filter(c echo.Context) (CatMap, bool) {
+	if c.FormValue("c-hide") == "1" {
+		cats := CatMap{}
+		for _, v := range data.Cats {
+			if v.Active {
+				cats[v.Id] = v
+			}
+		}
+		return cats, true
+	}
+	return nil, false
+}
+
+func (e Endpoints) cats_filter(c echo.Context) error {
+	if cats, ok := c_filter(c); ok {
+		return c.Render(200, "cats-tbody", cats.Sorted())
+	}
+
+	return c.Render(200, "cats-tbody", data.Cats.Sorted())
 }

@@ -70,8 +70,9 @@
 
 
 {{ define "tf-addr" }}
-<select required name="address" id="addr" hx-post="/newtask/addr" hx-trigger="change changed" hx-target="#addrs-tbody"
-    hx-swap="innerHTML" hx-history="false" hx-push-url="false" autocomplete="off" class="reoc">
+<select required name="address" id="addr" hx-post="/newtask/addr" hx-trigger="change changed"
+    hx-target="#addrtbody-tbody" hx-swap="innerHTML" hx-history="false" hx-push-url="false" autocomplete="off"
+    class="reoc">
     <option {{ if or (not .Filled) (eq .Filled.Addr_obj 0) }}selected{{ end }}>Не выбран!</option>
     {{ range $v := .Data.Addrs }}
     {{ if $v.Active }}

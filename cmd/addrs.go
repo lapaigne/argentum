@@ -39,6 +39,8 @@ func (e Endpoints) addrs_POST(c echo.Context) error {
 		return e.addrs_addpanel(c)
 	case "/addrs/add":
 		return e.addrs_add(c)
+	case "/addrs/filter":
+		return e.addrs_filter(c)
 	default:
 		return echo.ErrNotFound
 	}
@@ -120,4 +122,25 @@ func (e Endpoints) addrs_del(c echo.Context) error {
 	}
 
 	return c.Render(200, "addrs-row", a)
+}
+
+func a_filter(c echo.Context) ([]db.Address, bool) {
+	if c.FormValue("a-hide") == "1" {
+		addrs := []db.Address{}
+		for _, v := range data.Addrs {
+			if v.Active {
+				addrs = append(addrs, *v)
+			}
+		}
+		return addrs, true
+	}
+	return nil, false
+}
+
+func (e Endpoints) addrs_filter(c echo.Context) error {
+	if addrs, ok := a_filter(c); ok {
+		return c.Render(200, "addrs-tbody", addrs)
+	}
+
+	return c.Render(200, "addrs-tbody", data.Addrs)
 }
