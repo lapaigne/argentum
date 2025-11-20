@@ -18,7 +18,7 @@
 
 {{ define "tf-cat-2" }}
 {{ $val := .Cat1.Int32 }}
-<select required name="cat2" hx-post="/newtask/cat-2" hx-swap="outerHTML" hx-target="#cat3" hx-trigger="change changed"
+<select required name="cat2" hx-post="/newtask/cat-2" hx-swap="innerHTML" hx-target="#cat3" hx-trigger="change changed"
     hx-history="false" id="s2" hx-push-url="false" autocomplete="off">
     <option disabled value="-1" {{ if or (not .Filled) (eq .Filled.Cat2 0) }}selected{{ end }}>Не выбрано!</option>
 
