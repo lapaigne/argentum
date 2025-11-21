@@ -10,6 +10,9 @@
     <td data-label="">
         {{ call $helper.Status .Mark_date }}
     </td>
+    <td data-label="Создано">
+        {{ call $helper.Format .Created_date }}
+    </td>
     <td data-label="Категории">
         <span>{{ (index $cats .Cat1).Name }}&nbsp</span>
         <span>{{ (index $cats .Cat2).Name }}&nbsp</span>
