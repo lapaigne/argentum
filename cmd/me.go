@@ -23,12 +23,12 @@ func (e Endpoints) me_conf(c echo.Context) error {
 	// temp solution, target table or row instead
 	uid := getClaims(c).UID
 	d := struct {
-		Data   *Data
-		Helper *Helper
+		Data   Data
+		Helper Helper
 		UID    int
 	}{
-		Data:   &data,
-		Helper: &helper,
+		Data:   data,
+		Helper: helper,
 		UID:    uid,
 	}
 
@@ -42,12 +42,12 @@ func (e Endpoints) me_exp(c echo.Context) error {
 	}
 
 	d := struct {
-		Data   *Data
-		Helper *Helper
+		Data   Data
+		Helper Helper
 		Id     int
 	}{
-		Data:   &data,
-		Helper: &helper,
+		Data:   data,
+		Helper: helper,
 		Id:     id,
 	}
 

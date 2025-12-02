@@ -20,10 +20,10 @@
         </p>
     </div>
     {{ $addr := (index $addrs $t.Addr_obj) }}
-    {{ if $addr }}
+    {{ if ne $addr nil }}
     <div class="menus-group">
         <h1>Адрес</h1>
-        <p>{{ .Address }}</p>
+        <p>{{ $addr.Address }}</p>
     </div>
     {{ end }}
     {{ if $t.Until_date.Valid }}
